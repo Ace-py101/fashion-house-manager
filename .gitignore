@@ -1,0 +1,18 @@
+# Virtual environment
+venv/
+
+# Flask instance data
+instance/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Temporary accidental files
+✂️
+👁️
