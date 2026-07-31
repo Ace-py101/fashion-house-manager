@@ -1,0 +1,211 @@
+.profile {
+    position: relative;
+}
+
+
+.profile-button {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+}
+
+
+
+.profile-menu {
+
+    display: none;
+
+    position: absolute;
+
+    right: 0;
+
+    top: 55px;
+
+    min-width: 200px;
+
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+
+    z-index: 1000;
+
+}
+
+
+
+.profile-menu.active {
+
+    display: block;
+
+}
+
+
+
+.profile-menu a {
+
+    display: block;
+
+    padding: 10px;
+
+    text-decoration: none;
+
+}
+
+
+
+.profile-menu a:hover {
+
+    background: #f4f4f4;
+
+}
+
+
+.dashboard-link,
+.workflow-step,
+.list-item {
+
+    text-decoration: none;
+    color: inherit;
+
+}
+
+.notification{
+
+    position:relative;
+
+}
+
+
+
+.notification-button{
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    color:var(--gold);
+
+}
+
+
+
+.notification-menu{
+
+    display:none;
+
+    position:absolute;
+
+    right:0;
+
+    top:45px;
+
+    width:280px;
+
+    background:#181818;
+
+    border:1px solid var(--gold);
+
+    border-radius:16px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.5);
+
+    z-index:10000;
+
+    overflow:hidden;
+
+}
+
+
+
+.notification-menu.active{
+
+    display:block;
+
+}
+
+
+
+.notification-header{
+
+    padding:15px;
+
+    font-weight:700;
+
+    color:var(--ivory);
+
+    border-bottom:1px solid rgba(212,175,55,.3);
+
+}
+
+
+
+.notification-item{
+
+    padding:14px 15px;
+
+    color:var(--ivory);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+
+
+.notification-item:hover{
+
+    background:#242424;
+
+}
+
+
+
+.notification-footer{
+
+    display:block;
+
+    padding:14px 15px;
+
+    color:var(--gold);
+
+    text-decoration:none;
+
+}
+
+
+
+@media(max-width:900px){
+
+
+    .notification-menu{
+
+
+        position:fixed;
+
+        top:75px;
+
+        right:15px;
+
+        width:calc(100% - 30px);
+
+        max-width:350px;
+
+        z-index:10000;
+
+
+    }
+
+
+}

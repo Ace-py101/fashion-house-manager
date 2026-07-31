@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="dashboard-header">
+
+<h2>
+{{ greeting }}, Admin
+</h2>
+
+<p>
+Here is your fashion house performance overview.
+</p>
+
+</div>
+
+
+
+<!-- Summary Cards -->
+
+<div class="dashboard-grid">
+
+
+
+<a href="{{ url_for('customer.customers') }}"
+class="card dashboard-link">
+
+<div class="card-icon">
+👥
+</div>
+
+<h3>
+Total Customers
+</h3>
+
+<div class="card-number">
+{{ total_customers }}
+</div>
+
+<small>
+Registered clients
+</small>
+
+</a>
+
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="card dashboard-link">
+
+<div class="card-icon">
+✂️
+</div>
+
+<h3>
+Active Orders
+</h3>
+
+<div class="card-number">
+0
+</div>
+
+<small>
+Currently in production
+</small>
+
+</a>
+
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="card dashboard-link">
+
+<div class="card-icon">
+⏳
+</div>
+
+<h3>
+Pending Orders
+</h3>
+
+<div class="card-number">
+0
+</div>
+
+<small>
+Awaiting completion
+</small>
+
+</a>
+
+
+
+
+<a href="{{ url_for('payment.payments') }}"
+class="card dashboard-link">
+
+<div class="card-icon">
+💰
+</div>
+
+<h3>
+Outstanding Balance
+</h3>
+
+<div class="card-number">
+$0
+</div>
+
+<small>
+Customer payments pending
+</small>
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+<!-- Production Tracker -->
+
+
+<div class="section-title">
+
+<h2>
+🧵 Production Workflow
+</h2>
+
+</div>
+
+
+
+
+<div class="workflow">
+
+
+<a href="{{ url_for('order.orders') }}"
+class="workflow-step">
+
+<span>
+📋
+</span>
+
+<p>
+New Orders
+</p>
+
+<strong>
+12
+</strong>
+
+</a>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="workflow-step">
+
+<span>
+✂️
+</span>
+
+<p>
+Cutting
+</p>
+
+<strong>
+5
+</strong>
+
+</a>
+
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="workflow-step">
+
+<span>
+🪡
+</span>
+
+<p>
+Sewing
+</p>
+
+<strong>
+18
+</strong>
+
+</a>
+
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="workflow-step">
+
+<span>
+✨
+</span>
+
+<p>
+Finishing
+</p>
+
+<strong>
+7
+</strong>
+
+</a>
+
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="workflow-step">
+
+<span>
+🚚
+</span>
+
+<p>
+Ready
+</p>
+
+<strong>
+4
+</strong>
+
+</a>
+
+
+</div>
+
+
+
+
+
+
+<!-- Information Panels -->
+
+
+<div class="dashboard-panels">
+
+
+
+<div class="panel">
+
+
+<h2>
+📋 Recent Orders
+</h2>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="list-item">
+
+<strong>
+Agbada Set
+</strong>
+
+<span>
+In Sewing
+</span>
+
+</a>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="list-item">
+
+<strong>
+Corporate Shirt
+</strong>
+
+<span>
+Cutting
+</span>
+
+</a>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="list-item">
+
+<strong>
+Wedding Outfit
+</strong>
+
+<span>
+Ready
+</span>
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+<h2>
+🚚 Upcoming Deliveries
+</h2>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="list-item">
+
+<strong>
+Customer A
+</strong>
+
+<span>
+Tomorrow
+</span>
+
+</a>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="list-item">
+
+<strong>
+Customer B
+</strong>
+
+<span>
+Friday
+</span>
+
+</a>
+
+
+
+<a href="{{ url_for('order.orders') }}"
+class="list-item">
+
+<strong>
+Customer C
+</strong>
+
+<span>
+Next Week
+</span>
+
+</a>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+{% endblock %}

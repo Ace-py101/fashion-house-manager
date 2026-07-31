@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Customer History
+{% endblock %}
+
+
+
+{% block page_title %}
+Customer History
+{% endblock %}
+
+
+
+{% block breadcrumb %}
+
+<a href="/">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('customer.view_customers') }}">
+Customers
+</a>
+
+<span> / </span>
+
+<span>
+History
+</span>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="card">
+
+
+<div class="card-header">
+
+<h2>
+{{ customer.full_name }}
+</h2>
+
+<p>
+{{ customer.customer_code }}
+</p>
+
+</div>
+
+
+
+<div class="card-body">
+
+
+{% if history %}
+
+
+<div class="table-container">
+
+
+<table class="app-table">
+
+
+<thead>
+
+<tr>
+
+<th>
+Field
+</th>
+
+<th>
+Old Value
+</th>
+
+<th>
+New Value
+</th>
+
+<th>
+Date Changed
+</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody>
+
+
+{% for item in history %}
+
+
+<tr>
+
+<td>
+{{ item.field_name }}
+</td>
+
+
+<td>
+{{ item.old_value or "-" }}
+</td>
+
+
+<td>
+{{ item.new_value or "-" }}
+</td>
+
+
+<td>
+{{ item.changed_at.strftime("%d-%m-%Y %H:%M") }}
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+{% else %}
+
+
+<p>
+No changes recorded for this customer.
+</p>
+
+
+{% endif %}
+
+
+</div>
+
+
+</div>
+
+
+{% endblock %}

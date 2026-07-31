@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+{% block title %}
+Fashion House Manager
+{% endblock %}
+</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/base.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/layout.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/components.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/responsive.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/theme.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/toast.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/modules/dashboard.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/modules/customers.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/modules/orders.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/modules/measurements.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/modules/reports.css') }}">
+
+</head>
+
+<body>
+
+<div id="overlay" class="overlay"></div>
+
+<button
+id="menu-toggle"
+class="menu-toggle">
+
+☰
+
+</button>
+
+<div class="app-container">
+
+<aside
+id="sidebar"
+class="sidebar">
+
+<div class="brand">
+
+<h2>
+✨ Fashion House Manager
+</h2>
+
+</div>
+
+<nav>
+
+<a href="/">🏠 <span>Dashboard</span></a>
+
+<a href="{{ url_for('customer.customers') }}">👥 <span>Customers</span></a>
+
+<a href="{{ url_for('order.orders') }}">
+✂️ <span>Orders</span>
+</a>
+
+<a href="{{ url_for('measurement.measurements') }}">
+📏 <span>Measurements</span>
+</a>
+
+<a href="{{ url_for('style.styles') }}">
+🧵 <span>Styles Gallery</span>
+</a>
+
+<a href="{{ url_for('payment.payments') }}">
+💳 <span>Payments</span>
+</a>
+
+<a href="{{ url_for('inventory.inventory') }}">
+📦 <span>Inventory</span>
+</a>
+
+<a href="{{ url_for('report.reports') }}">
+📊 <span>Reports</span>
+</a>
+
+<a href="{{ url_for('settings.settings') }}">
+⚙️ <span>Settings</span>
+</a>
+
+</nav>
+
+</aside>
+
+<main class="main-area">
+
+<header class="topbar">
+
+<div class="topbar-left">
+
+<h1 class="page-title">
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+</h1>
+
+<nav class="breadcrumb-nav">
+
+{% block breadcrumb %}
+
+<a href="/">Dashboard</a>
+
+{% endblock %}
+
+</nav>
+
+</div>
+
+<div class="topbar-right">
+
+<div class="mobile-action-group">
+
+<div class="search-icon-mobile">
+🔍
+</div>
+
+<div class="search-box">
+🔍
+<input
+type="text"
+placeholder="Search...">
+</div>
+
+<div class="notification">
+
+<button
+class="notification-button"
+id="notification-toggle"
+type="button"
+>
+
+🔔
+
+<span class="notification-count">
+3
+</span>
+
+</button>
+
+
+
+<div
+class="notification-menu"
+id="notification-menu"
+>
+
+
+<div class="notification-header">
+
+Notifications
+
+</div>
+
+
+
+<div class="notification-item">
+
+👥 New customer registered
+
+</div>
+
+
+
+<div class="notification-item">
+
+✂️ Order status updated
+
+</div>
+
+
+
+<div class="notification-item">
+
+💰 Payment reminder
+
+</div>
+
+
+
+<a href="#" class="notification-footer">
+
+View all notifications
+
+</a>
+
+
+</div>
+
+
+</div>
+
+<div class="profile">
+
+<button
+class="profile-button"
+id="profile-toggle"
+type="button"
+>
+
+<div class="avatar">
+
+👤
+
+</div>
+
+
+<div class="profile-info">
+
+<strong>
+Admin
+</strong>
+
+<small>
+Manager
+</small>
+
+</div>
+
+
+</button>
+
+
+
+<div
+class="profile-menu"
+id="profile-menu"
+>
+
+
+<a href="#">
+👤 Profile
+</a>
+
+
+<a href="{{ url_for('settings.settings') }}">
+⚙️ Account Settings
+</a>
+
+
+<a href="#">
+📋 Activity Log
+</a>
+
+
+<a href="#">
+🚪 Logout
+</a>
+
+
+</div>
+
+
+</div>
+
+</header>
+
+<section class="content">
+
+{% block content %}
+{% endblock %}
+
+</section>
+
+</main>
+
+</div>
+
+<!-- Toast Container -->
+
+<div id="toast-container">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category, message in messages %}
+
+<div class="toast toast-{{ category }}">
+
+<div class="toast-message">
+
+{{ message }}
+
+</div>
+
+<button
+class="toast-close"
+type="button">
+
+&times;
+
+</button>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+</div>
+
+<!-- Confirmation Dialog -->
+
+<div id="confirm-modal" class="modal">
+
+<div class="modal-content">
+
+<h2 id="modal-title">
+
+Confirm Action
+
+</h2>
+
+<p id="modal-message">
+
+Are you sure you want to continue?
+
+</p>
+
+<div class="modal-actions">
+
+<button
+type="button"
+id="modal-cancel"
+class="button modal-secondary">
+
+Cancel
+
+</button>
+
+<button
+type="button"
+id="modal-confirm"
+class="button">
+
+Confirm
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/dashboard.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/customers.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/orders.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/measurements.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/dialogs.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/forms.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modules/tables.js') }}"></script>
+
+</body>
+
+</html>

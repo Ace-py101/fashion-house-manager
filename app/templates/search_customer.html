@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search Customers
+{% endblock %}
+
+{% block page_title %}
+Search Customers
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+<span> / </span>
+<a href="{{ url_for('customer.customers') }}">
+    Customers
+</a>
+<span> / </span>
+<span>Search</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>Customer Search</h2>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" class="app-form">
+
+            <div class="form-group">
+                <label>
+                    Search by Name, Phone or Customer Code
+                </label>
+
+                <input
+                    type="text"
+                    name="query"
+                    value="{{ query }}"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="button"
+            >
+                Search
+            </button>
+
+        </form>
+
+        {% if customers %}
+
+        <br>
+
+        <div class="table-container">
+
+            <table class="app-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Customer Code</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for customer in customers %}
+
+                    <tr>
+
+                        <td>{{ customer.customer_code }}</td>
+
+                        <td>{{ customer.full_name }}</td>
+
+                        <td>{{ customer.phone }}</td>
+
+                        <td>{{ customer.gender }}</td>
+
+                        <td>
+
+                            <div class="table-actions">
+
+                                <a
+                                    href="{{ url_for('customer.customer_history', customer_id=customer.id) }}"
+                                    class="button button-secondary"
+                                >
+                                    📜 Customer History
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% elif query %}
+
+            <div class="empty-state">
+
+                <h3>No Customer Found</h3>
+
+                <p>
+                    No customer matched your search.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

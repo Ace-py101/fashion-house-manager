@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+Customer Preview
+{% endblock %}
+
+{% block content %}
+
+<h1>Customer Preview</h1>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Field</th>
+    <th>Value</th>
+</tr>
+
+<tr>
+    <td>Name</td>
+    <td>{{ customer.name }}</td>
+</tr>
+
+<tr>
+    <td>Phone</td>
+    <td>{{ customer.phone }}</td>
+</tr>
+
+<tr>
+    <td>Email</td>
+    <td>{{ customer.email }}</td>
+</tr>
+
+<tr>
+    <td>Address</td>
+    <td>{{ customer.address }}</td>
+</tr>
+
+<tr>
+    <td>Gender</td>
+    <td>{{ customer.gender }}</td>
+</tr>
+
+<tr>
+    <td>Notes</td>
+    <td>{{ customer.notes }}</td>
+</tr>
+
+</table>
+
+<br>
+
+<a href="{{ url_for('customer.new_customer') }}">
+    Register Another Customer
+</a>
+
+{% endblock %}

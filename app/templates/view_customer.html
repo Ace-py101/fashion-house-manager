@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Customer
+{% endblock %}
+
+
+{% block page_title %}
+Customer Details
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('customer.customers') }}">
+    Customers
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('customer.view_customers') }}">
+    View Customers
+</a>
+
+<span> / </span>
+
+<span>
+    Customer Details
+</span>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="card">
+
+
+    <div class="card-header">
+
+        <h2>
+            Customer Details
+        </h2>
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <table class="details-table">
+
+
+            <tr>
+                <th>Customer Code</th>
+                <td>{{ customer.customer_code }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Full Name</th>
+                <td>{{ customer.full_name }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Phone Number</th>
+                <td>{{ customer.phone }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Email Address</th>
+                <td>{{ customer.email or "-" }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Address</th>
+                <td>{{ customer.address or "-" }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Gender</th>
+                <td>{{ customer.gender }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Status</th>
+                <td>{{ customer.status }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Notes</th>
+                <td>{{ customer.notes or "-" }}</td>
+            </tr>
+
+
+            <tr>
+                <th>Date Created</th>
+                <td>
+                    {{ customer.created_at.strftime("%d-%m-%Y %H:%M") }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Last Updated</th>
+
+                <td>
+
+                    {% if customer.updated_at %}
+
+                        {{ customer.updated_at.strftime("%d-%m-%Y %H:%M") }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+        </table>
+
+
+
+        <div class="page-actions">
+
+
+            <a
+                href="{{ url_for('customer.edit_customer', customer_id=customer.id) }}"
+                class="button button-primary"
+            >
+                ✏️ Edit Customer
+            </a>
+
+
+
+            <form
+                action="{{ url_for('customer.deactivate_customer_route', customer_id=customer.id) }}"
+                method="POST"
+            >
+            
+                <button
+                    type="submit"
+                    class="button button-danger"
+                    onclick="return confirm('Deactivate this customer?')"
+                >
+                    🚫 Deactivate Customer
+                </button>
+            
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

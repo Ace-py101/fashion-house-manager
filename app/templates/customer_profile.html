@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Customer Profile
+{% endblock %}
+
+
+
+{% block page_title %}
+Customer Profile
+{% endblock %}
+
+
+
+{% block breadcrumb %}
+
+<a href="/">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('customer.view_customers') }}">
+Customers
+</a>
+
+<span> / </span>
+
+<span>
+Profile
+</span>
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+<div class="card">
+
+
+<div class="card-header">
+
+<h2>
+{{ customer.full_name }}
+</h2>
+
+</div>
+
+
+
+<div class="card-body">
+
+
+<p>
+<strong>
+Customer Code:
+</strong>
+
+{{ customer.customer_code }}
+
+</p>
+
+
+
+<p>
+<strong>
+Phone:
+</strong>
+
+{{ customer.phone }}
+
+</p>
+
+
+
+<p>
+<strong>
+Email:
+</strong>
+
+{{ customer.email or "-" }}
+
+</p>
+
+
+
+<p>
+<strong>
+Address:
+</strong>
+
+{{ customer.address or "-" }}
+
+</p>
+
+
+
+<p>
+<strong>
+Gender:
+</strong>
+
+{{ customer.gender }}
+
+</p>
+
+
+
+<p>
+<strong>
+Status:
+</strong>
+
+{{ customer.status }}
+
+</p>
+
+
+
+<p>
+<strong>
+Notes:
+</strong>
+
+{{ customer.notes or "-" }}
+
+</p>
+
+
+</div>
+
+<a
+href="{{ url_for(
+    'customer.edit_customer',
+    customer_id=customer.id
+) }}"
+class="button"
+>
+Edit Customer
+</a>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,157 @@
+/* Customer Module Styles */
+/* Reserved for Phase 3 */
+
+/* =====================================
+   Customer Module Menu Cards
+   ===================================== */
+
+
+.module-header{
+
+    margin-bottom:25px;
+
+}
+
+
+.module-header h2{
+
+    color:var(--ivory);
+
+    margin-bottom:8px;
+
+}
+
+
+.module-header p{
+
+    color:var(--champagne);
+
+}
+
+
+
+
+.customer-menu-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(
+        auto-fit,
+        minmax(220px,1fr)
+    );
+
+    gap:25px;
+
+}
+
+
+
+
+.module-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    min-height:180px;
+
+    padding:25px;
+
+    text-decoration:none;
+
+    color:var(--ivory);
+
+    background:
+
+    linear-gradient(
+        145deg,
+        #242424,
+        #1c1c1c
+    );
+
+
+    border:
+
+    1px solid var(--border);
+
+
+    border-radius:22px;
+
+
+    transition:.3s ease;
+
+
+}
+
+
+
+
+.module-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:var(--gold);
+
+}
+
+
+
+
+.module-icon{
+
+    font-size:40px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.module-card h3{
+
+    margin:0 0 10px 0;
+
+    color:var(--gold);
+
+}
+
+
+
+.module-card p{
+
+    margin:0;
+
+    color:var(--champagne);
+
+    font-size:14px;
+
+}
+
+/* =====================================
+   Customer Details Actions
+   ===================================== */
+
+.page-actions{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-top:30px;
+
+    align-items:center;
+
+}
+
+
+.page-actions .button{
+
+    min-width:160px;
+
+    text-align:center;
+
+}

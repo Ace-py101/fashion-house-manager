@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Customers
+{% endblock %}
+
+{% block page_title %}
+Customer Directory
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+<span> / </span>
+
+<a href="{{ url_for('customer.customers') }}">
+    Customers
+</a><span> / </span>
+<span>View Customers</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card"><div class="card-header">
+
+
+</div>
+
+
+<div class="card-body">
+
+    {% if customers %}
+
+    <div class="table-container">
+
+        <table class="app-table">
+
+            <thead>
+
+                <tr>
+                    <th>Customer Code</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Gender</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for customer in customers %}
+
+                <tr>
+
+                    <td>
+                        {{ customer.customer_code }}
+                    </td>
+
+
+                    <td>
+                        {{ customer.full_name }}
+                    </td>
+
+
+                    <td>
+                        {{ customer.phone }}
+                    </td>
+
+
+                    <td>
+                        {{ customer.gender }}
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge">
+                            {{ customer.status }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ customer.created_at.strftime("%d-%m-%Y") }}
+                    </td>
+
+
+                    <td>
+
+                        <div class="table-actions">
+
+                            <a
+                                href="{{ url_for('customer.view_customer', customer_id=customer.id) }}"
+                                class="button button-secondary"
+                            >
+                                👁️ View Customer
+                            </a>
+
+
+                            <a
+                                href="#"
+                                class="button button-primary"
+                            >
+                                ✂️ Create Order
+                            </a>
+
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="empty-state">
+
+        <h3>No Customers Found</h3>
+
+        <p>
+            Register your first customer to begin.
+        </p>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+</div>{% endblock %}

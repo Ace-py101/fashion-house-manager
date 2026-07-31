@@ -1,0 +1,355 @@
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash
+)
+
+from app.services.customer_service import (
+    create_customer,
+    get_all_customers,
+    search_customers,
+    get_customer_by_id,
+    update_customer,
+    get_customer_history,
+    deactivate_customer
+)
+
+
+customer_bp = Blueprint(
+    "customer",
+    __name__
+)
+
+
+@customer_bp.route("/customers")
+def customers():
+
+    return render_template(
+        "customers.html"
+    )
+
+
+@customer_bp.route(
+    "/customers/new",
+    methods=["GET", "POST"]
+)
+def new_customer():
+
+    if request.method == "POST":
+
+        customer_data = {
+
+            "full_name": request.form.get(
+                "full_name",
+                ""
+            ),
+
+            "phone": request.form.get(
+                "phone",
+                ""
+            ),
+
+            "email": request.form.get(
+                "email",
+                ""
+            ),
+
+            "address": request.form.get(
+                "address",
+                ""
+            ),
+
+            "gender": request.form.get(
+                "gender",
+                ""
+            ),
+
+            "notes": request.form.get(
+                "notes",
+                ""
+            )
+        }
+
+
+        result = create_customer(
+            customer_data
+        )
+
+
+        if result["success"]:
+
+            flash(
+                "Customer created successfully.",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "customer.new_customer"
+                )
+            )
+
+
+        for error in result["errors"]:
+
+            category = (
+                "error"
+                if "already exists" in error
+                else "warning"
+            )
+
+            flash(
+                error,
+                category
+            )
+
+
+    return render_template(
+        "new_customer.html"
+    )
+
+
+@customer_bp.route("/customers/view")
+def view_customers():
+
+    customers = get_all_customers()
+
+    return render_template(
+        "view_customers.html",
+        customers=customers
+    )
+
+
+@customer_bp.route(
+    "/customers/search",
+    methods=["GET", "POST"]
+)
+def search_customer():
+
+    customers = []
+
+    query = ""
+
+
+    if request.method == "POST":
+
+        query = request.form.get(
+            "query",
+            ""
+        )
+
+        customers = search_customers(
+            query
+        )
+
+
+    return render_template(
+        "search_customer.html",
+        customers=customers,
+        query=query
+    )
+
+
+@customer_bp.route(
+    "/customers/<int:customer_id>"
+)
+def view_customer(customer_id):
+
+    customer = get_customer_by_id(
+        customer_id
+    )
+
+
+    if not customer:
+
+        flash(
+            "Customer not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for(
+                "customer.view_customers"
+            )
+        )
+
+
+    return render_template(
+        "view_customer.html",
+        customer=customer
+    )
+
+
+@customer_bp.route(
+    "/customers/<int:customer_id>/edit",
+    methods=["GET", "POST"]
+)
+def edit_customer(customer_id):
+
+    customer = get_customer_by_id(
+        customer_id
+    )
+
+
+    if not customer:
+
+        flash(
+            "Customer not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for(
+                "customer.view_customers"
+            )
+        )
+
+
+    if request.method == "POST":
+
+        customer_data = {
+
+            "full_name": request.form.get(
+                "full_name",
+                ""
+            ),
+
+            "phone": request.form.get(
+                "phone",
+                ""
+            ),
+
+            "email": request.form.get(
+                "email",
+                ""
+            ),
+
+            "address": request.form.get(
+                "address",
+                ""
+            ),
+
+            "gender": request.form.get(
+                "gender",
+                ""
+            ),
+
+            "notes": request.form.get(
+                "notes",
+                ""
+            )
+        }
+
+
+        result = update_customer(
+            customer_id,
+            customer_data
+        )
+
+
+        if result["success"]:
+
+            flash(
+                "Customer updated successfully.",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "customer.view_customer",
+                    customer_id=customer_id
+                )
+            )
+
+
+        for error in result["errors"]:
+
+            category = (
+                "error"
+                if "already exists" in error
+                else "warning"
+            )
+
+            flash(
+                error,
+                category
+            )
+
+
+    return render_template(
+        "edit_customer.html",
+        customer=customer
+    )
+
+
+@customer_bp.route(
+    "/customers/<int:customer_id>/history"
+)
+def customer_history(customer_id):
+
+    customer = get_customer_by_id(
+        customer_id
+    )
+
+
+    if not customer:
+
+        flash(
+            "Customer not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for(
+                "customer.view_customers"
+            )
+        )
+
+
+    history = get_customer_history(
+        customer_id
+    )
+
+
+    return render_template(
+        "customer_history.html",
+        customer=customer,
+        history=history
+    )
+
+@customer_bp.route(
+    "/customers/<int:customer_id>/deactivate",
+    methods=["POST"]
+)
+def deactivate_customer_route(customer_id):
+
+    result = deactivate_customer(
+        customer_id
+    )
+
+
+    if result["success"]:
+
+        flash(
+            "Customer deactivated successfully.",
+            "success"
+        )
+
+    else:
+
+        for error in result["errors"]:
+
+            flash(
+                error,
+                "error"
+            )
+
+
+    return redirect(
+        url_for(
+            "customer.view_customers"
+        )
+    )
