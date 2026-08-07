@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Measurement
+{% endblock %}
+
+{% block page_title %}
+New Measurement
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('measurement.measurements') }}">
+Measurements
+</a>
+
+<span> / </span>
+
+<span>
+New Measurement
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            New Measurement
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <!-- Customer Search -->
+
+        <form
+            method="POST"
+            class="app-form"
+        >
+
+            <input
+                type="hidden"
+                name="action"
+                value="search_customer"
+            >
+
+            <div class="form-group">
+
+                <label>
+                    Customer Code
+                </label>
+
+                <input
+                    type="text"
+                    name="customer_code"
+                    placeholder="Enter Customer Code"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="button button-primary"
+            >
+
+                🔍 Search Customer
+
+            </button>
+
+        </form>
+
+        {% if customer %}
+
+        <hr>
+
+        <h2>
+            Customer Information
+        </h2>
+
+        <div class="details-table">
+
+            <div class="detail-row">
+                <strong>Customer Code</strong>
+                <span>{{ customer.customer_code }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Name</strong>
+                <span>{{ customer.full_name }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Phone</strong>
+                <span>{{ customer.phone }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Gender</strong>
+                <span>{{ customer.gender }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Status</strong>
+                <span>{{ customer.status }}</span>
+            </div>
+
+        </div>
+
+        <hr>
+
+        {% if show_order_selection %}
+
+        <h2>
+
+            Eligible Custom Orders
+
+        </h2>
+
+        {% if eligible_orders %}
+
+            {% for order in eligible_orders %}
+
+            <div class="customer-card">
+
+                <div class="customer-card-body">
+
+                    <div class="detail-row">
+                        <strong>Order ID</strong>
+                        <span>{{ order.order_id }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Garment</strong>
+                        <span>{{ order.garment_name }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Fabric</strong>
+                        <span>{{ order.fabric_name }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Delivery Date</strong>
+                        <span>{{ order.delivery_date }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Status</strong>
+                        <span>{{ order.status }}</span>
+                    </div>
+
+                    <form
+                        method="POST"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="action"
+                            value="create_measurement"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="order_id"
+                            value="{{ order.order_id }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="button button-primary"
+                        >
+
+                            📏 Create Measurement
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>
+
+                No eligible Custom Made orders found.
+
+            </p>
+
+        {% endif %}
+
+        {% endif %}
+
+        {% endif %}
+
+        {% if order %}
+
+        <hr>
+
+        <h2>
+
+            Measurement Details
+
+        </h2>
+
+        <form
+            method="POST"
+            class="app-form"
+        >
+        
+            <input
+                type="hidden"
+                name="action"
+                value="save"
+            >
+        
+            <input
+                type="hidden"
+                name="order_id"
+                value="{{ order.order_id }}"
+            >
+        
+            <div class="form-group">
+        
+                <label>
+        
+                    Measurement Unit
+        
+                </label>
+        
+                <select
+                    name="measurement_unit"
+                    required
+                >
+        
+                    <option
+                        value="inches"
+                        {% if measurement and measurement.measurement_unit == "inches" %}selected{% endif %}
+                    >
+                        Inches
+                    </option>
+        
+                    <option
+                        value="centimeters"
+                        {% if measurement and measurement.measurement_unit == "centimeters" %}selected{% endif %}
+                    >
+                        Centimeters
+                    </option>
+        
+                </select>
+        
+            </div>
+        
+            <div class="form-group">
+        
+                <label>
+        
+                    Measurement Type
+        
+                </label>
+        
+                <select
+                    name="measurement_type"
+                    required
+                >
+        
+                    {% for item in [
+                        "Initial",
+                        "Fitting 1",
+                        "Fitting 2",
+                        "Fitting 3",
+                        "Alteration",
+                        "Final",
+                        "Remake"
+                    ] %}
+        
+                    <option
+                        value="{{ item }}"
+                        {% if measurement and measurement.measurement_type == item %}selected{% elif not measurement and item == "Initial" %}selected{% endif %}
+                    >
+        
+                        {{ item }}
+        
+                    </option>
+        
+                    {% endfor %}
+        
+                </select>
+        
+            </div>
+        
+            {% for section_title, fields in measurement_sections %}
+        
+            <hr>
+        
+            <h3>
+        
+                {{ section_title }}
+        
+            </h3>
+        
+            {% for field in fields %}
+        
+            <div class="form-group">
+        
+                <label>
+        
+                    {{ field }}
+        
+                </label>
+        
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="{{ field|lower|replace(' ', '_') }}"
+                    value="{% if measurement %}{{ measurement.measurement_data.get(section_title, {}).get(field, '') }}{% endif %}"
+                >
+        
+            </div>
+        
+            {% endfor %}
+        
+            {% endfor %}
+        
+            <div class="form-group">
+        
+                <label>
+        
+                    Notes
+        
+                </label>
+        
+                <textarea
+                    name="notes"
+                    rows="4"
+                >{% if measurement %}{{ measurement.notes }}{% endif %}</textarea>
+        
+            </div>
+        
+            <button
+                type="submit"
+                class="button button-success"
+            >
+        
+                {% if measurement %}
+        
+                    💾 Update Measurement
+        
+                {% else %}
+        
+                    💾 Save Measurements
+        
+                {% endif %}
+        
+            </button>
+        
+        </form>
+        
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

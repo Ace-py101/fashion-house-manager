@@ -39,15 +39,16 @@ Search Customers
                     type="text"
                     name="query"
                     value="{{ query }}"
+                    placeholder="Enter customer name, phone or customer code"
                     required
                 >
             </div>
 
             <button
                 type="submit"
-                class="button"
+                class="button button-primary"
             >
-                Search
+                🔍 Search
             </button>
 
         </form>
@@ -56,72 +57,89 @@ Search Customers
 
         <br>
 
-        <div class="table-container">
+        <div class="customer-card-grid">
 
-            <table class="app-table">
+            {% for customer in customers %}
 
-                <thead>
+            <div class="customer-card">
 
-                    <tr>
-                        <th>Customer Code</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Gender</th>
-                        <th>Actions</th>
-                    </tr>
+                <div class="customer-card-header">
 
-                </thead>
+                    <h3>{{ customer.customer_code }}</h3>
 
-                <tbody>
+                </div>
 
-                    {% for customer in customers %}
+                <div class="customer-card-body">
 
-                    <tr>
+                    <div class="detail-row">
+                        <strong>Customer Name</strong>
+                        <span>{{ customer.full_name }}</span>
+                    </div>
 
-                        <td>{{ customer.customer_code }}</td>
+                    <div class="detail-row">
+                        <strong>Phone</strong>
+                        <span>{{ customer.phone }}</span>
+                    </div>
 
-                        <td>{{ customer.full_name }}</td>
+                    <div class="detail-row">
+                        <strong>Gender</strong>
+                        <span>{{ customer.gender }}</span>
+                    </div>
 
-                        <td>{{ customer.phone }}</td>
+                    <div class="detail-row">
+                        <strong>Status</strong>
+                        <span>{{ customer.status }}</span>
+                    </div>
 
-                        <td>{{ customer.gender }}</td>
+                    <div class="detail-row">
+                        <strong>Orders</strong>
+                        <span>{{ customer_stats[customer.id]["orders"] }}</span>
+                    </div>
 
-                        <td>
+                    <div class="detail-row">
+                        <strong>Created</strong>
+                        <span>
+                            {{ customer.created_at.strftime('%d %b %Y') }}
+                        </span>
+                    </div>
 
-                            <div class="table-actions">
+                </div>
 
-                                <a
-                                    href="{{ url_for('customer.customer_history', customer_id=customer.id) }}"
-                                    class="button button-secondary"
-                                >
-                                    📜 Customer History
-                                </a>
+                <div class="page-actions">
 
-                            </div>
+                    <a
+                        href="{{ url_for('customer.customer_history', customer_id=customer.id) }}"
+                        class="button button-secondary"
+                    >
+                        📜 Customer History
+                    </a>
 
-                        </td>
+                    <a
+                        href="{{ url_for('customer.customer_activity', customer_id=customer.id) }}"
+                        class="button button-primary"
+                    >
+                        📊 Customer Activity
+                    </a>
 
-                    </tr>
+                </div>
 
-                    {% endfor %}
+            </div>
 
-                </tbody>
-
-            </table>
+            {% endfor %}
 
         </div>
 
         {% elif query %}
 
-            <div class="empty-state">
+        <div class="empty-state">
 
-                <h3>No Customer Found</h3>
+            <h3>No Customer Found</h3>
 
-                <p>
-                    No customer matched your search.
-                </p>
+            <p>
+                No customer matched your search.
+            </p>
 
-            </div>
+        </div>
 
         {% endif %}
 
@@ -130,3 +148,4 @@ Search Customers
 </div>
 
 {% endblock %}
+```

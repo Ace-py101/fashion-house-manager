@@ -8,13 +8,13 @@ from app.validators.customer_validator import validate_customer
 
 def generate_customer_code(phone):
     """
-    Generate a unique customer code.
+    Generate unique customer code.
 
     Format:
     CUS-YYYYMMDD-XXX-NNN
 
-    XXX = Last 3 digits of phone number
-    NNN = Daily sequence number
+    XXX = last 3 digits of phone number
+    NNN = daily sequence number
     """
 
     today = datetime.now().strftime("%Y%m%d")
@@ -26,9 +26,13 @@ def generate_customer_code(phone):
     latest_customer = (
         Customer.query
         .filter(
-            Customer.customer_code.like(f"{prefix}%")
+            Customer.customer_code.like(
+                f"{prefix}-%"
+            )
         )
-        .order_by(Customer.id.desc())
+        .order_by(
+            Customer.id.desc()
+        )
         .first()
     )
 
@@ -49,7 +53,7 @@ def generate_customer_code(phone):
 
 def create_customer(customer_data):
     """
-    Validate and create a new customer.
+    Validate and create customer.
     """
 
     errors = validate_customer(customer_data)
@@ -61,11 +65,16 @@ def create_customer(customer_data):
             "errors": errors
         }
 
+
     phone = customer_data["phone"].strip()
 
-    existing_customer = Customer.query.filter_by(
-        phone=phone
-    ).first()
+
+    existing_customer = (
+        Customer.query
+        .filter_by(phone=phone)
+        .first()
+    )
+
 
     if existing_customer:
 
@@ -76,6 +85,7 @@ def create_customer(customer_data):
             ]
         }
 
+
     customer = Customer(
 
         customer_code=generate_customer_code(phone),
@@ -84,199 +94,41 @@ def create_customer(customer_data):
 
         phone=phone,
 
-        email=customer_data.get(
-            "email",
-            ""
-        ).strip() or None,
+        email=customer_data.get("email", "").strip() or None,
 
-        address=customer_data.get(
-            "address",
-            ""
-        ).strip() or None,
+        address=customer_data.get("address", "").strip() or None,
 
         gender=customer_data["gender"],
 
-        notes=customer_data.get(
-            "notes",
-            ""
-        ).strip() or None
+        notes=customer_data.get("notes", "").strip() or None
 
     )
+
 
     try:
 
         db.session.add(customer)
 
-        db.session.commit()
-
-        return {
-            "success": True,
-            "customer": customer
-        }
-
-    except Exception as e:
-
-        db.session.rollback()
-
-        return {
-            "success": False,
-            "errors": [str(e)]
-        }
-
-def get_all_customers():
-    """
-    Return active customers ordered by newest first.
-    """
-
-    return (
-        Customer.query
-        .filter_by(status="Active")
-        .order_by(Customer.id.desc())
-        .all()
-    )
-
-def search_customers(query):
-    """
-    Search customers by code, name, or phone.
-    """
-
-    search = query.strip()
-
-    if not search:
-        return []
+        db.session.flush()
 
 
-    return (
-        Customer.query
-        .filter(
-            db.or_(
-                Customer.customer_code.ilike(
-                    f"%{search}%"
-                ),
-                Customer.full_name.ilike(
-                    f"%{search}%"
-                ),
-                Customer.phone.ilike(
-                    f"%{search}%"
-                )
-            )
+        create_customer_history(
+
+            customer_id=customer.id,
+
+            action="CREATE",
+
+            field_name="Customer Profile",
+
+            old_value="-",
+
+            new_value="Customer created",
+
+            changed_by=None
+
         )
-        .order_by(
-            Customer.id.desc()
-        )
-        .all()
-    )
-
-def get_customer_by_id(customer_id):
-    """
-    Retrieve a single customer by database ID.
-    """
-
-    return (
-        Customer.query
-        .filter_by(
-            id=customer_id
-        )
-        .first()
-    )
-
-def update_customer(customer_id, customer_data):
-    """
-    Update an existing customer after validation.
-    """
-
-    errors = validate_customer(customer_data)
-
-    if errors:
-
-        return {
-            "success": False,
-            "errors": errors
-        }
 
 
-    customer = (
-        Customer.query
-        .filter_by(
-            id=customer_id
-        )
-        .first()
-    )
-
-
-    if not customer:
-
-        return {
-            "success": False,
-            "errors": [
-                "Customer not found."
-            ]
-        }
-
-
-    existing_phone = (
-        Customer.query
-        .filter(
-            Customer.phone == customer_data["phone"],
-            Customer.id != customer_id
-        )
-        .first()
-    )
-
-
-    if existing_phone:
-
-        return {
-            "success": False,
-            "errors": [
-                "Phone number already exists."
-            ]
-        }
-
-
-    try:
-    
-        record_customer_changes(
-            customer,
-            customer_data
-        )
-    
-    
-        customer.full_name = (
-            customer_data["full_name"]
-            .strip()
-        )
-    
-    
-        customer.phone = (
-            customer_data["phone"]
-            .strip()
-        )
-    
-    
-        customer.email = (
-            customer_data.get("email")
-            or None
-        )
-    
-    
-        customer.address = (
-            customer_data.get("address")
-            or None
-        )
-    
-    
-        customer.gender = (
-            customer_data["gender"]
-        )
-    
-    
-        customer.notes = (
-            customer_data.get("notes")
-            or None
-        )
-    
-    
         db.session.commit()
 
 
@@ -298,25 +150,189 @@ def update_customer(customer_id, customer_data):
         }
 
 
+
+def get_all_customers():
+
+    return (
+        Customer.query
+        .filter_by(status="Active")
+        .order_by(Customer.id.desc())
+        .all()
+    )
+
+
+
+def search_customers(query):
+
+    search = query.strip()
+
+    if not search:
+
+        return []
+
+
+    return (
+
+        Customer.query
+        .filter(
+            db.or_(
+
+                Customer.customer_code.ilike(
+                    f"%{search}%"
+                ),
+
+                Customer.full_name.ilike(
+                    f"%{search}%"
+                ),
+
+                Customer.phone.ilike(
+                    f"%{search}%"
+                )
+
+            )
+        )
+        .order_by(
+            Customer.id.desc()
+        )
+        .all()
+
+    )
+
+
+
+def get_customer_by_id(customer_id):
+
+    return (
+
+        Customer.query
+        .filter_by(
+            id=customer_id
+        )
+        .first()
+
+    )
+
+
+
+def update_customer(customer_id, customer_data):
+
+    errors = validate_customer(customer_data)
+
+
+    if errors:
+
+        return {
+            "success": False,
+            "errors": errors
+        }
+
+
+    customer = get_customer_by_id(customer_id)
+
+
+    if not customer:
+
+        return {
+            "success": False,
+            "errors": [
+                "Customer not found."
+            ]
+        }
+
+
+    existing_phone = (
+
+        Customer.query
+        .filter(
+            Customer.phone == customer_data["phone"],
+            Customer.id != customer_id
+        )
+        .first()
+
+    )
+
+
+    if existing_phone:
+
+        return {
+            "success": False,
+            "errors": [
+                "Phone number already exists."
+            ]
+        }
+
+
+    try:
+
+        record_customer_changes(
+            customer,
+            customer_data
+        )
+
+
+        customer.full_name = customer_data["full_name"].strip()
+
+        customer.phone = customer_data["phone"].strip()
+
+        customer.email = (
+            customer_data.get("email") or None
+        )
+
+        customer.address = (
+            customer_data.get("address") or None
+        )
+
+        customer.gender = customer_data["gender"]
+
+        customer.notes = (
+            customer_data.get("notes") or None
+        )
+
+
+        db.session.commit()
+
+
+        return {
+            "success": True,
+            "customer": customer
+        }
+
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        return {
+            "success": False,
+            "errors": [
+                str(e)
+            ]
+        }
+
+
+
 def create_customer_history(
     customer_id,
+    action,
     field_name,
     old_value,
-    new_value
+    new_value,
+    changed_by=None
 ):
-    """
-    Record a customer data change.
-    """
 
     history = CustomerHistory(
 
         customer_id=customer_id,
 
+        action=action,
+
         field_name=field_name,
 
-        old_value=old_value,
+        old_value=str(old_value) if old_value else "",
 
-        new_value=new_value
+        new_value=str(new_value) if new_value else "",
+
+        changed_by=changed_by
 
     )
 
@@ -325,14 +341,7 @@ def create_customer_history(
 
 
 
-def record_customer_changes(
-    customer,
-    new_data
-):
-    """
-    Compare existing customer data
-    with submitted data and record changes.
-    """
+def record_customer_changes(customer, new_data):
 
     fields = {
 
@@ -353,6 +362,7 @@ def record_customer_changes(
 
     for field, label in fields.items():
 
+
         old_value = getattr(
             customer,
             field
@@ -366,19 +376,29 @@ def record_customer_changes(
 
         if str(old_value or "") != str(new_value or ""):
 
+
             create_customer_history(
-                customer.id,
-                label,
-                old_value,
-                new_value
+
+                customer_id=customer.id,
+
+                action="UPDATE",
+
+                field_name=label,
+
+                old_value=old_value,
+
+                new_value=new_value,
+
+                changed_by=None
+
             )
 
+
+
 def get_customer_history(customer_id):
-    """
-    Retrieve customer change history.
-    """
 
     return (
+
         CustomerHistory.query
         .filter_by(
             customer_id=customer_id
@@ -387,9 +407,83 @@ def get_customer_history(customer_id):
             CustomerHistory.changed_at.desc()
         )
         .all()
+
     )
 
+
+
 def deactivate_customer(customer_id):
+
+    customer = get_customer_by_id(
+        customer_id
+    )
+
+
+    if not customer:
+
+        return {
+
+            "success": False,
+
+            "errors": [
+                "Customer not found."
+            ]
+
+        }
+
+
+    old_status = customer.status
+
+
+    customer.status = "Inactive"
+
+
+    create_customer_history(
+
+        customer_id=customer.id,
+
+        action="UPDATE",
+
+        field_name="Status",
+
+        old_value=old_status,
+
+        new_value="Inactive",
+
+        changed_by=None
+
+    )
+
+
+    db.session.commit()
+
+
+    return {
+
+        "success": True,
+
+        "errors": []
+
+    }
+
+
+def get_inactive_customers():
+
+    return (
+
+        Customer.query
+        .filter_by(
+            status="Inactive"
+        )
+        .order_by(
+            Customer.id.desc()
+        )
+        .all()
+
+    )
+
+
+def activate_customer(customer_id):
 
     customer = get_customer_by_id(
         customer_id
@@ -398,21 +492,41 @@ def deactivate_customer(customer_id):
     if not customer:
 
         return {
+
             "success": False,
+
             "errors": [
                 "Customer not found."
             ]
+
         }
 
+    old_status = customer.status
 
-    customer.status = "Inactive"
+    customer.status = "Active"
 
-    from app import db
+    create_customer_history(
+
+        customer_id=customer.id,
+
+        action="UPDATE",
+
+        field_name="Status",
+
+        old_value=old_status,
+
+        new_value="Active",
+
+        changed_by=None
+
+    )
 
     db.session.commit()
 
-
     return {
+
         "success": True,
+
         "errors": []
+
     }

@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+View Order
+{% endblock %}
+
+
+{% block page_title %}
+View Order
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="/">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('order.view_orders') }}">
+Orders
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('order.view_orders') }}">
+View Orders
+</a>
+
+<span> / </span>
+
+<span>
+Order Details
+</span>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="card">
+
+
+    <div class="card-header">
+
+        <h2>
+            Order Details
+        </h2>
+
+    </div>
+
+
+
+    <div class="customer-card">
+
+
+        <div class="customer-card-header">
+
+            <h3>
+                {{ order.order_id }}
+            </h3>
+
+        </div>
+
+
+
+        <div class="customer-card-body">
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Name
+                </strong>
+
+                <span>
+                    {{ order.customer.full_name }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Phone
+                </strong>
+
+                <span>
+                    {{ order.customer.phone }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+            
+                <strong>
+                    Customer Code
+                </strong>
+            
+                <span>
+                    {{ order.customer.customer_code }}
+                </span>
+            
+            </div>
+            
+            <div class="detail-row">
+            
+                <strong>
+                    Gender
+                </strong>
+            
+                <span>
+                    {{ order.customer.gender }}
+                </span>
+            
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Garment Name
+                </strong>
+
+                <span>
+                    {{ order.garment_name }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+            
+                <strong>
+                    Order Type
+                </strong>
+            
+                <span>
+                    {{ order.order_type.replace("_", " ").title() }}
+                </span>
+            
+            </div>
+            
+            <div class="detail-row">
+            
+                <strong>
+                    Fulfillment Type
+                </strong>
+            
+                <span>
+                    {{ order.fulfillment_type.replace("_", " ").title() }}
+                </span>
+            
+            </div>
+            
+            {% if order.fulfillment_type == "ready_to_wear" %}
+            
+            <div class="detail-row">
+            
+                <strong>
+                    Size
+                </strong>
+            
+                <span>
+                    {{ order.size }}
+                </span>
+            
+            </div>
+            
+            {% endif %}
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Fabric Name
+                </strong>
+
+                <span>
+                    {{ order.fabric_name }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Style Image
+                </strong>
+
+                <span>
+
+                    {% if order.style_image %}
+
+                        📷 {{ order.style_image }}
+
+                    {% else %}
+
+                        No image uploaded
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Delivery Date
+                </strong>
+
+                <span>
+                    {{ order.delivery_date }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+            
+                <strong>
+                    Delivered Date
+                </strong>
+            
+                <span>
+            
+                    {% if order.delivered_at %}
+            
+                        {{ order.delivered_at }}
+            
+                    {% else %}
+            
+                        Not Delivered
+            
+                    {% endif %}
+            
+                </span>
+            
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Price
+                </strong>
+
+                <span>
+                    ₦{{ "{:,.2f}".format(order.price) }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Deposit
+                </strong>
+
+                <span>
+                    ₦{{ "{:,.2f}".format(order.deposit) }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Balance
+                </strong>
+
+                <span>
+                    ₦{{ "{:,.2f}".format(order.balance) }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Status
+                </strong>
+
+                <span>
+                    {{ order.status.replace("_", " ").title() }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Notes
+                </strong>
+
+                <span>
+
+                    {% if order.notes %}
+
+                        {{ order.notes }}
+
+                    {% else %}
+
+                        No notes
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <div class="page-actions">
+
+
+            <a href="{{ url_for('order.edit_order', order_id=order.order_id) }}"
+               class="button button-primary">
+
+                ✏️ Edit Order
+
+            </a>
+
+
+
+             <a href="{{ url_for('order.change_order_status', order_id=order.order_id) }}"
+                class="button">
+             
+                 🔄 Change Order Status
+             
+             </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

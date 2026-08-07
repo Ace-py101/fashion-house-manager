@@ -22,13 +22,13 @@ Dashboard
 
 <div class="dashboard-header">
 
-<h2>
-{{ greeting }}, Admin
-</h2>
+    <h2>
+        {{ greeting }}, Admin
+    </h2>
 
-<p>
-Here is your fashion house performance overview.
-</p>
+    <p>
+        Here is your fashion house performance overview.
+    </p>
 
 </div>
 
@@ -39,100 +39,97 @@ Here is your fashion house performance overview.
 <div class="dashboard-grid">
 
 
+    <a href="{{ url_for('customer.customers') }}"
+       class="card dashboard-link">
 
-<a href="{{ url_for('customer.customers') }}"
-class="card dashboard-link">
+        <div class="card-icon">
+            👥
+        </div>
 
-<div class="card-icon">
-👥
-</div>
+        <h3>
+            Total Customers
+        </h3>
 
-<h3>
-Total Customers
-</h3>
+        <div class="card-number">
+            {{ total_customers }}
+        </div>
 
-<div class="card-number">
-{{ total_customers }}
-</div>
+        <small>
+            Registered clients
+        </small>
 
-<small>
-Registered clients
-</small>
-
-</a>
-
-
-
-
-<a href="{{ url_for('order.orders') }}"
-class="card dashboard-link">
-
-<div class="card-icon">
-✂️
-</div>
-
-<h3>
-Active Orders
-</h3>
-
-<div class="card-number">
-0
-</div>
-
-<small>
-Currently in production
-</small>
-
-</a>
+    </a>
 
 
 
 
-<a href="{{ url_for('order.orders') }}"
-class="card dashboard-link">
-
-<div class="card-icon">
-⏳
-</div>
-
-<h3>
-Pending Orders
-</h3>
-
-<div class="card-number">
-0
-</div>
-
-<small>
-Awaiting completion
-</small>
-
-</a>
-
+    <a href="{{ url_for('order.view_orders') }}" class="card dashboard-link">
+    
+        <div class="card-icon">
+            📋
+        </div>
+    
+        <h3>
+            Total Orders
+        </h3>
+    
+        <div class="card-number">
+            {{ total_orders }}
+        </div>
+    
+        <small>
+            All customer orders recorded
+        </small>
+    
+    </a>
 
 
 
-<a href="{{ url_for('payment.payments') }}"
-class="card dashboard-link">
 
-<div class="card-icon">
-💰
-</div>
+    <a href="{{ url_for('customer.inactive_customers') }}"
+       class="card dashboard-link">
 
-<h3>
-Outstanding Balance
-</h3>
+        <div class="card-icon">
+            🔴
+        </div>
 
-<div class="card-number">
-$0
-</div>
+        <h3>
+            Inactive Customers
+        </h3>
 
-<small>
-Customer payments pending
-</small>
+        <div class="card-number">
+            {{ inactive_customers }}
+        </div>
 
-</a>
+        <small>
+            Deactivated clients
+        </small>
 
+    </a>
+
+
+
+
+    <a href="{{ url_for('payment.payments') }}"
+       class="card dashboard-link">
+
+        <div class="card-icon">
+            💰
+        </div>
+
+        <h3>
+            Outstanding Balance
+        </h3>
+
+        <div class="card-number">
+            ₦0
+        </div>
+
+        <small>
+            Customer payments pending
+        </small>
+
+    </a>
 
 
 </div>
@@ -141,14 +138,14 @@ Customer payments pending
 
 
 
-<!-- Production Tracker -->
+<!-- Production Workflow -->
 
 
 <div class="section-title">
 
-<h2>
-🧵 Production Workflow
-</h2>
+    <h2>
+        🧵 Production Workflow
+    </h2>
 
 </div>
 
@@ -158,105 +155,282 @@ Customer payments pending
 <div class="workflow">
 
 
-<a href="{{ url_for('order.orders') }}"
-class="workflow-step">
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
 
-<span>
-📋
-</span>
+        <span>
+            📋
+        </span>
 
-<p>
-New Orders
-</p>
+        <p>
+            New Orders
+        </p>
 
-<strong>
-12
-</strong>
+        <strong>
+            {{ new_orders }}
+        </strong>
 
-</a>
-
-
-
-<a href="{{ url_for('order.orders') }}"
-class="workflow-step">
-
-<span>
-✂️
-</span>
-
-<p>
-Cutting
-</p>
-
-<strong>
-5
-</strong>
-
-</a>
+    </a>
 
 
 
 
-<a href="{{ url_for('order.orders') }}"
-class="workflow-step">
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
 
-<span>
-🪡
-</span>
+        <span>
+            ✂️
+        </span>
 
-<p>
-Sewing
-</p>
+        <p>
+            Cutting
+        </p>
 
-<strong>
-18
-</strong>
+        <strong>
+            {{ cutting_orders }}
+        </strong>
 
-</a>
-
-
-
-
-<a href="{{ url_for('order.orders') }}"
-class="workflow-step">
-
-<span>
-✨
-</span>
-
-<p>
-Finishing
-</p>
-
-<strong>
-7
-</strong>
-
-</a>
+    </a>
 
 
 
 
-<a href="{{ url_for('order.orders') }}"
-class="workflow-step">
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
 
-<span>
-🚚
-</span>
+        <span>
+            🪡
+        </span>
 
-<p>
-Ready
-</p>
+        <p>
+            Sewing
+        </p>
 
-<strong>
-4
-</strong>
+        <strong>
+            {{ sewing_orders }}
+        </strong>
 
-</a>
+    </a>
+
+
+
+
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
+
+        <span>
+            📌
+        </span>
+
+        <p>
+            Fitting
+        </p>
+
+        <strong>
+            {{ fitting_orders }}
+        </strong>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
+
+        <span>
+            🔧
+        </span>
+
+        <p>
+            Alteration
+        </p>
+
+        <strong>
+            {{ alteration_orders }}
+        </strong>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
+
+        <span>
+            ✨
+        </span>
+
+        <p>
+            Ready
+        </p>
+
+        <strong>
+            {{ ready_orders }}
+        </strong>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('order.view_orders') }}"
+       class="workflow-step">
+
+        <span>
+            🚚
+        </span>
+
+        <p>
+            Delivered
+        </p>
+
+        <strong>
+            {{ delivered_orders }}
+        </strong>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('order.orders') }}"
+       class="workflow-step">
+
+        <span>
+            ❌
+        </span>
+
+        <p>
+            Cancelled
+        </p>
+
+        <strong>
+            {{ cancelled_orders }}
+        </strong>
+
+    </a>
 
 
 </div>
 
+
+
+
+
+<!-- Measurement Tracker -->
+
+
+<div class="section-title">
+
+    <h2>
+        📏 Measurement Records
+    </h2>
+
+</div>
+
+
+
+
+<div class="dashboard-grid">
+
+
+    <a href="{{ url_for('measurement.measurements') }}"
+       class="card dashboard-link">
+
+        <div class="card-icon">
+            📏
+        </div>
+
+        <h3>
+            Total Measurements
+        </h3>
+
+        <div class="card-number">
+            {{ total_measurements }}
+        </div>
+
+        <small>
+            All recorded measurements
+        </small>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('measurement.measurements') }}"
+       class="card dashboard-link">
+
+        <div class="card-icon">
+            👨
+        </div>
+
+        <h3>
+            Male Measurements
+        </h3>
+
+        <div class="card-number">
+            {{ male_measurements }}
+        </div>
+
+        <small>
+            Male clients
+        </small>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('measurement.measurements') }}"
+       class="card dashboard-link">
+
+        <div class="card-icon">
+            👩
+        </div>
+
+        <h3>
+            Female Measurements
+        </h3>
+
+        <div class="card-number">
+            {{ female_measurements }}
+        </div>
+
+        <small>
+            Female clients
+        </small>
+
+    </a>
+
+
+
+
+    <a href="{{ url_for('measurement.measurements') }}"
+       class="card dashboard-link">
+
+        <div class="card-icon">
+            👧
+        </div>
+
+        <h3>
+            Children Measurements
+        </h3>
+
+        <div class="card-number">
+            {{ children_measurements }}
+        </div>
+
+        <small>
+            Children clients
+        </small>
+
+    </a>
+
+
+</div>
 
 
 
@@ -268,123 +442,84 @@ Ready
 <div class="dashboard-panels">
 
 
+    <div class="panel">
 
-<div class="panel">
-
-
-<h2>
-📋 Recent Orders
-</h2>
+        <h2>
+            📋 Recent Orders
+        </h2>
 
 
+        {% for order in recent_orders %}
 
-<a href="{{ url_for('order.orders') }}"
-class="list-item">
+        <a href="{{ url_for('order.view_order', order_id=order.order_id) }}"
+           class="list-item">
 
-<strong>
-Agbada Set
-</strong>
+            <strong>
+                {{ order.garment_name }}
+            </strong>
 
-<span>
-In Sewing
-</span>
+            <span>
+                {{ order.status }}
+            </span>
 
-</a>
-
-
-
-<a href="{{ url_for('order.orders') }}"
-class="list-item">
-
-<strong>
-Corporate Shirt
-</strong>
-
-<span>
-Cutting
-</span>
-
-</a>
+        </a>
 
 
+        {% else %}
 
-<a href="{{ url_for('order.orders') }}"
-class="list-item">
-
-<strong>
-Wedding Outfit
-</strong>
-
-<span>
-Ready
-</span>
-
-</a>
+        <p>
+            No recent orders.
+        </p>
 
 
+        {% endfor %}
 
-</div>
+
+    </div>
 
 
 
 
 
-<div class="panel">
+    <div class="panel">
 
 
-<h2>
-🚚 Upcoming Deliveries
-</h2>
-
-
-
-<a href="{{ url_for('order.orders') }}"
-class="list-item">
-
-<strong>
-Customer A
-</strong>
-
-<span>
-Tomorrow
-</span>
-
-</a>
+        <h2>
+            🚚 Upcoming Deliveries
+        </h2>
 
 
 
-<a href="{{ url_for('order.orders') }}"
-class="list-item">
-
-<strong>
-Customer B
-</strong>
-
-<span>
-Friday
-</span>
-
-</a>
+        {% for order in upcoming_deliveries %}
 
 
+        <a href="{{ url_for('order.view_order', order_id=order.order_id) }}"
+           class="list-item">
 
-<a href="{{ url_for('order.orders') }}"
-class="list-item">
+            <strong>
+                {{ order.customer.full_name }}
+            </strong>
 
-<strong>
-Customer C
-</strong>
+            <span>
+                {{ order.delivery_date.strftime("%d %b %Y") }}
+            </span>
 
-<span>
-Next Week
-</span>
-
-</a>
-
+        </a>
 
 
-</div>
+        {% else %}
 
+
+        <p>
+            No upcoming deliveries.
+        </p>
+
+
+        {% endfor %}
+
+
+
+    </div>
 
 
 </div>

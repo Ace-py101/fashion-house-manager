@@ -1,0 +1,207 @@
+{% extends "documents/base_document.html" %}
+
+{% block document_content %}
+
+<h2>Customer Information</h2>
+
+<table>
+
+    <tr>
+        <th style="width:30%;">Customer Name</th>
+        <td>{{ customer.full_name }}</td>
+    </tr>
+
+    <tr>
+        <th>Customer Code</th>
+        <td>{{ customer.customer_code }}</td>
+    </tr>
+
+    <tr>
+        <th>Phone</th>
+        <td>{{ customer.phone }}</td>
+    </tr>
+
+    <tr>
+        <th>Email</th>
+        <td>{{ customer.email or "-" }}</td>
+    </tr>
+
+    <tr>
+        <th>Address</th>
+        <td>{{ customer.address or "-" }}</td>
+    </tr>
+
+</table>
+
+<h2>Order Information</h2>
+
+<table>
+
+    <tr>
+        <th style="width:30%;">Order ID</th>
+        <td>{{ order.order_id }}</td>
+    </tr>
+
+    <tr>
+        <th>Garment</th>
+        <td>{{ order.garment_name }}</td>
+    </tr>
+
+    <tr>
+        <th>Style</th>
+        <td>{{ order.garment_style or "-" }}</td>
+    </tr>
+
+    <tr>
+        <th>Measurement Type</th>
+        <td>{{ measurement.measurement_type }}</td>
+    </tr>
+
+    <tr>
+        <th>Measurement Unit</th>
+        <td>{{ measurement.measurement_unit }}</td>
+    </tr>
+
+</table>
+
+<h2>
+
+    Measurement Values
+
+</h2>
+
+{% for category, values in measurement.measurement_data.items() %}
+
+<h3>
+
+    {{ category }}
+
+</h3>
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Measurement</th>
+
+            <th>Value</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for name, value in values.items() %}
+
+        <tr>
+
+            <td>{{ name }}</td>
+
+            <td>{{ value or "-" }}</td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endfor %}
+
+{% if measurement.notes %}
+
+<h2>
+
+    Notes
+
+</h2>
+
+<p>
+
+    {{ measurement.notes }}
+
+</p>
+
+{% endif %}
+
+<hr>
+
+<h2>
+
+Authorization
+
+</h2>
+
+<table>
+
+    <tr>
+
+        <th style="width:30%;">
+
+            Prepared By
+
+        </th>
+
+        <td>
+
+            _______________________
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <th>
+
+            Checked By
+
+        </th>
+
+        <td>
+
+            _______________________
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <th>
+
+            Customer Signature
+
+        </th>
+
+        <td>
+
+            _______________________
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <th>
+
+            Tailor Signature
+
+        </th>
+
+        <td>
+
+            _______________________
+
+        </td>
+
+    </tr>
+
+</table>
+
+{% endblock %}

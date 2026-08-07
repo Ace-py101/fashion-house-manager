@@ -10,12 +10,16 @@ from flask import (
 from app.services.customer_service import (
     create_customer,
     get_all_customers,
+    get_inactive_customers,
+    activate_customer,
     search_customers,
     get_customer_by_id,
     update_customer,
     get_customer_history,
     deactivate_customer
 )
+
+from app.models.order import Order
 
 
 customer_bp = Blueprint(
@@ -71,13 +75,12 @@ def new_customer():
                 "notes",
                 ""
             )
-        }
 
+        }
 
         result = create_customer(
             customer_data
         )
-
 
         if result["success"]:
 
@@ -92,7 +95,6 @@ def new_customer():
                 )
             )
 
-
         for error in result["errors"]:
 
             category = (
@@ -106,7 +108,6 @@ def new_customer():
                 category
             )
 
-
     return render_template(
         "new_customer.html"
     )
@@ -117,9 +118,22 @@ def view_customers():
 
     customers = get_all_customers()
 
+    customer_stats = {}
+
+    for customer in customers:
+
+        customer_stats[customer.id] = {
+
+            "orders": Order.query.filter_by(
+                customer_id=customer.id
+            ).count()
+
+        }
+
     return render_template(
         "view_customers.html",
-        customers=customers
+        customers=customers,
+        customer_stats=customer_stats
     )
 
 
@@ -133,7 +147,6 @@ def search_customer():
 
     query = ""
 
-
     if request.method == "POST":
 
         query = request.form.get(
@@ -145,11 +158,23 @@ def search_customer():
             query
         )
 
+    customer_stats = {}
+
+    for customer in customers:
+
+        customer_stats[customer.id] = {
+
+            "orders": Order.query.filter_by(
+                customer_id=customer.id
+            ).count()
+
+        }
 
     return render_template(
         "search_customer.html",
         customers=customers,
-        query=query
+        query=query,
+        customer_stats=customer_stats
     )
 
 
@@ -161,7 +186,6 @@ def view_customer(customer_id):
     customer = get_customer_by_id(
         customer_id
     )
-
 
     if not customer:
 
@@ -175,7 +199,6 @@ def view_customer(customer_id):
                 "customer.view_customers"
             )
         )
-
 
     return render_template(
         "view_customer.html",
@@ -193,7 +216,6 @@ def edit_customer(customer_id):
         customer_id
     )
 
-
     if not customer:
 
         flash(
@@ -206,7 +228,6 @@ def edit_customer(customer_id):
                 "customer.view_customers"
             )
         )
-
 
     if request.method == "POST":
 
@@ -241,14 +262,13 @@ def edit_customer(customer_id):
                 "notes",
                 ""
             )
-        }
 
+        }
 
         result = update_customer(
             customer_id,
             customer_data
         )
-
 
         if result["success"]:
 
@@ -264,7 +284,6 @@ def edit_customer(customer_id):
                 )
             )
 
-
         for error in result["errors"]:
 
             category = (
@@ -277,7 +296,6 @@ def edit_customer(customer_id):
                 error,
                 category
             )
-
 
     return render_template(
         "edit_customer.html",
@@ -294,6 +312,38 @@ def customer_history(customer_id):
         customer_id
     )
 
+    if not customer:
+
+        flash(
+            "Customer not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for(
+                "customer.view_customers"
+            )
+        )
+
+    history = get_customer_history(
+        customer_id
+    )
+
+    return render_template(
+        "customer_history.html",
+        customer=customer,
+        history=history
+    )
+
+
+@customer_bp.route(
+    "/customers/<int:customer_id>/activity"
+)
+def customer_activity(customer_id):
+
+    customer = get_customer_by_id(
+        customer_id
+    )
 
     if not customer:
 
@@ -308,18 +358,23 @@ def customer_history(customer_id):
             )
         )
 
-
-    history = get_customer_history(
-        customer_id
-    )
-
+    total_orders = Order.query.filter_by(
+        customer_id=customer.id
+    ).count()
 
     return render_template(
-        "customer_history.html",
+        "customer_activity.html",
         customer=customer,
-        history=history
+        total_orders=total_orders,
+        production_orders=0,
+        delivered_orders=0,
+        amendment_orders=0,
+        replacement_orders=0,
+        total_measurements=0,
+        outstanding_balance=0,
+        lifetime_spending=0
     )
-
+    
 @customer_bp.route(
     "/customers/<int:customer_id>/deactivate",
     methods=["POST"]
@@ -329,7 +384,6 @@ def deactivate_customer_route(customer_id):
     result = deactivate_customer(
         customer_id
     )
-
 
     if result["success"]:
 
@@ -347,9 +401,67 @@ def deactivate_customer_route(customer_id):
                 "error"
             )
 
-
     return redirect(
         url_for(
             "customer.view_customers"
+        )
+    )
+
+
+@customer_bp.route(
+    "/customers/inactive"
+)
+def inactive_customers():
+
+    customers = get_inactive_customers()
+
+    customer_stats = {}
+
+    for customer in customers:
+
+        customer_stats[customer.id] = {
+
+            "orders": Order.query.filter_by(
+                customer_id=customer.id
+            ).count()
+
+        }
+
+    return render_template(
+        "inactive_customers.html",
+        customers=customers,
+        customer_stats=customer_stats
+    )
+
+
+@customer_bp.route(
+    "/customers/<int:customer_id>/activate",
+    methods=["POST"]
+)
+def activate_customer_route(customer_id):
+
+    result = activate_customer(
+        customer_id
+    )
+
+    if result["success"]:
+
+        flash(
+            "Customer activated successfully.",
+            "success"
+        )
+
+    else:
+
+        for error in result["errors"]:
+
+            flash(
+                error,
+                "error"
+            )
+
+    return redirect(
+        url_for(
+            "customer.inactive_customers"
         )
     )

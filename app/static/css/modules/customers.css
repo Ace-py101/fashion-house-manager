@@ -155,3 +155,50 @@
     text-align:center;
 
 }
+
+.customer-record-card{
+
+    background:
+    linear-gradient(
+        145deg,
+        #242424,
+        #1c1c1c
+    );
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    padding:30px;
+
+    margin-bottom:25px;
+
+}
+
+
+.detail-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:
+    1px solid rgba(255,255,255,.08);
+
+}
+
+
+.detail-row strong{
+
+    color:var(--gold);
+
+}
+
+
+.detail-row span{
+
+    color:var(--ivory);
+
+}

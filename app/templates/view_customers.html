@@ -9,138 +9,125 @@ Customer Directory
 {% endblock %}
 
 {% block breadcrumb %}
+
 <a href="/">Dashboard</a>
+
 <span> / </span>
 
 <a href="{{ url_for('customer.customers') }}">
     Customers
-</a><span> / </span>
+</a>
+
+<span> / </span>
+
 <span>View Customers</span>
+
 {% endblock %}
 
 {% block content %}
 
-<div class="card"><div class="card-header">
+<div class="card">
 
+    <div class="card-header">
+        <h2>Customer Directory</h2>
+    </div>
 
-</div>
+    <div class="card-body">
 
-
-<div class="card-body">
-
-    {% if customers %}
-
-    <div class="table-container">
-
-        <table class="app-table">
-
-            <thead>
-
-                <tr>
-                    <th>Customer Code</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Gender</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                    <th>Actions</th>
-                </tr>
-
-            </thead>
-
-
-            <tbody>
+        {% if customers %}
 
             {% for customer in customers %}
 
-                <tr>
+            <div class="customer-record-card">
 
-                    <td>
-                        {{ customer.customer_code }}
-                    </td>
+                <div class="details-table">
 
+                    <div class="detail-row">
+                        <strong>Customer Code</strong>
+                        <span>{{ customer.customer_code }}</span>
+                    </div>
 
-                    <td>
-                        {{ customer.full_name }}
-                    </td>
+                    <div class="detail-row">
+                        <strong>Customer Name</strong>
+                        <span>{{ customer.full_name }}</span>
+                    </div>
 
+                    <div class="detail-row">
+                        <strong>Phone</strong>
+                        <span>{{ customer.phone }}</span>
+                    </div>
 
-                    <td>
-                        {{ customer.phone }}
-                    </td>
+                    <div class="detail-row">
+                        <strong>Gender</strong>
+                        <span>{{ customer.gender }}</span>
+                    </div>
 
-
-                    <td>
-                        {{ customer.gender }}
-                    </td>
-
-
-                    <td>
-
+                    <div class="detail-row">
+                        <strong>Status</strong>
                         <span class="badge">
                             {{ customer.status }}
                         </span>
+                    </div>
 
-                    </td>
+                    <div class="detail-row">
+                        <strong>Orders</strong>
+                        <span>
+                            {{ customer_stats[customer.id]["orders"] }}
+                        </span>
+                    </div>
 
+                    <div class="detail-row">
+                        <strong>Date Created</strong>
+                        <span>
+                            {{ customer.created_at.strftime("%d-%m-%Y") }}
+                        </span>
+                    </div>
 
-                    <td>
-                        {{ customer.created_at.strftime("%d-%m-%Y") }}
-                    </td>
+                </div>
 
+                <div class="page-actions">
 
-                    <td>
+                    <a
+                        href="{{ url_for('customer.view_customer', customer_id=customer.id) }}"
+                        class="button button-secondary"
+                    >
+                        👁️ View Customer
+                    </a>
 
-                        <div class="table-actions">
+                    <a
+                        href="{{ url_for(
+                            'order.new_order',
+                            customer_code=customer.customer_code
+                        ) }}"
+                        class="button button-primary"
+                    >
+                        ✂️ Create Order
+                    </a>
 
-                            <a
-                                href="{{ url_for('customer.view_customer', customer_id=customer.id) }}"
-                                class="button button-secondary"
-                            >
-                                👁️ View Customer
-                            </a>
+                </div>
 
+            </div>
 
-                            <a
-                                href="#"
-                                class="button button-primary"
-                            >
-                                ✂️ Create Order
-                            </a>
-
-                        </div>
-
-                    </td>
-
-
-                </tr>
+            <br>
 
             {% endfor %}
 
-            </tbody>
+        {% else %}
 
-        </table>
+            <div class="empty-state">
 
-    </div>
+                <h3>No Customers Found</h3>
 
+                <p>
+                    Register your first customer to begin.
+                </p>
 
-    {% else %}
+            </div>
 
-
-    <div class="empty-state">
-
-        <h3>No Customers Found</h3>
-
-        <p>
-            Register your first customer to begin.
-        </p>
+        {% endif %}
 
     </div>
-
-
-    {% endif %}
-
 
 </div>
 
-</div>{% endblock %}
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}
+Measurement History
+{% endblock %}
+
+{% block page_title %}
+Measurement History
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('measurement.measurements') }}">
+    Measurements
+</a>
+
+<span> / </span>
+
+<span>
+    Measurement History
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            📜 Measurement History
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="details-table">
+
+            <div class="detail-row">
+
+                <strong>Customer</strong>
+
+                <span>{{ customer.full_name }}</span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <strong>Customer Code</strong>
+
+                <span>{{ customer.customer_code }}</span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <strong>Order ID</strong>
+
+                <span>{{ order.order_id }}</span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <strong>Garment</strong>
+
+                <span>{{ order.garment_name }}</span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <strong>Measurement ID</strong>
+
+                <span>{{ measurement.measurement_id }}</span>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        {% if history %}
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Action</th>
+
+                    <th>Description</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in history %}
+
+                <tr>
+
+                    <td>
+
+                        {{ item.created_at.strftime("%d %b %Y %I:%M %p") }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.action }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.description }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <p>
+
+            No history available.
+
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

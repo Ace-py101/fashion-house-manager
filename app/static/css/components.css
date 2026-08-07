@@ -1,73 +1,65 @@
+/* =====================================
+   Profile Widget
+===================================== */
+
 .profile {
     position: relative;
 }
 
 
 .profile-button {
-
     display: flex;
     align-items: center;
     gap: 10px;
     background: none;
     border: none;
     cursor: pointer;
-
 }
-
 
 
 .profile-menu {
-
     display: none;
-
     position: absolute;
-
     right: 0;
-
     top: 55px;
-
     min-width: 200px;
 
-    background: white;
-
-    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
 
     padding: 10px;
 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 35px rgba(0,0,0,.5);
 
-    z-index: 1000;
-
+    z-index: 10000;
 }
-
 
 
 .profile-menu.active {
-
     display: block;
-
 }
-
 
 
 .profile-menu a {
-
     display: block;
-
-    padding: 10px;
+    padding: 12px;
 
     text-decoration: none;
+    color: var(--ivory);
 
+    border-radius: 8px;
 }
-
 
 
 .profile-menu a:hover {
-
-    background: #f4f4f4;
-
+    background: #242424;
 }
 
+
+/* =====================================
+   Dashboard / General Links
+===================================== */
 
 .dashboard-link,
 .workflow-step,
@@ -78,18 +70,19 @@
 
 }
 
-.notification{
 
-    position:relative;
+/* =====================================
+   Notification System
+===================================== */
 
+.notification {
+    position: relative;
 }
 
 
-
-.notification-button{
+.notification-button {
 
     background:none;
-
     border:none;
 
     cursor:pointer;
@@ -101,8 +94,7 @@
 }
 
 
-
-.notification-menu{
+.notification-menu {
 
     display:none;
 
@@ -114,6 +106,7 @@
 
     width:280px;
 
+
     background:#181818;
 
     border:1px solid var(--gold);
@@ -122,6 +115,7 @@
 
     box-shadow:0 15px 35px rgba(0,0,0,.5);
 
+
     z-index:10000;
 
     overflow:hidden;
@@ -129,16 +123,14 @@
 }
 
 
-
-.notification-menu.active{
+.notification-menu.active {
 
     display:block;
 
 }
 
 
-
-.notification-header{
+.notification-header {
 
     padding:15px;
 
@@ -146,33 +138,32 @@
 
     color:var(--ivory);
 
-    border-bottom:1px solid rgba(212,175,55,.3);
+    border-bottom:
+    1px solid rgba(212,175,55,.3);
 
 }
 
 
-
-.notification-item{
+.notification-item {
 
     padding:14px 15px;
 
     color:var(--ivory);
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+    border-bottom:
+    1px solid rgba(255,255,255,.08);
 
 }
 
 
-
-.notification-item:hover{
+.notification-item:hover {
 
     background:#242424;
 
 }
 
 
-
-.notification-footer{
+.notification-footer {
 
     display:block;
 
@@ -185,12 +176,78 @@
 }
 
 
+.notification-footer:hover {
+
+    background:#242424;
+
+}
+
+
+/* =====================================
+   Universal Action Buttons
+===================================== */
+
+
+.page-actions,
+.table-actions {
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    margin-top:30px;
+
+}
+
+
+.page-actions .button,
+.table-actions .button {
+
+    min-width:160px;
+
+    text-align:center;
+
+}
+
+
+/* =====================================
+   Responsive Actions
+===================================== */
+
+@media(max-width:600px){
+
+    .page-actions,
+    .table-actions {
+
+        flex-direction:column;
+
+        width:100%;
+
+    }
+
+
+    .page-actions .button,
+    .table-actions .button {
+
+        width:100%;
+
+    }
+
+}
+
+
+/* =====================================
+   Mobile Notification
+===================================== */
 
 @media(max-width:900px){
 
 
-    .notification-menu{
-
+    .notification-menu {
 
         position:fixed;
 
@@ -198,12 +255,13 @@
 
         right:15px;
 
+
         width:calc(100% - 30px);
 
         max-width:350px;
 
-        z-index:10000;
 
+        z-index:10000;
 
     }
 

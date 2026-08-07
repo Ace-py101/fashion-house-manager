@@ -1,156 +1,193 @@
 {% extends "base.html" %}
 
-
 {% block title %}
 Customer History
 {% endblock %}
-
-
 
 {% block page_title %}
 Customer History
 {% endblock %}
 
-
-
 {% block breadcrumb %}
-
-<a href="/">
-Dashboard
-</a>
+<a href="/">Dashboard</a>
 
 <span> / </span>
 
 <a href="{{ url_for('customer.view_customers') }}">
-Customers
+    Customers
 </a>
 
 <span> / </span>
 
-<span>
-History
-</span>
-
+<span>Customer History</span>
 {% endblock %}
-
-
 
 {% block content %}
 
-
 <div class="card">
 
+    <div class="card-header">
 
-<div class="card-header">
+        <h2>{{ customer.full_name }}</h2>
 
-<h2>
-{{ customer.full_name }}
-</h2>
+        <p>{{ customer.customer_code }}</p>
 
-<p>
-{{ customer.customer_code }}
-</p>
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-card">
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Phone</strong>
+                    <span>{{ customer.phone }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Gender</strong>
+                    <span>{{ customer.gender }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Status</strong>
+                    <span>{{ customer.status }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 
-
-<div class="card-body">
+<br>
 
 
 {% if history %}
 
-
-<div class="table-container">
-
-
-<table class="app-table">
-
-
-<thead>
-
-<tr>
-
-<th>
-Field
-</th>
-
-<th>
-Old Value
-</th>
-
-<th>
-New Value
-</th>
-
-<th>
-Date Changed
-</th>
-
-</tr>
-
-</thead>
-
-
-
-<tbody>
-
-
 {% for item in history %}
 
+<div class="customer-card">
 
-<tr>
+    <div class="customer-card-header">
 
-<td>
-{{ item.field_name }}
-</td>
+        <h3>
 
+            {% if item.action == "CREATE" %}
+                🟢 Customer Created
 
-<td>
-{{ item.old_value or "-" }}
-</td>
+            {% elif item.action == "UPDATE" %}
+                ✏ Customer Updated
 
+            {% elif item.action == "STATUS_CHANGE" %}
+                🔴 Status Changed
 
-<td>
-{{ item.new_value or "-" }}
-</td>
+            {% else %}
+                📜 Customer History
 
+            {% endif %}
 
-<td>
-{{ item.changed_at.strftime("%d-%m-%Y %H:%M") }}
-</td>
+        </h3>
 
+    </div>
 
-</tr>
+    <div class="customer-card-body">
 
+        <div class="detail-row">
 
-{% endfor %}
+            <strong>Field</strong>
 
+            <span>
+                {{ item.field_name|replace("_"," ")|title }}
+            </span>
 
-</tbody>
+        </div>
 
+        <div class="detail-row">
 
-</table>
+            <strong>Old Value</strong>
 
+            <span>
+                {{ item.old_value or "-" }}
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>New Value</strong>
+
+            <span>
+                {{ item.new_value or "-" }}
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>Date</strong>
+
+            <span>
+                {{ item.changed_at.strftime("%d %b %Y") }}
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>Time</strong>
+
+            <span>
+                {{ item.changed_at.strftime("%I:%M %p") }}
+            </span>
+
+        </div>
+
+    </div>
 
 </div>
 
+<br>
+
+{% endfor %}
 
 {% else %}
 
+<div class="empty-state">
 
-<p>
-No changes recorded for this customer.
-</p>
+    <h3>No History Available</h3>
 
+    <p>
+
+        No business history has been recorded for this customer yet.
+
+    </p>
+
+</div>
 
 {% endif %}
 
 
+<div class="page-actions">
+
+    <a
+        href="{{ url_for('customer.customer_activity', customer_id=customer.id) }}"
+        class="button button-primary"
+    >
+        📊 Customer Activity
+    </a>
+
+    <a
+        href="{{ url_for('customer.view_customers') }}"
+        class="button button-secondary"
+    >
+        ← Back to Customers
+    </a>
+
 </div>
-
-
-</div>
-
 
 {% endblock %}

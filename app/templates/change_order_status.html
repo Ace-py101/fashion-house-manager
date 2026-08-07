@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Change Order Status
+{% endblock %}
+
+
+{% block page_title %}
+Change Order Status
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="/">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('order.view_orders') }}">
+Orders
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('order.view_order', order_id=order.order_id) }}">
+Order Details
+</a>
+
+<span> / </span>
+
+<span>
+Change Status
+</span>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="card">
+
+
+    <div class="card-header">
+
+        <h2>
+            Change Order Status
+        </h2>
+
+    </div>
+
+
+
+    <div class="customer-card">
+
+
+        <div class="customer-card-header">
+
+            <h3>
+                {{ order.order_id }}
+            </h3>
+
+        </div>
+
+
+
+        <div class="customer-card-body">
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Customer Name
+                </strong>
+
+                <span>
+                    {{ order.customer.full_name }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Phone
+                </strong>
+
+                <span>
+                    {{ order.customer.phone }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Garment Name
+                </strong>
+
+                <span>
+                    {{ order.garment_name }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Delivery Date
+                </strong>
+
+                <span>
+                    {{ order.delivery_date }}
+                </span>
+
+            </div>
+
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Current Status
+                </strong>
+
+                <span>
+                    {{ order.status }}
+                </span>
+
+            </div>
+
+
+
+            <form method="POST">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Change Status
+                    </label>
+
+
+                    <select name="status" required>
+
+
+                        <option value="">
+                            Select New Status
+                        </option>
+
+
+                        <option value="new">
+                            New
+                        </option>
+
+
+                        <option value="cutting">
+                            Cutting
+                        </option>
+
+
+                        <option value="sewing">
+                            Sewing
+                        </option>
+
+
+                        <option value="fitting">
+                            Fitting
+                        </option>
+
+
+                        <option value="alteration">
+                            Alteration
+                        </option>
+
+
+                        <option value="ready">
+                            Ready
+                        </option>
+
+
+                        <option value="delivered">
+                            Delivered
+                        </option>
+
+
+                        <option value="cancelled">
+                            Cancelled
+                        </option>
+
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="page-actions">
+
+
+                    <button
+                    type="submit"
+                    class="button button-primary">
+
+                        🔄 Update Status
+
+                    </button>
+
+
+
+                    <a
+                    href="{{ url_for('order.view_order', order_id=order.order_id) }}"
+                    class="button">
+
+                        ❌ Cancel
+
+                    </a>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Measurement
+{% endblock %}
+
+{% block page_title %}
+Measurement Details
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('measurement.measurements') }}">
+    Measurements
+</a>
+
+<span> / </span>
+
+<span>
+    View Measurement
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            📏 Measurement Details
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <!-- ============================= -->
+        <!-- CUSTOMER INFORMATION          -->
+        <!-- ============================= -->
+
+        <div class="detail-row">
+
+            <strong>
+
+                Customer
+
+            </strong>
+
+            <span>
+
+                {{ customer.full_name }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>
+
+                Customer Code
+
+            </strong>
+
+            <span>
+
+                {{ customer.customer_code }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>
+
+                Phone
+
+            </strong>
+
+            <span>
+
+                {{ customer.phone }}
+
+            </span>
+
+        </div>
+
+        <hr>
+
+        <!-- ============================= -->
+        <!-- ORDER INFORMATION             -->
+        <!-- ============================= -->
+
+        <div class="detail-row">
+
+            <strong>
+
+                Order ID
+
+            </strong>
+
+            <span>
+
+                {{ order.order_id }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>
+
+                Garment
+
+            </strong>
+
+            <span>
+
+                {{ order.garment_name }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>
+
+                Measurement Unit
+
+            </strong>
+
+            <span>
+
+                {{ measurement.measurement_unit }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+        
+            <strong>
+        
+                Measurement Type
+        
+            </strong>
+        
+            <span>
+        
+                {{ measurement.measurement_type }}
+        
+            </span>
+        
+        </div>
+      
+        <div class="detail-row">
+
+            <strong>
+
+                Date Created
+
+            </strong>
+
+            <span>
+
+                {{ measurement.created_at.strftime("%d %B %Y") }}
+
+            </span>
+
+        </div>
+
+        <hr>
+
+        <!-- ============================= -->
+        <!-- MEASUREMENTS                  -->
+        <!-- ============================= -->
+
+        {% for section, values in measurement.measurement_data.items() %}
+
+            <h3>
+
+                {{ section }}
+
+            </h3>
+
+            <div class="card">
+
+                <div class="card-body">
+
+                {% for field, value in values.items() %}
+
+                    <div class="detail-row">
+
+                        <strong>
+
+                            {{ field }}
+
+                        </strong>
+
+                        <span>
+
+                            {% if value %}
+
+                                {{ value }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+                </div>
+
+            </div>
+
+            <br>
+
+        {% endfor %}
+
+        {% if measurement.notes %}
+
+            <hr>
+
+            <h3>
+
+                Notes
+
+            </h3>
+
+            <p>
+
+                {{ measurement.notes }}
+
+            </p>
+
+        {% endif %}
+
+        <hr>
+
+        <div class="page-actions">
+        
+            <a
+            href="{{ url_for(
+                'measurement.edit_measurement',
+                measurement_id=measurement.id
+            ) }}"
+            class="button button-primary">
+        
+                ✏️ Edit Measurement
+        
+            </a>
+        
+            <a
+            href="{{ url_for(
+                'order.view_order',
+                order_id=order.order_id
+            ) }}"
+            class="button button-secondary">
+        
+                📄 Related Order
+        
+            </a>
+        
+            <a
+            href="{{ url_for(
+                'measurement.print_measurement',
+                measurement_id=measurement.id
+            ) }}"
+            class="button button-secondary">
+            
+                🖨 Print Measurement
+            
+            </a>
+        
+            <a
+            href="{{ url_for(
+                'measurement.send_measurement',
+                measurement_id=measurement.id
+            ) }}"
+            class="button button-success">
+        
+                📤 Send Measurement
+        
+            </a>
+        
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

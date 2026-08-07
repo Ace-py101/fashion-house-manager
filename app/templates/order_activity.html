@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block title %}
+Order Activity
+{% endblock %}
+
+{% block page_title %}
+Order Activity
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+<span> / </span>
+<a href="{{ url_for('order.orders') }}">Orders</a>
+<span> / </span>
+<a href="{{ url_for('order.search_order') }}">Search Order</a>
+<span> / </span>
+<span>Order Activity</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>📊 Order Activity</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>{{ order.order_id }}</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Customer</strong>
+                    <span>{{ order.customer.full_name }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Customer Code</strong>
+                    <span>{{ order.customer.customer_code }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Order Type</strong>
+                    <span>{{ order.order_type|replace("_"," ")|title }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Fulfillment Type</strong>
+                    <span>{{ order.fulfillment_type|replace("_"," ")|title }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Current Status</strong>
+                    <span>{{ order.status|replace("_"," ")|title }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>🏭 Production</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Current Stage</strong>
+                    <span>{{ activity.production.current_stage|replace("_"," ")|title }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Progress</strong>
+                    <span>{{ activity.production.progress }}%</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Date Created</strong>
+                    <span>{{ order.created_at }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Last Updated</strong>
+                    <span>{{ order.updated_at }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>📏 Measurements</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Status</strong>
+                    <span>{{ activity.measurements.measurement_status }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Measurements</strong>
+                    <span>{{ activity.measurements.measurement_count }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Revisions</strong>
+                    <span>{{ activity.measurements.measurement_revisions }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Last Updated</strong>
+                    <span>{{ activity.measurements.last_measurement_update or "-" }}</span>
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>💳 Payments</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Payment Status</strong>
+                    <span>{{ activity.payments.payment_status }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Transactions</strong>
+                    <span>{{ activity.payments.payment_transactions }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Total Price</strong>
+                    <span>{{ activity.payments.total_price }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Total Paid</strong>
+                    <span>{{ activity.payments.total_paid }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Outstanding Balance</strong>
+                    <span>{{ activity.payments.outstanding_balance }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>🚚 Delivery</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Expected Delivery</strong>
+                    <span>{{ activity.delivery.expected_delivery }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Delivered At</strong>
+                    <span>{{ activity.delivery.delivered_at or "-" }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Delivery Status</strong>
+                    <span>{{ activity.delivery.delivery_status|replace("_"," ")|title }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Delivery Notes</strong>
+                    <span>{{ activity.delivery.delivery_notes or "-" }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>🏭 Future Production</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Assigned Tailor</strong>
+                    <span>Not Assigned</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Assigned Cutter</strong>
+                    <span>Not Assigned</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Assigned Finisher</strong>
+                    <span>Not Assigned</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Quality Check</strong>
+                    <span>Pending</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Production Duration</strong>
+                    <span>Not Available</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Customer Satisfaction</strong>
+                    <span>Not Available</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Search Order
+{% endblock %}
+
+
+
+{% block page_title %}
+Search Order
+{% endblock %}
+
+
+
+{% block breadcrumb %}
+
+<a href="/">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('order.view_orders') }}">
+Orders
+</a>
+
+<span> / </span>
+
+<span>
+Search Order
+</span>
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+<div class="card">
+
+
+    <div class="card-header">
+
+        <h2>
+            Search Order
+        </h2>
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <form
+        method="POST"
+        class="app-form">
+
+
+            <div class="form-group">
+
+                <label>
+                    Order ID
+                </label>
+
+
+                <input
+                type="text"
+                name="order_id"
+                placeholder="Enter Order ID"
+                required
+                >
+
+            </div>
+
+
+
+            <button
+            type="submit"
+            class="button button-primary">
+
+                🔍 Search Order
+
+            </button>
+
+
+        </form>
+
+
+
+
+
+        {% if order %}
+
+
+        <hr>
+
+
+
+        <div class="customer-record-card">
+
+
+            <div class="customer-card-header">
+
+                <h3>
+                    {{ order.order_id }}
+                </h3>
+
+            </div>
+
+
+
+            <div class="customer-card-body">
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        Customer
+                    </strong>
+
+                    <span>
+                        {{ order.customer.full_name }}
+                    </span>
+
+                </div>
+
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        Garment
+                    </strong>
+
+                    <span>
+                        {{ order.garment_name }}
+                    </span>
+
+                </div>
+
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        Status
+                    </strong>
+
+                    <span>
+                        {{ order.status }}
+                    </span>
+
+                </div>
+
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        Delivery Date
+                    </strong>
+
+                    <span>
+                        {{ order.delivery_date }}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="page-actions">
+
+
+                <div class="page-actions">
+                
+                    <a
+                    href="{{ url_for(
+                        'order.order_history',
+                        order_id=order.order_id
+                    ) }}"
+                    class="button button-primary">
+                
+                        📜 Order History
+                
+                    </a>
+                
+                    <a
+                    href="{{ url_for(
+                        'order.order_activity',
+                        order_id=order.order_id
+                    ) }}"
+                    class="button button-secondary">
+                
+                        📊 Order Activity
+                
+                    </a>
+                
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

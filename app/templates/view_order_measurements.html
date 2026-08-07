@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}
+Related Measurements
+{% endblock %}
+
+{% block page_title %}
+Related Measurements
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('order.view_orders') }}">
+    Orders
+</a>
+
+<span> / </span>
+
+<span>
+    Related Measurements
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            📚 Related Measurements
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <!-- Search Placeholder -->
+
+        <div class="form-group">
+
+            <input
+            type="text"
+            class="form-control"
+            placeholder="🔍 Universal search coming soon..."
+            disabled>
+
+        </div>
+
+        <br>
+
+        <!-- Order Summary -->
+
+        <div class="detail-row">
+
+            <strong>
+
+                Customer
+
+            </strong>
+
+            <span>
+
+                {{ customer.full_name }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>
+
+                Order ID
+
+            </strong>
+
+            <span>
+
+                {{ order.order_id }}
+
+            </span>
+
+        </div>
+
+        <div class="detail-row">
+
+            <strong>
+
+                Garment
+
+            </strong>
+
+            <span>
+
+                {{ order.garment_name }}
+
+            </span>
+
+        </div>
+
+        <hr>
+
+        {% if measurements %}
+
+        {% for measurement in measurements %}
+        
+        <div class="card">
+        
+            <div class="card-body">
+        
+                <h3>
+        
+                    📏 {{ measurement.measurement_type }}
+        
+                </h3>
+        
+                <div class="detail-row">
+        
+                    <strong>
+        
+                        Date
+        
+                    </strong>
+        
+                    <span>
+        
+                        {{ measurement.created_at.strftime("%d %B %Y") }}
+        
+                    </span>
+        
+                </div>
+        
+                <div class="detail-row">
+        
+                    <strong>
+        
+                        Unit
+        
+                    </strong>
+        
+                    <span>
+        
+                        {{ measurement.measurement_unit }}
+        
+                    </span>
+        
+                </div>
+        
+                <div class="detail-row">
+        
+                    <strong>
+        
+                        Modified By
+        
+                    </strong>
+        
+                    <span>
+        
+                        Admin
+        
+                    </span>
+        
+                </div>
+        
+                <hr>
+                
+                <h3>
+                
+                    Saved Measurements
+                
+                </h3>
+                
+                {% for section, fields in measurement.measurement_data.items() %}
+                
+                <div class="card">
+                
+                    <div class="card-header">
+                
+                        <h4>
+                
+                            📐 {{ section }}
+                
+                        </h4>
+                
+                    </div>
+                
+                    <div class="card-body">
+                
+                        {% for field, value in fields.items() %}
+                
+                            {% if value %}
+                
+                            <div class="detail-row">
+                
+                                <strong>
+                
+                                    {{ field }}
+                
+                                </strong>
+                
+                                <div>
+                
+                                    {{ value }}
+                
+                                </div>
+                
+                            </div>
+                
+                            {% endif %}
+                
+                        {% endfor %}
+                
+                    </div>
+                
+                </div>
+                
+                <br>
+                
+                {% endfor %}
+        
+            </div>
+        
+        </div>
+        
+        <br>
+        
+        {% endfor %}
+
+        {% else %}
+        
+        <div class="empty-state">
+        
+            <h3>
+        
+                No Measurements Found
+        
+            </h3>
+        
+            <p>
+        
+                This order has no saved measurements yet.
+        
+            </p>
+        
+            <div class="page-actions">
+        
+                <a
+                href="{{ url_for(
+                    'measurement.new_measurement',
+                    order_id=order.order_id
+                ) }}"
+                class="button button-primary">
+        
+                    📏 Create Measurement
+        
+                </a>
+        
+            </div>
+        
+        </div>
+        
+        {% endif %}
+        
+        <hr>
+        
+        <div class="page-actions">
+        
+            <a
+            href="{{ url_for('order.view_orders') }}"
+            class="button button-secondary">
+        
+                ← Back to Orders
+        
+            </a>
+        
+        </div>
+        
+            </div>
+        
+        </div>
+        
+        {% endblock %}

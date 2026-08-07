@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}
+Measurements
+{% endblock %}
+
+{% block page_title %}
+Measurements
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<span>
+    Measurements
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            Measurement Management
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-menu-grid">
+
+            <a
+            href="{{ url_for('measurement.new_measurement') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    📏
+
+                </div>
+
+                <h3>
+
+                    New Measurement
+
+                </h3>
+
+                <p>
+
+                    Create a new customer measurement.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for('measurement.view_measurements') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    📋
+
+                </div>
+
+                <h3>
+
+                    View Measurements
+
+                </h3>
+
+                <p>
+
+                    Browse all saved measurements.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for('measurement.search_measurements_route') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    🔍
+
+                </div>
+
+                <h3>
+
+                    Search Measurements
+
+                </h3>
+
+                <p>
+
+                    Find an existing measurement.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for('main.index') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    🏠
+
+                </div>
+
+                <h3>
+
+                    Dashboard
+
+                </h3>
+
+                <p>
+
+                    Return to dashboard.
+
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

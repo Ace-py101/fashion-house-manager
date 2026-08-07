@@ -3,11 +3,9 @@ from datetime import datetime
 from app.database import db
 
 
-
 class CustomerHistory(db.Model):
 
     __tablename__ = "customer_history"
-
 
 
     id = db.Column(
@@ -18,13 +16,20 @@ class CustomerHistory(db.Model):
 
     customer_id = db.Column(
         db.Integer,
+        db.ForeignKey("customers.id"),
+        nullable=False
+    )
+
+
+    action = db.Column(
+        db.String(100),
         nullable=False
     )
 
 
     field_name = db.Column(
         db.String(100),
-        nullable=False
+        nullable=True
     )
 
 
@@ -53,10 +58,14 @@ class CustomerHistory(db.Model):
     )
 
 
+    customer = db.relationship(
+        "Customer",
+        backref="history"
+    )
+
 
     def __repr__(self):
 
         return (
-            f"<CustomerHistory "
-            f"{self.field_name}>"
+            f"<CustomerHistory {self.action}>"
         )

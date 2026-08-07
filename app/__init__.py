@@ -1,21 +1,19 @@
 from flask import Flask
 from flask_migrate import Migrate
 
+from config import Config
+
 from app.database import db
+
 
 migrate = Migrate()
 
 
 def create_app():
+
     app = Flask(__name__)
 
-    app.config["SECRET_KEY"] = "change-this-later"
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        "sqlite:///fashion_house.db"
-    )
-
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config.from_object(Config)
 
     db.init_app(app)
     migrate.init_app(app, db)

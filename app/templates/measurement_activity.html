@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}
+Measurement Activity
+{% endblock %}
+
+{% block page_title %}
+Measurement Activity
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('measurement.measurements') }}">
+    Measurements
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for(
+    'measurement.view_measurement',
+    measurement_id=measurement.id
+) }}">
+    View Measurement
+</a>
+
+<span> / </span>
+
+<span>
+    Measurement Activity
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            Measurement Activity
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        {% if activity %}
+
+            {% for item in activity %}
+
+            <div class="customer-card">
+
+                <div class="customer-card-body">
+
+                    <div class="detail-row">
+
+                        <strong>
+
+                            Action
+
+                        </strong>
+
+                        <span>
+
+                            {{ item.action }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <strong>
+
+                            Description
+
+                        </strong>
+
+                        <span>
+
+                            {{ item.description }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <strong>
+
+                            Date
+
+                        </strong>
+
+                        <span>
+
+                            {{ item.created_at.strftime("%d %b %Y %I:%M %p") }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            {% endfor %}
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <h3>
+
+                No activity found.
+
+            </h3>
+
+            <p>
+
+                No activity has been recorded for this measurement.
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

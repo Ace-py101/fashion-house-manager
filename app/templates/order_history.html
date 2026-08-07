@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}
+Order History
+{% endblock %}
+
+{% block page_title %}
+Order History
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+<span> / </span>
+<a href="{{ url_for('order.orders') }}">Orders</a>
+<span> / </span>
+<a href="{{ url_for('order.search_order') }}">Search Order</a>
+<span> / </span>
+<span>Order History</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>📜 Order History</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-record-card">
+
+            <div class="customer-card-header">
+                <h3>{{ order.order_id }}</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Customer</strong>
+                    <span>{{ order.customer.full_name }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Customer Code</strong>
+                    <span>{{ order.customer.customer_code }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Garment</strong>
+                    <span>{{ order.garment_name }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Status</strong>
+                    <span>{{ order.status|replace("_"," ")|title }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        {% if history %}
+
+            {% for item in history %}
+
+            <div class="customer-record-card">
+
+                <div class="customer-card-header">
+                    <h3>{{ item.action }}</h3>
+                </div>
+
+                <div class="customer-card-body">
+
+                    <div class="detail-row">
+                        <strong>Field</strong>
+                        <span>{{ item.field_name }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Old Value</strong>
+                        <span>{{ item.old_value or "-" }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>New Value</strong>
+                        <span>{{ item.new_value or "-" }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Date</strong>
+                        <span>{{ item.changed_at }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Changed By</strong>
+                        <span>{{ item.changed_by or "System" }}</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="customer-record-card">
+
+                <div class="customer-card-body">
+
+                    <p>No order history available.</p>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

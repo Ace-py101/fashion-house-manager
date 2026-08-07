@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Orders
+{% endblock %}
+
+
+{% block page_title %}
+Orders
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<span>
+    Orders
+</span>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="card">
+
+
+    <div class="card-header">
+
+        <h2>
+            Order Management
+        </h2>
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <div class="customer-menu-grid">
+
+
+            <a
+            href="{{ url_for('order.new_order') }}"
+            class="module-card"
+            >
+
+                <div class="module-icon">
+                    ➕
+                </div>
+
+                <h3>
+                    New Order
+                </h3>
+
+                <p>
+                    Create a new customer order.
+                </p>
+
+            </a>
+
+
+
+            <a
+            href="{{ url_for('order.view_orders') }}"
+            class="module-card"
+            >
+
+                <div class="module-icon">
+                    📋
+                </div>
+
+                <h3>
+                    View Orders
+                </h3>
+
+                <p>
+                    View all orders.
+                </p>
+
+            </a>
+
+
+
+
+            <a
+            href="{{ url_for('order.search_order') }}"
+            class="module-card"
+            >
+
+                <div class="module-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    Search Order
+                </h3>
+
+                <p>
+                    Find an existing order.
+                </p>
+
+            </a>
+
+
+
+
+            <a
+            href="/"
+            class="module-card"
+            >
+
+                <div class="module-icon">
+                    🏠
+                </div>
+
+                <h3>
+                    Dashboard
+                </h3>
+
+                <p>
+                    Return to dashboard.
+                </p>
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

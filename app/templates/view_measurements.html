@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+View Measurements
+{% endblock %}
+
+
+{% block page_title %}
+View Measurements
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('measurement.measurements') }}">
+Measurements
+</a>
+
+<span> / </span>
+
+<span>
+View Measurements
+</span>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-actions">
+
+    <a
+        href="{{ url_for('measurement.new_measurement') }}"
+        class="button button-primary"
+    >
+        ➕ New Measurement
+    </a>
+
+</div>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <input
+        type="text"
+        class="form-control"
+        placeholder="🔍 Universal Search (Coming Soon)"
+        disabled>
+
+    </div>
+
+</div>
+
+<br>
+
+{% if measurements %}
+
+{% for measurement in measurements %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            {{ measurement.measurement_id }}
+
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="details-table">
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Customer
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.customer.full_name }}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Customer Code
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.customer.customer_code }}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Order ID
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.order.order_id }}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Garment
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.order.garment_name }}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Measurement Unit
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.measurement_unit }}
+
+                </span>
+
+            </div>
+
+            
+            <div class="detail-row">
+            
+                <strong>
+            
+                    Measurement Type
+            
+                </strong>
+            
+                <span>
+            
+                    {{ measurement.measurement_type }}
+            
+                </span>
+            
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Date
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.created_at.strftime("%d %b %Y") }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a
+                href="{{ url_for(
+                    'measurement.view_measurement',
+                    measurement_id=measurement.id
+                ) }}"
+                class="button button-primary"
+            >
+
+                👁 View Measurement
+
+            </a>
+
+
+            <a
+                href="#"
+                class="button button-success"
+            >
+
+                💳 Make Payment
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="card">
+
+    <div class="card-body">
+
+        <p>
+
+            No measurements found.
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

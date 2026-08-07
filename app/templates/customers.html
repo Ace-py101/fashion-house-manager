@@ -4,15 +4,13 @@
 Customers
 {% endblock %}
 
-
 {% block page_title %}
-Customer Management
+Customers
 {% endblock %}
-
 
 {% block breadcrumb %}
 
-<a href="/">
+<a href="{{ url_for('main.index') }}">
     Dashboard
 </a>
 
@@ -24,103 +22,124 @@ Customer Management
 
 {% endblock %}
 
-
-
 {% block content %}
 
+<div class="card">
 
-<div class="module-header">
+    <div class="card-header">
 
-    <h2>
-        👥 Customer Management
-    </h2>
+        <h2>
 
-    <p>
-        Manage customer profiles, records and history.
-    </p>
+            Customer Management
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-menu-grid">
+
+            <a
+            href="{{ url_for('customer.new_customer') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    ➕
+
+                </div>
+
+                <h3>
+
+                    New Customer
+
+                </h3>
+
+                <p>
+
+                    Register a new customer profile.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for('customer.view_customers') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    📋
+
+                </div>
+
+                <h3>
+
+                    View Customers
+
+                </h3>
+
+                <p>
+
+                    Browse all registered customers.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for('customer.search_customer') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    🔍
+
+                </div>
+
+                <h3>
+
+                    Search Customer
+
+                </h3>
+
+                <p>
+
+                    Find an existing customer.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for('main.index') }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    🏠
+
+                </div>
+
+                <h3>
+
+                    Dashboard
+
+                </h3>
+
+                <p>
+
+                    Return to dashboard.
+
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
-
-
-
-<div class="menu-grid customer-menu-grid">
-
-
-    <a class="module-card" href="{{ url_for('customer.new_customer') }}">
-
-        <div class="module-icon">
-            ➕
-        </div>
-
-        <h3>
-            New Customer
-        </h3>
-
-        <p>
-            Register a new customer profile.
-        </p>
-
-    </a>
-
-
-
-
-    <a class="module-card" href="{{ url_for('customer.view_customers') }}">
-
-        <div class="module-icon">
-            📋
-        </div>
-
-        <h3>
-            View Customers
-        </h3>
-
-        <p>
-            Browse all registered customers.
-        </p>
-
-    </a>
-
-
-
-
-    <a class="module-card" href="{{ url_for('customer.search_customer') }}">
-
-        <div class="module-icon">
-            🔍
-        </div>
-
-        <h3>
-            Search Customer
-        </h3>
-
-        <p>
-            Find customer records quickly.
-        </p>
-
-    </a>
-
-
-
-
-    <a class="module-card" href="/">
-
-        <div class="module-icon">
-            🏠
-        </div>
-
-        <h3>
-            Dashboard
-        </h3>
-
-        <p>
-            Return to the dashboard.
-        </p>
-
-    </a>
-
-
-</div>
-
 
 {% endblock %}

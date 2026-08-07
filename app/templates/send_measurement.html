@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}
+Send Measurement
+{% endblock %}
+
+{% block page_title %}
+Send Measurement
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('measurement.measurements') }}">
+    Measurements
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for(
+    'measurement.view_measurement',
+    measurement_id=measurement.id
+) }}">
+    View Measurement
+</a>
+
+<span> / </span>
+
+<span>
+    Send Measurement
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            Send Measurement
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="details-table">
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Customer
+
+                </strong>
+
+                <span>
+
+                    {{ customer.full_name }}
+
+                </span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Measurement ID
+
+                </strong>
+
+                <span>
+
+                    {{ measurement.measurement_id }}
+
+                </span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <strong>
+
+                    Order ID
+
+                </strong>
+
+                <span>
+
+                    {{ order.order_id }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="customer-menu-grid">
+
+            <a
+            href="https://wa.me/?text={{ document_url }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    💬
+
+                </div>
+
+                <h3>
+
+                    WhatsApp
+
+                </h3>
+
+                <p>
+
+                    Share measurement.
+
+                </p>
+
+            </a>
+
+            <a
+            href="mailto:?subject=Measurement Sheet&body={{ document_url }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    📧
+
+                </div>
+
+                <h3>
+
+                    Email
+
+                </h3>
+
+                <p>
+
+                    Send via email.
+
+                </p>
+
+            </a>
+
+            <a
+            href="{{ url_for(
+                'measurement.print_measurement',
+                measurement_id=measurement.id
+            ) }}"
+            class="module-card">
+            
+                <div class="module-icon">
+            
+                    🖨
+            
+                </div>
+            
+                <h3>
+            
+                    Print
+            
+                </h3>
+            
+                <p>
+            
+                    Print the measurement sheet.
+            
+                </p>
+            
+            </a>
+
+            <a
+            href="{{ url_for(
+                'measurement.download_measurement_pdf',
+                measurement_id=measurement.id
+            ) }}"
+            class="module-card">
+            
+                <div class="module-icon">
+            
+                    📄
+            
+                </div>
+            
+                <h3>
+            
+                    Download PDF
+            
+                </h3>
+            
+                <p>
+            
+                    Save the document as PDF.
+            
+                </p>
+            
+            </a>
+
+            <a
+            href="{{ url_for(
+                'measurement.view_measurement',
+                measurement_id=measurement.id
+            ) }}"
+            class="module-card">
+
+                <div class="module-icon">
+
+                    ⬅
+
+                </div>
+
+                <h3>
+
+                    Back
+
+                </h3>
+
+                <p>
+
+                    Return to measurement.
+
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

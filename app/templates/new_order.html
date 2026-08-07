@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Order
+{% endblock %}
+
+{% block page_title %}
+New Order
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+<span> / </span>
+<a href="{{ url_for('order.view_orders') }}">Orders</a>
+<span> / </span>
+<span>New Order</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>New Order</h2>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" class="app-form">
+
+            <input
+                type="hidden"
+                name="action"
+                value="search_customer"
+            >
+
+            <div class="form-group">
+                <label>Customer Code</label>
+
+                <input
+                    type="text"
+                    name="customer_code"
+                    value="{{ prefilled_customer_code }}"
+                    placeholder="Enter Customer ID"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="button button-primary">
+                🔍 Search Customer
+            </button>
+
+        </form>
+
+        {% if customer %}
+
+        <hr>
+
+        <h2>Customer Information</h2>
+
+        <table class="details-table">
+
+            <tr>
+                <th>Name</th>
+                <td>{{ customer.full_name }}</td>
+            </tr>
+
+            <tr>
+                <th>Phone</th>
+                <td>{{ customer.phone }}</td>
+            </tr>
+
+            <tr>
+                <th>Gender</th>
+                <td>{{ customer.gender }}</td>
+            </tr>
+
+            <tr>
+                <th>Notes</th>
+                <td>{{ customer.notes or "-" }}</td>
+            </tr>
+
+        </table>
+
+        <hr>
+
+        <h2>Order Details</h2>
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="app-form">
+
+            <input
+                type="hidden"
+                name="action"
+                value="save_order"
+            >
+
+            <input
+                type="hidden"
+                name="customer_id"
+                value="{{ customer.id }}"
+            >
+
+            <div class="form-group">
+                <label>Order ID</label>
+                <input
+                type="text"
+                value="{{ order_id or '' }}"
+                readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Name</label>
+                <input
+                    type="text"
+                    value="{{ customer.full_name }}"
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                <input
+                    type="text"
+                    value="{{ customer.phone }}"
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Garment Name</label>
+                <select
+                    name="garment_name"
+                    required
+                >
+                
+                    <option value="">
+                        -- Select Garment --
+                    </option>
+                
+                    {% for garment in garment_names %}
+                
+                    <option value="{{ garment }}">
+                
+                        {{ garment }}
+                
+                    </option>
+                
+                    {% endfor %}
+                
+                </select>
+                
+            </div>
+
+            <div class="form-group">
+                <label>Fabric Name</label>
+                <input
+                    type="text"
+                    name="fabric_name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Style Image</label>
+                <input
+                    type="file"
+                    name="style_image"
+                    accept="image/*"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Delivery Date</label>
+                <input
+                    type="date"
+                    name="delivery_date"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Price</label>
+                <input
+                    type="number"
+                    name="price"
+                    id="price"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Deposit</label>
+                <input
+                    type="number"
+                    name="deposit"
+                    id="deposit"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Balance</label>
+                <input
+                    type="number"
+                    id="balance"
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Order Type</label>
+            
+                <select name="order_type" required>
+            
+                    <option value="new" selected>
+                        New
+                    </option>
+            
+                    <option value="amendment">
+                        Amendment
+                    </option>
+            
+                    <option value="replacement">
+                        Replacement
+                    </option>
+            
+                </select>
+
+            <div class="form-group">
+            
+                <label>
+                    Fulfillment Type
+                </label>
+            
+                <select
+                    name="fulfillment_type"
+                    id="fulfillment_type"
+                    required
+                >
+            
+                    {% for fulfillment_type in fulfillment_types %}
+            
+                    <option value="{{ fulfillment_type }}">
+            
+                        {{ fulfillment_type.replace("_", " ").title() }}
+            
+                    </option>
+            
+                    {% endfor %}
+            
+                </select>
+            
+            </div>
+            
+            <div
+            id="size_group"
+            class="form-group"
+            style="display:none;"
+            >
+            
+                <label>
+                    Size
+                </label>
+            
+                <input
+                    type="number"
+                    name="size"
+                    id="size"
+                    min="1"
+                    placeholder="Enter garment size"
+                >
+            
+            </div>
+            
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select name="status">
+                
+                    <option value="new" selected>New</option>
+                    <option value="cutting">Cutting</option>
+                    <option value="sewing">Sewing</option>
+                    <option value="fitting">Fitting</option>
+                    <option value="ready">Ready</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="alteration">Alteration</option>
+                    <option value="cancelled">Cancelled</option>
+                
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label>Notes</label>
+
+                <textarea
+                    name="notes"
+                    rows="4"></textarea>
+            </div>
+
+            <div class="page-actions">
+
+                <button
+                    type="submit"
+                    class="button button-primary">
+                    💾 Save Order
+                </button>
+
+                <a
+                    href="{{ url_for('order.view_orders') }}"
+                    class="button button-danger">
+                    ❌ Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+
+const priceInput = document.getElementById("price");
+const depositInput = document.getElementById("deposit");
+const balanceInput = document.getElementById("balance");
+
+function calculateBalance(){
+
+    const price = Number(priceInput.value) || 0;
+    const deposit = Number(depositInput.value) || 0;
+
+    balanceInput.value = price - deposit;
+
+}
+
+if(priceInput && depositInput){
+
+    priceInput.addEventListener("input", calculateBalance);
+    depositInput.addEventListener("input", calculateBalance);
+
+}
+
+</script>
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const fulfillment = document.getElementById(
+            "fulfillment_type"
+        );
+
+        const sizeGroup = document.getElementById(
+            "size_group"
+        );
+
+        function toggleSizeField() {
+
+            if (
+                fulfillment.value === "ready_to_wear"
+            ) {
+
+                sizeGroup.style.display = "block";
+
+            } else {
+
+                sizeGroup.style.display = "none";
+
+            }
+
+        }
+
+        toggleSizeField();
+
+        fulfillment.addEventListener(
+            "change",
+            toggleSizeField
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

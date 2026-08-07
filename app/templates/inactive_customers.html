@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}
+Inactive Customers
+{% endblock %}
+
+{% block page_title %}
+Inactive Customers
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">Dashboard</a>
+
+<span> / </span>
+
+<a href="{{ url_for('customer.customers') }}">
+    Customers
+</a>
+
+<span> / </span>
+
+<span>
+    Inactive Customers
+</span>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Inactive Customers
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        {% if customers %}
+
+            {% for customer in customers %}
+
+            <div class="customer-record-card">
+
+                <div class="details-table">
+
+                    <div class="detail-row">
+                        <strong>Customer Code</strong>
+                        <span>{{ customer.customer_code }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Customer Name</strong>
+                        <span>{{ customer.full_name }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Phone</strong>
+                        <span>{{ customer.phone }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Gender</strong>
+                        <span>{{ customer.gender }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Status</strong>
+                        <span class="badge">
+                            {{ customer.status }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Orders</strong>
+                        <span>
+                            {{ customer_stats[customer.id]["orders"] }}
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <strong>Date Created</strong>
+                        <span>
+                            {{ customer.created_at.strftime("%d-%m-%Y") }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="page-actions">
+
+                    <a
+                        href="{{ url_for('customer.view_customer', customer_id=customer.id) }}"
+                        class="button button-secondary"
+                    >
+                        👁️ View Customer
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('customer.activate_customer_route', customer_id=customer.id) }}"
+                        style="display:inline;"
+                    >
+
+                        <button
+                            type="submit"
+                            class="button button-success"
+                        >
+                            ✅ Activate Customer
+                        </button>
+
+                    </form>
+
+                    <a
+                        href="{{ url_for('customer.customer_history', customer_id=customer.id) }}"
+                        class="button button-primary"
+                    >
+                        📜 Customer History
+                    </a>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>
+                    No Inactive Customers
+                </h3>
+
+                <p>
+
+                    There are currently no deactivated customers.
+
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

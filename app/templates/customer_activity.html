@@ -1,0 +1,172 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}
+Customer Activity
+{% endblock %}
+
+{% block page_title %}
+Customer Activity
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="/">Dashboard</a>
+<span> / </span>
+
+<a href="{{ url_for('customer.customers') }}">
+    Customers
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('customer.search_customer') }}">
+    Search
+</a>
+
+<span> / </span>
+
+<span>Customer Activity</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>📊 Customer Activity</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-card">
+
+            <div class="customer-card-header">
+                <h3>{{ customer.full_name }}</h3>
+            </div>
+
+            <div class="customer-card-body">
+
+                <div class="detail-row">
+                    <strong>Customer Code</strong>
+                    <span>{{ customer.customer_code }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Phone</strong>
+                    <span>{{ customer.phone }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Gender</strong>
+                    <span>{{ customer.gender }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Status</strong>
+                    <span>{{ customer.status }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<br>
+
+
+<div class="dashboard-grid">
+
+    <div class="card">
+        <div class="card-icon">📦</div>
+        <h3>Total Orders</h3>
+        <div class="card-number">
+            {{ total_orders }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">🧵</div>
+        <h3>Orders in Production</h3>
+        <div class="card-number">
+            {{ production_orders }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">🚚</div>
+        <h3>Delivered Orders</h3>
+        <div class="card-number">
+            {{ delivered_orders }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">📝</div>
+        <h3>Amendments</h3>
+        <div class="card-number">
+            {{ amendment_orders }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">🔁</div>
+        <h3>Replacements</h3>
+        <div class="card-number">
+            {{ replacement_orders }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">📏</div>
+        <h3>Measurements</h3>
+        <div class="card-number">
+            {{ total_measurements }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">💰</div>
+        <h3>Outstanding Balance</h3>
+        <div class="card-number">
+            ₦{{ outstanding_balance }}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">💵</div>
+        <h3>Lifetime Spending</h3>
+        <div class="card-number">
+            ₦{{ lifetime_spending }}
+        </div>
+    </div>
+
+</div>
+
+
+<br>
+
+
+<div class="page-actions">
+
+    <a
+        href="{{ url_for('customer.customer_history', customer_id=customer.id) }}"
+        class="button button-secondary"
+    >
+        📜 Customer History
+    </a>
+
+    <a
+        href="{{ url_for('customer.view_customer', customer_id=customer.id) }}"
+        class="button button-primary"
+    >
+        👤 Customer Details
+    </a>
+
+</div>
+
+{% endblock %}
+```
