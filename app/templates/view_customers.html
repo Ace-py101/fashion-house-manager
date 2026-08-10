@@ -34,6 +34,101 @@ Customer Directory
 
     <div class="card-body">
 
+        {% if search_results is defined and search_results %}
+        
+            <div class="card-header">
+        
+                <h3>
+                    🔍 Search Results
+                </h3>
+        
+                {% if search_query %}
+                    <p>
+                        Results for:
+                        <strong>
+                            {{ search_query }}
+                        </strong>
+                    </p>
+                {% endif %}
+        
+            </div>
+        
+            {% for customer in search_results %}
+        
+            <div class="customer-record-card">
+        
+                <div class="details-table">
+        
+                    <div class="detail-row">
+                        <strong>Customer Code</strong>
+                        <span>
+                            {{ customer.customer_code }}
+                        </span>
+                    </div>
+        
+                    <div class="detail-row">
+                        <strong>Customer Name</strong>
+                        <span>
+                            {{ customer.full_name }}
+                        </span>
+                    </div>
+        
+                    <div class="detail-row">
+                        <strong>Phone</strong>
+                        <span>
+                            {{ customer.phone }}
+                        </span>
+                    </div>
+        
+                    <div class="detail-row">
+                        <strong>Gender</strong>
+                        <span>
+                            {{ customer.gender }}
+                        </span>
+                    </div>
+        
+                    <div class="detail-row">
+                        <strong>Status</strong>
+                        <span class="badge">
+                            {{ customer.status }}
+                        </span>
+                    </div>
+        
+                </div>
+        
+                <div class="page-actions">
+        
+                    <a
+                        href="{{ url_for(
+                          'customer.view_customer',
+                          customer_id=customer.id,
+                          style_id=style_id
+                        ) }}"
+                        class="button button-secondary"
+                    >
+                        👁️ View Customer
+                    </a>
+        
+                </div>
+        
+            </div>
+        
+            <br>
+        
+            {% endfor %}
+        
+            <hr>
+        
+            <div class="card-header">
+        
+                <h3>
+                    👥 All Customers
+                </h3>
+        
+            </div>
+        
+        {% endif %}
+
         {% if customers %}
 
             {% for customer in customers %}
@@ -88,7 +183,14 @@ Customer Directory
                 <div class="page-actions">
 
                     <a
-                        href="{{ url_for('customer.view_customer', customer_id=customer.id) }}"
+                        href="{{ url_for(
+                            'customer.view_customer',
+                            customer_id=customer.id,
+                            style_id=style_id
+                        ) if style_id else url_for(
+                            'customer.view_customer',
+                            customer_id=customer.id
+                        ) }}"
                         class="button button-secondary"
                     >
                         👁️ View Customer
@@ -96,6 +198,10 @@ Customer Directory
 
                     <a
                         href="{{ url_for(
+                            'order.new_order',
+                            customer_code=customer.customer_code,
+                            style_id=style_id
+                        ) if style_id else url_for(
                             'order.new_order',
                             customer_code=customer.customer_code
                         ) }}"

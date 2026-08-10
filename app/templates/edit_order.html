@@ -235,30 +235,73 @@ required
 </div>
 
 
-
 <div class="form-group">
 
-<label>
-Style Image
-</label>
+    <label>
+        Style Gallery
+    </label>
 
-<input
-type="file"
-name="style_image"
-accept="image/*"
->
+    {% set current_style = selected_style or order.style %}
 
-{% if order.style_image %}
+    {% if current_style %}
 
-<p>
-Current:
-{{ order.style_image }}
-</p>
+        <div class="module-card">
 
-{% endif %}
+            {% if current_style.image_filename %}
+
+                <a
+                    href="{{ url_for(
+                        'style.new_style',
+                        order_id=order.order_id
+                    ) }}"
+                >
+                    <img
+                        class="gallery-image"
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/styles/' ~ current_style.image_filename
+                        ) }}"
+                        alt="{{ current_style.style_name or 'Selected Style' }}"
+                    >
+                </a>
+
+            {% endif %}
+
+            <h3>
+                {{ current_style.style_name or "Selected Style" }}
+            </h3>
+
+            <p>
+                {{ current_style.category or "Style" }}
+            </p>
+
+        </div>
+
+        <input
+            type="hidden"
+            name="style_id"
+            value="{{ current_style.id }}"
+        >
+
+    {% else %}
+
+        <p>
+            No style selected.
+        </p>
+
+    {% endif %}
+
+    <a
+        href="{{ url_for(
+            'style.new_style',
+            order_id=order.order_id
+        ) }}"
+        class="button button-primary"
+    >
+        🖼️ Change Style
+    </a>
 
 </div>
-
 
 
 <div class="form-group">

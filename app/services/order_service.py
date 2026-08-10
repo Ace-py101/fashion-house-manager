@@ -203,10 +203,12 @@ def create_order(
     delivery_date,
     price,
     deposit,
+    style_id=None,
     style_image=None,
     status="new",
     notes=None
 ):
+
     validate_order_type(
         order_type
     )
@@ -237,38 +239,40 @@ def create_order(
         size = int(size)
     
     order = Order(
-
+    
         order_id=generate_order_id(),
-
+    
         customer_id=customer_id,
-
+    
+        style_id=style_id,
+    
         order_type=order_type,
-
+    
         fulfillment_type=fulfillment_type,
-
+    
         size=size,
-
+    
         garment_name=garment_name,
-
+    
         fabric_name=fabric_name,
-
+    
         style_image=style_image,
-
+    
         delivery_date=delivery_date,
-
+    
         price=price,
-
+    
         deposit=deposit,
-
+    
         balance=calculate_balance(
             price,
             deposit
         ),
-
+    
         status=status,
-
+    
         notes=notes
-
+    
     )
 
     db.session.add(order)
@@ -395,6 +399,7 @@ def update_order(
     delivery_date,
     price,
     deposit,
+    style_id=None,
     style_image=None,
     status="new",
     notes=None
@@ -476,6 +481,15 @@ def update_order(
 
     ]
 
+    if style_id != order.style_id:
+        changes.append(
+            (
+                "style_id",
+                order.style_id,
+                style_id
+            )
+        )
+
     if style_image:
 
         changes.append(
@@ -515,6 +529,7 @@ def update_order(
     )
     
     order.garment_name = garment_name
+    order.style_id = style_id
     order.fabric_name = fabric_name
     order.delivery_date = delivery_date
     order.price = price

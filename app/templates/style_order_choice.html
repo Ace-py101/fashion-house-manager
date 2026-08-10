@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}
+Make Order
+{% endblock %}
+
+{% block page_title %}
+Make Order
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('style.new_style') }}">
+    Styles Gallery
+</a>
+
+<span> / </span>
+
+<span>
+    Make Order
+</span>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Make Order
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <!-- ==========================================
+             SELECTED STYLE
+        =========================================== -->
+
+        <div class="module-card">
+
+            {% if style.image_filename %}
+
+            <img
+                class="gallery-image"
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/styles/' ~ style.image_filename
+                ) }}"
+                alt="{{ style.style_name }}"
+            >
+
+            {% endif %}
+
+
+            <h3>
+                {{ style.style_name or "Selected Style" }}
+            </h3>
+
+
+            <p>
+                {{ style.category or "Style" }}
+            </p>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- ==========================================
+             CUSTOMER OPTIONS
+        =========================================== -->
+
+        <h3>
+            Select Customer
+        </h3>
+
+
+        <div class="customer-menu-grid">
+
+
+            <!-- EXISTING CUSTOMER -->
+
+            <div class="module-card">
+
+                <div class="module-icon">
+                    👤
+                </div>
+
+
+                <h3>
+                    Existing Customer
+                </h3>
+
+
+                <p>
+                    Enter the customer's code to
+                    continue directly to the order form.
+                </p>
+
+
+                <form
+                    method="POST"
+                    class="app-form"
+                >
+
+                    <input
+                        type="hidden"
+                        name="style_id"
+                        value="{{ style.id }}"
+                    >
+
+
+                    <div class="form-group">
+
+                        <label for="customer_code">
+                            Customer Code
+                        </label>
+
+                        <input
+                            id="customer_code"
+                            type="text"
+                            name="customer_code"
+                            placeholder="e.g. CUS-20260802-632-001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="button button-primary"
+                    >
+                        🔍 Continue to Order
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- NEW CUSTOMER -->
+
+            <a
+                href="{{ url_for(
+                    'customer.new_customer',
+                    style_id=style.id
+                ) }}"
+                class="module-card"
+            >
+
+                <div class="module-icon">
+                    📝
+                </div>
+
+
+                <h3>
+                    New Customer
+                </h3>
+
+
+                <p>
+                    Register a new customer and
+                    continue directly to the order.
+                </p>
+
+            </a>
+
+
+            <!-- BACK -->
+
+            <a
+                href="{{ url_for('style.new_style') }}"
+                class="module-card"
+            >
+
+                <div class="module-icon">
+                    ⬅
+                </div>
+
+
+                <h3>
+                    Back to Styles
+                </h3>
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

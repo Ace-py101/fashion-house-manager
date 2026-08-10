@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_migrate import Migrate
 
@@ -15,9 +17,89 @@ def create_app():
 
     app.config.from_object(Config)
 
-    db.init_app(app)
-    migrate.init_app(app, db)
+    # ======================================================
+    # Upload Configuration
+    # ======================================================
+    
+    UPLOAD_ROOT = os.path.join(
+        app.root_path,
+        "static",
+        "uploads"
+    )
+    
+    app.config["UPLOAD_ROOT"] = UPLOAD_ROOT
+    
+    app.config["UPLOAD_FOLDERS"] = {
+    
+        "styles": os.path.join(
+            UPLOAD_ROOT,
+            "styles"
+        ),
+    
+        "customers": os.path.join(
+            UPLOAD_ROOT,
+            "customers"
+        ),
+    
+        "inventory": os.path.join(
+            UPLOAD_ROOT,
+            "inventory"
+        ),
+    
+        "payments": os.path.join(
+            UPLOAD_ROOT,
+            "payments"
+        ),
+    
+        "staff": os.path.join(
+            UPLOAD_ROOT,
+            "staff"
+        ),
+    
+        "reports": os.path.join(
+            UPLOAD_ROOT,
+            "reports"
+        ),
+    
+        "temp": os.path.join(
+            UPLOAD_ROOT,
+            "temp"
+        )
+    
+    }
+    
+    # Maximum upload size (25 MB)
+    
+    app.config["MAX_CONTENT_LENGTH"] = (
+        25 * 1024 * 1024
+    )
+    
+    # Allowed image extensions
+    
+    app.config["UPLOAD_EXTENSIONS"] = {
+    
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp"
 
+    }
+
+    # Create upload folders automatically
+    
+    for folder in app.config[
+        "UPLOAD_FOLDERS"
+    ].values():
+    
+        os.makedirs(
+            folder,
+            exist_ok=True
+        )
+    
+    db.init_app(app)
+    
+    migrate.init_app(app, db)
+    
     from datetime import datetime
     
     

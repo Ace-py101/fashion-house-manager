@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+Styles Gallery
+{% endblock %}
+
+{% block page_title %}
+Styles Gallery
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="/">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<span>
+    Styles Gallery
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+
+            Styles Gallery
+
+        </h2>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="customer-menu-grid">
+
+            <a
+                href="{{ url_for('style.new_style') }}"
+                class="module-card"
+            >
+
+                <div class="module-icon">
+                    🖼️
+                </div>
+
+                <h3>
+                    New Style
+                </h3>
+
+                <p>
+                    Create a new custom or ready-to-wear style.
+                </p>
+
+            </a>
+
+            <a
+                href="{{ url_for('style.view_styles') }}"
+                class="module-card"
+            >
+
+                <div class="module-icon">
+                    📂
+                </div>
+
+                <h3>
+                    View Styles
+                </h3>
+
+                <p>
+                    Browse all styles saved in your gallery.
+                </p>
+
+            </a>
+
+            <a
+                href="{{ url_for('style.search_styles_route') }}"
+                class="module-card"
+            >
+
+                <div class="module-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    Search Styles
+                </h3>
+
+                <p>
+                    Search the gallery, Google or Pinterest.
+                </p>
+
+            </a>
+
+            <a
+                href="/"
+                class="module-card"
+            >
+
+                <div class="module-icon">
+                    🏠
+                </div>
+
+                <h3>
+                    Dashboard
+                </h3>
+
+                <p>
+                    Return to dashboard.
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

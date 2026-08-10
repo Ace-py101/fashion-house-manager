@@ -42,6 +42,11 @@ def customers():
 )
 def new_customer():
 
+    style_id = request.args.get(
+        "style_id",
+        type=int
+    )
+ 
     if request.method == "POST":
 
         customer_data = {
@@ -91,7 +96,9 @@ def new_customer():
 
             return redirect(
                 url_for(
-                    "customer.new_customer"
+                    "order.new_order",
+                    customer_code=result["customer"].customer_code,
+                    style_id=style_id
                 )
             )
 
@@ -136,7 +143,7 @@ def view_customers():
         customer_stats=customer_stats
     )
 
-
+  
 @customer_bp.route(
     "/customers/search",
     methods=["GET", "POST"]
@@ -147,11 +154,21 @@ def search_customer():
 
     query = ""
 
+    style_id = request.args.get(
+        "style_id",
+        type=int
+    )
+
     if request.method == "POST":
 
         query = request.form.get(
             "query",
             ""
+        ).strip()
+
+        style_id = request.form.get(
+            "style_id",
+            type=int
         )
 
         customers = search_customers(
@@ -171,10 +188,17 @@ def search_customer():
         }
 
     return render_template(
+
         "search_customer.html",
+
         customers=customers,
+
         query=query,
-        customer_stats=customer_stats
+
+        customer_stats=customer_stats,
+
+        style_id=style_id
+
     )
 
 
@@ -182,6 +206,11 @@ def search_customer():
     "/customers/<int:customer_id>"
 )
 def view_customer(customer_id):
+
+    style_id = request.args.get(
+        "style_id",
+        type=int
+    )
 
     customer = get_customer_by_id(
         customer_id
@@ -196,13 +225,21 @@ def view_customer(customer_id):
 
         return redirect(
             url_for(
+                "customer.customers"
+            )
+        )
+ 
+        return redirect(
+            url_for(
                 "customer.view_customers"
             )
         )
 
     return render_template(
         "view_customer.html",
-        customer=customer
+        customer=customer,
+        sty_id=style_id,
+        
     )
 
 

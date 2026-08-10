@@ -46,6 +46,14 @@ class Order(db.Model):
         nullable=False
     )
 
+    style_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            "styles.id"
+        ),
+        nullable=True
+    )
+
     order_type = db.Column(
         db.String(50),
         nullable=False,
@@ -128,6 +136,11 @@ class Order(db.Model):
     customer = db.relationship(
         "Customer",
         backref="orders"
+    )
+
+    style = db.relationship(
+        "Style",
+        back_populates="orders"
     )
 
     def __repr__(self):

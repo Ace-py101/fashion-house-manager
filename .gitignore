@@ -16,3 +16,15 @@ __pycache__/
 # Temporary accidental files
 ✂️
 👁️
+
+# Virtual environment
+venv/
+.venv/
+
+# Runtime uploads
+app/static/uploads/
+
+# Environment secrets
+.env
+.env.*
+!.env.example

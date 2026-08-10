@@ -11,6 +11,8 @@ from flask import (
 
 from app.models.customer import Customer
 
+from app.models.style import Style
+
 from app.constants.garments import VALID_GARMENT_NAMES
 
 from app.models.measurement import Measurement
@@ -53,7 +55,32 @@ def new_order():
         "customer_code",
         ""
     )
+    
+    prefilled_style_id = request.args.get(
+        "style_id",
+        type=int
+    )
 
+    selected_style = None
+
+    if prefilled_style_id:
+        selected_style = Style.query.get(
+            prefilled_style_id
+        )
+
+    if prefilled_customer_code:
+        
+            customer = (
+                Customer.query
+                .filter_by(
+                    customer_code=prefilled_customer_code
+                )
+                .first()
+            )
+        
+            if customer:
+                order_id = generate_order_id()    
+      
     if request.method == "POST":
 
         action = request.form.get(
@@ -167,20 +194,22 @@ def new_order():
                     "notes"
                 )
 
-                style_image = request.files.get(
-                    "style_image"
+                style_id = request.form.get(
+                    "style_id",
+                    type=int
                 )
-
-                style_image_name = None
-
-                if (
-                    style_image
-                    and style_image.filename
-                ):
-
-                    style_image_name = (
-                        style_image.filename
+                
+                selected_style = None
+                
+                if style_id:
+                    selected_style = Style.query.get(
+                        style_id
                     )
+                
+                    if not selected_style:
+                        raise ValueError(
+                            "Selected style not found."
+                        )
 
                 create_order(
                     customer_id=customer_id,
@@ -192,11 +221,11 @@ def new_order():
                     delivery_date=delivery_date,
                     price=price,
                     deposit=deposit,
-                    style_image=style_image_name,
+                    style_id=style_id,
                     status=status,
                     notes=notes
                 )
-
+ 
                 flash(
                     "Order created successfully.",
                     "success"
@@ -222,18 +251,20 @@ def new_order():
                     )
 
                 order_id = generate_order_id()
-
+        
     return render_template(
         "new_order.html",
         customer=customer,
         order_id=order_id,
         prefilled_customer_code=prefilled_customer_code,
+        style_id=prefilled_style_id,
+        selected_style=selected_style,
         order_types=VALID_ORDER_TYPES,
         fulfillment_types=VALID_FULFILLMENT_TYPES,
         order_statuses=VALID_ORDER_STATUSES,
         garment_names=VALID_GARMENT_NAMES
     )
-
+ 
 
 @order_bp.route("/orders/view")
 def view_orders():
@@ -290,6 +321,11 @@ def search_order():
             ""
         ).strip()
 
+        prefilled_style_id = request.form.get(
+            "style_id",
+            type=int
+        )
+
         if order_id:
 
             order = get_order_by_id(
@@ -345,6 +381,26 @@ def edit_order(order_id):
         order_id
     )
 
+    selected_style_id = request.args.get(
+        "style_id",
+        type=int
+    )
+    
+    selected_style = None
+    
+    if selected_style_id:
+        selected_style = Style.query.get(
+            selected_style_id
+        )
+    
+        if not selected_style:
+            flash(
+                "Selected style not found.",
+                "warning"
+            )
+    
+            selected_style = None
+
     if not order:
 
         flash(
@@ -392,7 +448,22 @@ def edit_order(order_id):
             size = request.form.get(
                 "size"
             )
+
+            style_id = request.form.get(
+                "style_id",
+                type=int
+            )
             
+            if style_id:
+                selected_style = Style.query.get(
+                    style_id
+                )
+            
+                if not selected_style:
+                    raise ValueError(
+                        "Selected style not found."
+                    )
+        
             garment_name = request.form.get(
                 "garment_name"
             )
@@ -462,6 +533,7 @@ def edit_order(order_id):
                 delivery_date=delivery_date,
                 price=price,
                 deposit=deposit,
+                style_id=style_id,
                 style_image=style_image_name,
                 status=status,
                 notes=notes
@@ -489,6 +561,8 @@ def edit_order(order_id):
     return render_template(
         "edit_order.html",
         order=order,
+        styles=Style.query.all(),
+        selected_style=selected_style,
         order_types=VALID_ORDER_TYPES,
         fulfillment_types=VALID_FULFILLMENT_TYPES,
         order_statuses=VALID_ORDER_STATUSES,

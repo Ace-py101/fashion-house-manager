@@ -161,25 +161,40 @@ View Orders
                     </strong>
 
                     <span>
-
-                        {% if order.style_image %}
-
-                            <a href="#">
-
-                                📷 Open Gallery
-
-                            </a>
-
-                        {% else %}
-
-                            {{ order.fabric_name }}
-
-                        {% endif %}
-
-                    </span>
+                        {{ order.fabric_name }}
+                    <span>
 
                 </div>
 
+                <div class="detail-row">
+
+                    <strong>
+                        Garment Style
+                    </strong>
+                     
+                    <span>
+                    
+                        {% if order.style and order.style.image_filename %}
+                    
+                            <img
+                                class="gallery-image"
+                                src="{{ url_for(
+                                    'static',
+                                    filename='uploads/styles/' ~ order.style.image_filename
+                                ) }}"
+                                alt="{{ order.style.style_name or 'Order Style' }}"
+                            >
+                    
+                        {% else %}
+                    
+                            No image available
+                    
+                        {% endif %}
+                    
+                    </span>
+
+                </div>
+               
                 <div class="detail-row">
 
                     <strong>
@@ -291,7 +306,6 @@ View Orders
 
                     </a>
 
-
                     <!-- ===================================== -->
                     <!-- CUSTOM ORDERS                         -->
                     <!-- ===================================== -->
@@ -326,7 +340,6 @@ View Orders
                             </a>
 
                         {% endif %}
-
 
                     <!-- ===================================== -->
                     <!-- READY-TO-WEAR ORDERS                  -->

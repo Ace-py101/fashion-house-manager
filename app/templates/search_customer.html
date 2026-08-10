@@ -30,6 +30,14 @@ Search Customers
 
         <form method="POST" class="app-form">
 
+        {% if style_id %}
+            <input
+                type="hidden"
+                name="style_id"
+                value="{{ style_id }}"
+            >
+        {% endif %}
+      
             <div class="form-group">
                 <label>
                     Search by Name, Phone or Customer Code
@@ -50,7 +58,7 @@ Search Customers
             >
                 🔍 Search
             </button>
-
+  
         </form>
 
         {% if customers %}
@@ -121,6 +129,21 @@ Search Customers
                         📊 Customer Activity
                     </a>
 
+                    {% if style_id %}
+                    
+                    <a
+                        href="{{ url_for(
+                            'order.new_order',
+                            customer_code=customer.customer_code,
+                            style_id=style_id
+                        ) }}"
+                        class="button button-primary"
+                    >
+                        ✂️ Create Order
+                    </a>
+                    
+                    {% endif %}
+                  
                 </div>
 
             </div>

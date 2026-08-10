@@ -51,6 +51,9 @@ href="{{ url_for('static', filename='css/modules/orders.css') }}">
 href="{{ url_for('static', filename='css/modules/measurements.css') }}">
 
 <link rel="stylesheet"
+href="{{ url_for('static', filename='css/modules/styles.css') }}">
+
+<link rel="stylesheet"
 href="{{ url_for('static', filename='css/modules/reports.css') }}">
 
 </head>
@@ -401,6 +404,15 @@ Confirm
 <script src="{{ url_for('static', filename='js/modules/forms.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/modules/tables.js') }}"></script>
+
+
+<script
+src="{{ url_for(
+'static',
+filename='js/modules/style_gallery.js'
+) }}">
+</script>
+
 
 </body>
 

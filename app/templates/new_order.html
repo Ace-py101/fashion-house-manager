@@ -9,24 +9,52 @@ New Order
 {% endblock %}
 
 {% block breadcrumb %}
-<a href="/">Dashboard</a>
+
+<a href="/">
+    Dashboard
+</a>
+
 <span> / </span>
-<a href="{{ url_for('order.view_orders') }}">Orders</a>
+
+<a href="{{ url_for('order.view_orders') }}">
+    Orders
+</a>
+
 <span> / </span>
-<span>New Order</span>
+
+<span>
+    New Order
+</span>
+
 {% endblock %}
+
 
 {% block content %}
 
 <div class="card">
 
     <div class="card-header">
-        <h2>New Order</h2>
+
+        <h2>
+            New Order
+        </h2>
+
     </div>
+
 
     <div class="card-body">
 
-        <form method="POST" class="app-form">
+
+        {# =====================================================
+           CUSTOMER SEARCH
+           ===================================================== #}
+
+        {% if not customer %}
+
+        <form
+            method="POST"
+            class="app-form"
+        >
 
             <input
                 type="hidden"
@@ -34,64 +62,266 @@ New Order
                 value="search_customer"
             >
 
+            {% if prefilled_style_id %}
+
+            <input
+                type="hidden"
+                name="style_id"
+                value="{{ prefilled_style_id }}"
+            >
+
+            {% endif %}
+
+
             <div class="form-group">
-                <label>Customer Code</label>
+
+                <label>
+                    Customer Code
+                </label>
 
                 <input
                     type="text"
                     name="customer_code"
-                    value="{{ prefilled_customer_code }}"
+                    value="{{ prefilled_customer_code or '' }}"
                     placeholder="Enter Customer ID"
                     required
                 >
+
             </div>
+
 
             <button
                 type="submit"
-                class="button button-primary">
+                class="button button-primary"
+            >
                 🔍 Search Customer
             </button>
 
         </form>
 
+        {% endif %}
+
+
+        {# =====================================================
+           CUSTOMER + ORDER FORM
+           ===================================================== #}
+
         {% if customer %}
+
 
         <hr>
 
-        <h2>Customer Information</h2>
+
+        <h2>
+            Customer Information
+        </h2>
+
 
         <table class="details-table">
 
             <tr>
-                <th>Name</th>
-                <td>{{ customer.full_name }}</td>
+
+                <th>
+                    Name
+                </th>
+
+                <td>
+                    {{ customer.full_name }}
+                </td>
+
             </tr>
 
-            <tr>
-                <th>Phone</th>
-                <td>{{ customer.phone }}</td>
-            </tr>
 
             <tr>
-                <th>Gender</th>
-                <td>{{ customer.gender }}</td>
+
+                <th>
+                    Phone
+                </th>
+
+                <td>
+                    {{ customer.phone }}
+                </td>
+
             </tr>
 
+
             <tr>
-                <th>Notes</th>
-                <td>{{ customer.notes or "-" }}</td>
+
+                <th>
+                    Gender
+                </th>
+
+                <td>
+                    {{ customer.gender }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Notes
+                </th>
+
+                <td>
+                    {{ customer.notes or "-" }}
+                </td>
+
             </tr>
 
         </table>
 
+
         <hr>
 
-        <h2>Order Details</h2>
+
+        {# =====================================================
+           SELECTED STYLE
+           ===================================================== #}
+
+        {% if selected_style %}
+
+        <div class="form-group">
+
+            <label>
+                Selected Style
+            </label>
+
+
+            <div class="module-card">
+
+
+                {% if selected_style.image_filename %}
+
+                <a
+                    href="{{ url_for(
+                        'style.new_style',
+                        order_id=order_id
+                    ) }}"
+                >
+
+                    <img
+                        class="gallery-image"
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/styles/' ~ selected_style.image_filename
+                        ) }}"
+                        alt="{{ selected_style.style_name or 'Selected Style' }}"
+                    >
+
+                </a>
+
+                {% endif %}
+
+
+                <h3>
+                    {{ selected_style.style_name or "Selected Style" }}
+                </h3>
+
+
+                {% if selected_style.style_type %}
+
+                <p>
+                    <strong>
+                        Type:
+                    </strong>
+
+                    {{ selected_style.style_type }}
+                </p>
+
+                {% endif %}
+
+
+                {% if selected_style.occasion_fit %}
+
+                <p>
+                    <strong>
+                        Occasion / Fit:
+                    </strong>
+
+                    {{ selected_style.occasion_fit }}
+                </p>
+
+                {% endif %}
+
+
+                {% if selected_style.garment_name %}
+
+                <p>
+                    <strong>
+                        Garment:
+                    </strong>
+
+                    {{ selected_style.garment_name }}
+                </p>
+
+                {% endif %}
+
+
+                {% if selected_style.gender %}
+
+                <p>
+                    <strong>
+                        Gender:
+                    </strong>
+
+                    {{ selected_style.gender }}
+                </p>
+
+                {% endif %}
+
+
+                {% if selected_style.fabric_requirement %}
+
+                <p>
+                    <strong>
+                        Fabric:
+                    </strong>
+
+                    {{ selected_style.fabric_requirement }}
+                </p>
+
+                {% endif %}
+
+
+                {% if selected_style.status %}
+
+                <p>
+                    <strong>
+                        Status:
+                    </strong>
+
+                    {{ selected_style.status }}
+                </p>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <input
+                type="hidden"
+                name="style_id"
+                value="{{ selected_style.id }}"
+            >
+
+        </div>
+
+        {% endif %}
+
+
+        <h2>
+            Order Details
+        </h2>
+
 
         <form
             method="POST"
             enctype="multipart/form-data"
-            class="app-form">
+            class="app-form"
+        >
 
             <input
                 type="hidden"
@@ -99,175 +329,316 @@ New Order
                 value="save_order"
             >
 
+
+            {% if selected_style %}
+
+            <input
+                type="hidden"
+                name="style_id"
+                value="{{ selected_style.id }}"
+            >
+
+            {% elif style_id %}
+
+            <input
+                type="hidden"
+                name="style_id"
+                value="{{ style_id }}"
+            >
+
+            {% endif %}
+
+
             <input
                 type="hidden"
                 name="customer_id"
                 value="{{ customer.id }}"
             >
 
-            <div class="form-group">
-                <label>Order ID</label>
-                <input
-                type="text"
-                value="{{ order_id or '' }}"
-                readonly
-                >
-            </div>
+
+            {# =================================================
+               ORDER ID
+               ================================================= #}
 
             <div class="form-group">
-                <label>Name</label>
+
+                <label>
+                    Order ID
+                </label>
+
+                <input
+                    type="text"
+                    value="{{ order_id or '' }}"
+                    readonly
+                >
+
+            </div>
+
+
+            {# =================================================
+               CUSTOMER NAME
+               ================================================= #}
+
+            <div class="form-group">
+
+                <label>
+                    Name
+                </label>
+
                 <input
                     type="text"
                     value="{{ customer.full_name }}"
                     readonly
                 >
+
             </div>
 
+
+            {# =================================================
+               CUSTOMER PHONE
+               ================================================= #}
+
             <div class="form-group">
-                <label>Phone</label>
+
+                <label>
+                    Phone
+                </label>
+
                 <input
                     type="text"
                     value="{{ customer.phone }}"
                     readonly
                 >
+
             </div>
 
+
+            {# =================================================
+               GARMENT NAME
+               ================================================= #}
+
             <div class="form-group">
-                <label>Garment Name</label>
+
+                <label>
+                    Garment Name
+                </label>
+
                 <select
                     name="garment_name"
                     required
                 >
-                
+
                     <option value="">
                         -- Select Garment --
                     </option>
-                
+
+
                     {% for garment in garment_names %}
-                
-                    <option value="{{ garment }}">
-                
+
+                    <option
+                        value="{{ garment }}"
+                        {% if selected_style and selected_style.garment_name == garment %}
+                        selected
+                        {% endif %}
+                    >
+
                         {{ garment }}
-                
+
                     </option>
-                
+
                     {% endfor %}
-                
+
                 </select>
-                
+
             </div>
 
+
+            {# =================================================
+               FABRIC NAME
+               ================================================= #}
+
             <div class="form-group">
-                <label>Fabric Name</label>
+
+                <label>
+                    Fabric Name
+                </label>
+
                 <input
                     type="text"
                     name="fabric_name"
                     required
                 >
+
             </div>
 
-            <div class="form-group">
-                <label>Style Image</label>
-                <input
-                    type="file"
-                    name="style_image"
-                    accept="image/*"
-                >
-            </div>
+
+            {# =================================================
+               DELIVERY DATE
+               ================================================= #}
 
             <div class="form-group">
-                <label>Delivery Date</label>
+
+                <label>
+                    Delivery Date
+                </label>
+
                 <input
                     type="date"
                     name="delivery_date"
                     required
                 >
+
             </div>
 
+
+            {# =================================================
+               PRICE
+               ================================================= #}
+
             <div class="form-group">
-                <label>Price</label>
+
+                <label>
+                    Price
+                </label>
+
                 <input
                     type="number"
                     name="price"
                     id="price"
+                    min="0"
+                    step="0.01"
                     required
                 >
+
             </div>
 
+
+            {# =================================================
+               DEPOSIT
+               ================================================= #}
+
             <div class="form-group">
-                <label>Deposit</label>
+
+                <label>
+                    Deposit
+                </label>
+
                 <input
                     type="number"
                     name="deposit"
                     id="deposit"
+                    min="0"
+                    step="0.01"
                     required
                 >
+
             </div>
 
+
+            {# =================================================
+               BALANCE
+               ================================================= #}
+
             <div class="form-group">
-                <label>Balance</label>
+
+                <label>
+                    Balance
+                </label>
+
                 <input
                     type="number"
                     id="balance"
                     readonly
                 >
+
             </div>
 
+
+            {# =================================================
+               ORDER TYPE
+               ================================================= #}
+
             <div class="form-group">
-                <label>Order Type</label>
-            
-                <select name="order_type" required>
-            
-                    <option value="new" selected>
+
+                <label>
+                    Order Type
+                </label>
+
+                <select
+                    name="order_type"
+                    required
+                >
+
+                    <option
+                        value="new"
+                        selected
+                    >
                         New
                     </option>
-            
+
                     <option value="amendment">
                         Amendment
                     </option>
-            
+
                     <option value="replacement">
                         Replacement
                     </option>
-            
+
                 </select>
 
+            </div>
+
+
+            {# =================================================
+               FULFILLMENT TYPE
+               ================================================= #}
+
             <div class="form-group">
-            
+
                 <label>
                     Fulfillment Type
                 </label>
-            
+
                 <select
                     name="fulfillment_type"
                     id="fulfillment_type"
                     required
                 >
-            
+
                     {% for fulfillment_type in fulfillment_types %}
-            
-                    <option value="{{ fulfillment_type }}">
-            
-                        {{ fulfillment_type.replace("_", " ").title() }}
-            
+
+                    <option
+                        value="{{ fulfillment_type }}"
+                    >
+
+                        {{ fulfillment_type.replace(
+                            "_",
+                            " "
+                        ).title() }}
+
                     </option>
-            
+
                     {% endfor %}
-            
+
                 </select>
-            
+
             </div>
-            
+
+
+            {# =================================================
+               SIZE
+               ================================================= #}
+
             <div
-            id="size_group"
-            class="form-group"
-            style="display:none;"
+                id="size_group"
+                class="form-group"
+                style="display: none;"
             >
-            
+
                 <label>
                     Size
                 </label>
-            
+
                 <input
                     type="number"
                     name="size"
@@ -275,84 +646,116 @@ New Order
                     min="1"
                     placeholder="Enter garment size"
                 >
-            
+
             </div>
-            
-            </div>
+
+
+            {# =================================================
+               STATUS
+               ================================================= #}
 
             <div class="form-group">
-                <label>Status</label>
 
-                <select name="status">
-                
-                    <option value="new" selected>New</option>
-                    <option value="cutting">Cutting</option>
-                    <option value="sewing">Sewing</option>
-                    <option value="fitting">Fitting</option>
-                    <option value="ready">Ready</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="alteration">Alteration</option>
-                    <option value="cancelled">Cancelled</option>
-                
+                <label>
+                    Status
+                </label>
+
+                <select
+                    name="status"
+                >
+
+                    <option
+                        value="new"
+                        selected
+                    >
+                        New
+                    </option>
+
+                    <option value="cutting">
+                        Cutting
+                    </option>
+
+                    <option value="sewing">
+                        Sewing
+                    </option>
+
+                    <option value="fitting">
+                        Fitting
+                    </option>
+
+                    <option value="ready">
+                        Ready
+                    </option>
+
+                    <option value="delivered">
+                        Delivered
+                    </option>
+
+                    <option value="alteration">
+                        Alteration
+                    </option>
+
+                    <option value="cancelled">
+                        Cancelled
+                    </option>
+
                 </select>
 
             </div>
 
+
+            {# =================================================
+               NOTES
+               ================================================= #}
+
             <div class="form-group">
-                <label>Notes</label>
+
+                <label>
+                    Notes
+                </label>
 
                 <textarea
                     name="notes"
-                    rows="4"></textarea>
+                    rows="4"
+                ></textarea>
+
             </div>
+
+
+            {# =================================================
+               ACTIONS
+               ================================================= #}
 
             <div class="page-actions">
 
                 <button
                     type="submit"
-                    class="button button-primary">
+                    class="button button-primary"
+                >
                     💾 Save Order
                 </button>
 
+
                 <a
                     href="{{ url_for('order.view_orders') }}"
-                    class="button button-danger">
+                    class="button button-danger"
+                >
                     ❌ Cancel
                 </a>
 
             </div>
 
+
         </form>
 
+
         {% endif %}
+
 
     </div>
 
 </div>
 
-<script>
-
-const priceInput = document.getElementById("price");
-const depositInput = document.getElementById("deposit");
-const balanceInput = document.getElementById("balance");
-
-function calculateBalance(){
-
-    const price = Number(priceInput.value) || 0;
-    const deposit = Number(depositInput.value) || 0;
-
-    balanceInput.value = price - deposit;
-
-}
-
-if(priceInput && depositInput){
-
-    priceInput.addEventListener("input", calculateBalance);
-    depositInput.addEventListener("input", calculateBalance);
-
-}
-
-</script>
 
 <script>
 
@@ -360,40 +763,112 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        const fulfillment = document.getElementById(
-            "fulfillment_type"
-        );
+        const priceInput =
+            document.getElementById("price");
 
-        const sizeGroup = document.getElementById(
-            "size_group"
-        );
+        const depositInput =
+            document.getElementById("deposit");
+
+        const balanceInput =
+            document.getElementById("balance");
+
+
+        function calculateBalance() {
+
+            if (
+                !priceInput ||
+                !depositInput ||
+                !balanceInput
+            ) {
+                return;
+            }
+
+
+            const price =
+                Number(priceInput.value) || 0;
+
+            const deposit =
+                Number(depositInput.value) || 0;
+
+
+            balanceInput.value =
+                price - deposit;
+
+        }
+
+
+        if (
+            priceInput &&
+            depositInput
+        ) {
+
+            priceInput.addEventListener(
+                "input",
+                calculateBalance
+            );
+
+            depositInput.addEventListener(
+                "input",
+                calculateBalance
+            );
+
+        }
+
+
+        const fulfillment =
+            document.getElementById(
+                "fulfillment_type"
+            );
+
+        const sizeGroup =
+            document.getElementById(
+                "size_group"
+            );
+
 
         function toggleSizeField() {
 
             if (
-                fulfillment.value === "ready_to_wear"
+                !fulfillment ||
+                !sizeGroup
+            ) {
+                return;
+            }
+
+
+            if (
+                fulfillment.value ===
+                "ready_to_wear"
             ) {
 
-                sizeGroup.style.display = "block";
+                sizeGroup.style.display =
+                    "block";
 
             } else {
 
-                sizeGroup.style.display = "none";
+                sizeGroup.style.display =
+                    "none";
 
             }
 
         }
 
-        toggleSizeField();
 
-        fulfillment.addEventListener(
-            "change",
-            toggleSizeField
-        );
+        if (fulfillment) {
+
+            toggleSizeField();
+
+            fulfillment.addEventListener(
+                "change",
+                toggleSizeField
+            );
+
+        }
 
     }
 );
 
 </script>
+
 
 {% endblock %}
