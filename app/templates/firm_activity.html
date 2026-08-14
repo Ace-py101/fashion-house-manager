@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+Firm Activity
+{% endblock %}
+
+{% block page_title %}
+Firm Activity
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span> / </span>
+<span>Firm Activity</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>Firm Activity</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="module-card">
+
+            <h3>Firm Activity</h3>
+
+            <p>
+                Business updates, announcements, events,
+                collections and other activity will appear here.
+            </p>
+
+            <p>
+                Firm Activity functionality will be introduced
+                progressively in the platform roadmap.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1045 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if form_mode == "edit" %}
+        Edit Marketplace Listing
+    {% else %}
+        Create Marketplace Listing
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% if form_mode == "edit" %}
+        Edit Marketplace Listing
+    {% else %}
+        Create Marketplace Listing
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>/</span>
+
+<a href="{{ url_for('marketplace.marketplace') }}">
+    Marketplace
+</a>
+
+<span>/</span>
+
+<span>
+    {% if form_mode == "edit" %}
+        Edit Listing
+    {% else %}
+        Create Listing
+    {% endif %}
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* =========================================================
+       MARKETPLACE LISTING FORM
+       ========================================================= */
+
+    .marketplace-form-shell {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .marketplace-form-card {
+        overflow: hidden;
+        border: 1px solid rgba(212, 175, 55, 0.32);
+    }
+
+    .marketplace-form-header {
+        padding: 24px;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+    }
+
+    .marketplace-form-header h2 {
+        margin: 0 0 8px;
+    }
+
+    .marketplace-form-header p {
+        margin: 0;
+        color: var(--champagne, #A89F91);
+    }
+
+    /* =========================================================
+       SELECTED STYLE
+       ========================================================= */
+
+    .selected-style-section {
+        padding: 24px;
+    }
+
+    .selected-style-card {
+        display: none;
+        grid-template-columns: 150px 1fr;
+        gap: 20px;
+        align-items: center;
+        padding: 18px;
+        margin-top: 16px;
+        border: 1px solid rgba(212, 175, 55, 0.42);
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.18);
+    }
+
+    .selected-style-card.visible {
+        display: grid;
+    }
+
+    .selected-style-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #111;
+        border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    .selected-style-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 190px;
+        padding: 25px;
+        text-align: center;
+        border: 1px dashed rgba(212, 175, 55, 0.35);
+        border-radius: 16px;
+        color: var(--champagne, #A89F91);
+    }
+
+    .selected-style-details h3 {
+        margin: 0 0 12px;
+    }
+
+    .style-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .style-meta-item {
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.035);
+    }
+
+    .style-meta-label {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 12px;
+        color: var(--champagne, #A89F91);
+    }
+
+    .style-meta-value {
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       STYLE GALLERY BUTTON
+       ========================================================= */
+
+    .style-gallery-button {
+        width: 100%;
+        min-height: 58px;
+        margin-top: 16px;
+        border: 1px solid var(--gold, #D4AF37);
+        border-radius: 12px;
+        background: transparent;
+        color: var(--gold, #D4AF37);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+            background 0.2s,
+            color 0.2s,
+            transform 0.2s;
+    }
+
+    .style-gallery-button:hover {
+        background: var(--gold, #D4AF37);
+        color: #111;
+        transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       FORM
+       ========================================================= */
+
+    .marketplace-fields {
+        padding: 0 24px 24px;
+    }
+
+    .marketplace-fields-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .marketplace-fields-grid .full-width {
+        grid-column: 1 / -1;
+    }
+
+    .marketplace-fields label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .marketplace-fields input,
+    .marketplace-fields select {
+        width: 100%;
+        min-height: 54px;
+        padding: 13px 15px;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.20);
+        color: var(--ivory, #F5F1E8);
+        font-size: 16px;
+    }
+
+    .marketplace-fields input:focus,
+    .marketplace-fields select:focus {
+        outline: none;
+        border-color: var(--gold, #D4AF37);
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.10);
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .marketplace-form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        padding: 20px 24px 24px;
+        border-top: 1px solid rgba(212, 175, 55, 0.18);
+    }
+
+    .marketplace-gold-button,
+    .marketplace-cancel-button {
+        min-height: 52px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .marketplace-gold-button {
+        border: 1px solid var(--gold, #D4AF37);
+        background: var(--gold, #D4AF37);
+        color: #111;
+    }
+
+    .marketplace-cancel-button {
+        border: 1px solid var(--gold, #D4AF37);
+        background: transparent;
+        color: var(--gold, #D4AF37);
+    }
+
+    .marketplace-gold-button:hover,
+    .marketplace-cancel-button:hover {
+        background: var(--gold, #D4AF37);
+        color: #111;
+    }
+
+    /* =========================================================
+       STYLE GALLERY OVERLAY
+       ========================================================= */
+
+    .style-gallery-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: none;
+        overflow-y: auto;
+        padding: 24px;
+        background: rgba(10, 10, 10, 0.97);
+    }
+
+    .style-gallery-overlay.open {
+        display: block;
+    }
+
+    .style-gallery-panel {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .style-gallery-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .style-gallery-toolbar h2 {
+        margin: 0;
+    }
+
+    .style-gallery-close {
+        min-width: 46px;
+        min-height: 46px;
+        border: 1px solid var(--gold, #D4AF37);
+        border-radius: 10px;
+        background: transparent;
+        color: var(--gold, #D4AF37);
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .style-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 18px;
+    }
+
+    .style-gallery-item {
+        overflow: hidden;
+        padding: 0;
+        border: 1px solid rgba(212, 175, 55, 0.28);
+        border-radius: 15px;
+        background: #181818;
+        color: var(--ivory, #F5F1E8);
+        text-align: left;
+        cursor: pointer;
+        transition:
+            transform 0.2s,
+            border-color 0.2s;
+    }
+
+    .style-gallery-item:hover {
+        transform: translateY(-3px);
+        border-color: var(--gold, #D4AF37);
+    }
+
+    .style-gallery-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+        background: #111;
+    }
+
+    .style-gallery-no-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1 / 1;
+        color: var(--champagne, #A89F91);
+        font-size: 36px;
+    }
+
+    .style-gallery-info {
+        padding: 13px;
+    }
+
+    .style-gallery-info h3 {
+        margin: 0 0 7px;
+        font-size: 16px;
+    }
+
+    .style-gallery-info p {
+        margin: 3px 0;
+        color: var(--champagne, #A89F91);
+        font-size: 13px;
+    }
+
+    .style-gallery-empty {
+        padding: 50px 20px;
+        text-align: center;
+        border: 1px dashed rgba(212, 175, 55, 0.30);
+        border-radius: 16px;
+        color: var(--champagne, #A89F91);
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 700px) {
+
+        .marketplace-form-header,
+        .selected-style-section,
+        .marketplace-fields {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .selected-style-card {
+            grid-template-columns: 1fr;
+        }
+
+        .selected-style-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+        }
+
+        .style-meta-grid,
+        .marketplace-fields-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .marketplace-fields-grid .full-width {
+            grid-column: auto;
+        }
+
+        .marketplace-form-actions {
+            flex-direction: column-reverse;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .marketplace-gold-button,
+        .marketplace-cancel-button {
+            width: 100%;
+        }
+
+        .style-gallery-overlay {
+            padding: 15px;
+        }
+
+        .style-gallery-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="marketplace-form-shell">
+
+    <div class="card marketplace-form-card">
+
+        <div class="marketplace-form-header">
+
+            <h2>
+                {% if form_mode == "edit" %}
+                    Edit Marketplace Listing
+                {% else %}
+                    Create Marketplace Listing
+                {% endif %}
+            </h2>
+
+            <p>
+                Select a saved style from your Style Gallery,
+                then set its Marketplace price and publication status.
+            </p>
+
+        </div>
+
+        <form
+            method="POST"
+            id="marketplace-listing-form"
+        >
+
+            <input
+                type="hidden"
+                id="style_id"
+                name="style_id"
+                value="{{ listing.style_id if listing else '' }}"
+            >
+
+            <section class="selected-style-section">
+
+                <h3>
+                    Selected Style
+                </h3>
+
+                <div
+                    id="selected-style-placeholder"
+                    class="selected-style-placeholder"
+                    {% if listing and listing.style %}
+                        style="display: none;"
+                    {% endif %}
+                >
+                    <div>
+                        <div style="font-size: 36px; margin-bottom: 10px;">
+                            🧵
+                        </div>
+
+                        <strong>
+                            No style selected
+                        </strong>
+
+                        <p>
+                            Open the Style Gallery and choose the product
+                            you want to publish.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="selected-style-card"
+                    class="selected-style-card{% if listing and listing.style %} visible{% endif %}"
+                >
+
+                    <div id="selected-style-image-container">
+
+                        {% if listing and listing.style and listing.style.image_filename %}
+
+                            <img
+                                id="selected-style-image"
+                                class="selected-style-image"
+                                src="{{ url_for(
+                                    'static',
+                                    filename='uploads/styles/' ~ listing.style.image_filename
+                                ) }}"
+                                alt="{{ listing.style.style_name }}"
+                            >
+
+                        {% else %}
+
+                            <div
+                                id="selected-style-no-image"
+                                class="selected-style-placeholder"
+                            >
+                                🧵
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="selected-style-details">
+
+                        <h3 id="selected-style-name">
+                            {{ listing.style.style_name if listing and listing.style else '' }}
+                        </h3>
+
+                        <div class="style-meta-grid">
+
+                            <div class="style-meta-item">
+                                <span class="style-meta-label">
+                                    Style ID
+                                </span>
+
+                                <span
+                                    class="style-meta-value"
+                                    id="selected-style-id-display"
+                                >
+                                    {{ listing.style.style_id if listing and listing.style else '' }}
+                                </span>
+                            </div>
+
+                            <div class="style-meta-item">
+                                <span class="style-meta-label">
+                                    Garment
+                                </span>
+
+                                <span
+                                    class="style-meta-value"
+                                    id="selected-style-garment"
+                                >
+                                    {{ listing.style.garment_name if listing and listing.style else '' }}
+                                </span>
+                            </div>
+
+                            <div class="style-meta-item">
+                                <span class="style-meta-label">
+                                    Style Type
+                                </span>
+
+                                <span
+                                    class="style-meta-value"
+                                    id="selected-style-type"
+                                >
+                                    {{ listing.style.style_type if listing and listing.style else '' }}
+                                </span>
+                            </div>
+
+                            <div class="style-meta-item">
+                                <span class="style-meta-label">
+                                    Occasion
+                                </span>
+
+                                <span
+                                    class="style-meta-value"
+                                    id="selected-style-occasion"
+                                >
+                                    {{ listing.style.occasion_fit if listing and listing.style else '' }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="style-gallery-button"
+                    id="open-style-gallery"
+                >
+                    🧵 Open Style Gallery
+                </button>
+
+            </section>
+
+
+            <section class="marketplace-fields">
+
+                <div class="marketplace-fields-grid">
+
+                    <div>
+
+                        <label for="price">
+                            Price
+                        </label>
+
+                        <input
+                            type="number"
+                            id="price"
+                            name="price"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            value="{{ listing.price if listing and listing.price is not none else '' }}"
+                            placeholder="Enter marketplace price"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="currency">
+                            Currency
+                        </label>
+
+                        <input
+                            type="text"
+                            id="currency"
+                            name="currency"
+                            value="{{ listing.currency if listing else 'NGN' }}"
+                            maxlength="3"
+                            pattern="[A-Za-z]{3}"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="full-width">
+
+                        <label for="status">
+                            Publication Status
+                        </label>
+
+                        <select
+                            id="status"
+                            name="status"
+                            required
+                        >
+
+                            <option
+                                value="draft"
+                                {% if not listing or listing.status == "draft" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Draft
+                            </option>
+
+                            <option
+                                value="published"
+                                {% if listing and listing.status == "published" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Published
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <div class="marketplace-form-actions">
+
+                <a
+                    href="{{ url_for('marketplace.manage_listings') }}"
+                    class="marketplace-cancel-button"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="marketplace-gold-button"
+                >
+                    {% if form_mode == "edit" %}
+                        Save Listing
+                    {% else %}
+                        Create Listing
+                    {% endif %}
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     STYLE GALLERY OVERLAY
+     ========================================================= -->
+
+<div
+    id="style-gallery-overlay"
+    class="style-gallery-overlay"
+    aria-hidden="true"
+>
+
+    <div class="style-gallery-panel">
+
+        <div class="style-gallery-toolbar">
+
+            <div>
+
+                <h2>
+                    🧵 Style Gallery
+                </h2>
+
+                <p style="color: var(--champagne, #A89F91);">
+                    Select the style you want to publish.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="style-gallery-close"
+                id="close-style-gallery"
+                aria-label="Close Style Gallery"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        {% if styles %}
+
+            <div class="style-gallery-grid">
+
+                {% for style in styles %}
+
+                    {% if style.status|lower == "active" %}
+
+                        <button
+                            type="button"
+                            class="style-gallery-item"
+                            data-style-id="{{ style.id }}"
+                            data-style-name="{{ style.style_name|e }}"
+                            data-style-code="{{ style.style_id|e }}"
+                            data-garment="{{ style.garment_name|e }}"
+                            data-style-type="{{ style.style_type|e }}"
+                            data-occasion="{{ style.occasion_fit|e }}"
+                            data-image="{% if style.image_filename %}{{ url_for('static', filename='uploads/styles/' ~ style.image_filename) }}{% endif %}"
+                        >
+
+                            {% if style.image_filename %}
+
+                                <img
+                                    class="style-gallery-image"
+                                    src="{{ url_for(
+                                        'static',
+                                        filename='uploads/styles/' ~ style.image_filename
+                                    ) }}"
+                                    alt="{{ style.style_name }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="style-gallery-no-image">
+                                    🧵
+                                </div>
+
+                            {% endif %}
+
+                            <div class="style-gallery-info">
+
+                                <h3>
+                                    {{ style.style_name }}
+                                </h3>
+
+                                <p>
+                                    {{ style.garment_name }}
+                                </p>
+
+                                <p>
+                                    {{ style.style_type }}
+                                </p>
+
+                                <p>
+                                    {{ style.style_id }}
+                                </p>
+
+                            </div>
+
+                        </button>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="style-gallery-empty">
+
+                <div style="font-size: 40px;">
+                    🧵
+                </div>
+
+                <h3>
+                    No Styles Available
+                </h3>
+
+                <p>
+                    Upload an active style to the Style Gallery
+                    before creating a Marketplace listing.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById(
+        "marketplace-listing-form"
+    );
+
+    const styleIdInput = document.getElementById(
+        "style_id"
+    );
+
+    const overlay = document.getElementById(
+        "style-gallery-overlay"
+    );
+
+    const openButton = document.getElementById(
+        "open-style-gallery"
+    );
+
+    const closeButton = document.getElementById(
+        "close-style-gallery"
+    );
+
+    const selectedCard = document.getElementById(
+        "selected-style-card"
+    );
+
+    const placeholder = document.getElementById(
+        "selected-style-placeholder"
+    );
+
+    const selectedName = document.getElementById(
+        "selected-style-name"
+    );
+
+    const selectedId = document.getElementById(
+        "selected-style-id-display"
+    );
+
+    const selectedGarment = document.getElementById(
+        "selected-style-garment"
+    );
+
+    const selectedType = document.getElementById(
+        "selected-style-type"
+    );
+
+    const selectedOccasion = document.getElementById(
+        "selected-style-occasion"
+    );
+
+    const imageContainer = document.getElementById(
+        "selected-style-image-container"
+    );
+
+    const styleItems = document.querySelectorAll(
+        ".style-gallery-item"
+    );
+
+
+    function openGallery() {
+
+        overlay.classList.add("open");
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        document.body.style.overflow = "hidden";
+    }
+
+
+    function closeGallery() {
+
+        overlay.classList.remove("open");
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        document.body.style.overflow = "";
+    }
+
+
+    function selectStyle(item) {
+
+        const data = item.dataset;
+
+        styleIdInput.value = data.styleId;
+
+        selectedName.textContent = data.styleName;
+        selectedId.textContent = data.styleCode;
+        selectedGarment.textContent = data.garment;
+        selectedType.textContent = data.styleType;
+        selectedOccasion.textContent = data.occasion;
+
+        imageContainer.innerHTML = "";
+
+        if (data.image) {
+
+            const image = document.createElement("img");
+
+            image.id = "selected-style-image";
+            image.className = "selected-style-image";
+            image.src = data.image;
+            image.alt = data.styleName;
+
+            imageContainer.appendChild(image);
+
+        } else {
+
+            const noImage = document.createElement("div");
+
+            noImage.className =
+                "selected-style-placeholder";
+
+            noImage.textContent = "🧵";
+
+            imageContainer.appendChild(noImage);
+        }
+
+        placeholder.style.display = "none";
+
+        selectedCard.classList.add(
+            "visible"
+        );
+
+        closeGallery();
+    }
+
+
+    openButton.addEventListener(
+        "click",
+        openGallery
+    );
+
+
+    closeButton.addEventListener(
+        "click",
+        closeGallery
+    );
+
+
+    overlay.addEventListener(
+        "click",
+        function (event) {
+
+            if (event.target === overlay) {
+                closeGallery();
+            }
+
+        }
+    );
+
+
+    styleItems.forEach(function (item) {
+
+        item.addEventListener(
+            "click",
+            function () {
+                selectStyle(item);
+            }
+        );
+
+    });
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape"
+                && overlay.classList.contains("open")
+            ) {
+                closeGallery();
+            }
+
+        }
+    );
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            if (!styleIdInput.value) {
+
+                event.preventDefault();
+
+                openGallery();
+
+                return;
+            }
+
+        }
+    );
+
+});
+</script>
+
+{% endblock %}

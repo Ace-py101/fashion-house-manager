@@ -1,8 +1,15 @@
-from flask import Blueprint, render_template
+from flask import (
+    Blueprint,
+    render_template
+)
 
 from app.services.dashboard_service import (
     get_dashboard_metrics,
     get_greeting
+)
+
+from app.services.auth_helpers import (
+    admin_required
 )
 
 
@@ -13,12 +20,12 @@ main_bp = Blueprint(
 
 
 @main_bp.route("/")
+@admin_required
 def index():
 
     metrics = get_dashboard_metrics()
 
     greeting = get_greeting()
-
 
     return render_template(
         "index.html",

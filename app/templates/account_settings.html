@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}
+Account Settings
+{% endblock %}
+
+{% block page_title %}
+Account Settings
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<span>Account Settings</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Account Settings
+    </h2>
+
+    <p>
+        Manage your Ateliier_fhm account, security,
+        preferences and platform settings.
+    </p>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+
+    <!-- ACCOUNT -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='account') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            👤
+        </div>
+
+        <h3>
+            Account
+        </h3>
+
+        <small>
+            Account information and preferences
+        </small>
+
+    </a>
+
+
+    <!-- PROFILE -->
+
+    <a
+        href="{{ url_for('profile.profile') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🪪
+        </div>
+
+        <h3>
+            Profile
+        </h3>
+
+        <small>
+            Manage your profile information
+        </small>
+
+    </a>
+
+
+    <!-- SECURITY -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='security') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🔐
+        </div>
+
+        <h3>
+            Security
+        </h3>
+
+        <small>
+            Password, sessions and login security
+        </small>
+
+    </a>
+
+
+    <!-- VERIFICATION -->
+
+    <a
+        href="{{ url_for('auth.verify_phone') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🛡️
+        </div>
+
+        <h3>
+            Verification
+        </h3>
+
+        <small>
+            Email and phone verification
+        </small>
+
+    </a>
+
+
+    <!-- PRIVACY -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='privacy') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🔒
+        </div>
+
+        <h3>
+            Privacy
+        </h3>
+
+        <small>
+            Privacy and personal-data preferences
+        </small>
+
+    </a>
+
+
+    <!-- CONSENT -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='consent') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            📜
+        </div>
+
+        <h3>
+            Consent & Agreements
+        </h3>
+
+        <small>
+            Terms, privacy agreements and consent records
+        </small>
+
+    </a>
+
+
+    <!-- NOTIFICATIONS -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='notifications') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🔔
+        </div>
+
+        <h3>
+            Notifications
+        </h3>
+
+        <small>
+            Email, SMS and application notifications
+        </small>
+
+    </a>
+
+
+    <!-- SUBSCRIPTION -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='subscription') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            💳
+        </div>
+
+        <h3>
+            Subscription
+        </h3>
+
+        <small>
+            Plan, billing and subscription status
+        </small>
+
+    </a>
+
+
+    <!-- ACCOUNT STATUS -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='status') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🟢
+        </div>
+
+        <h3>
+            Account Status
+        </h3>
+
+        <small>
+            Current account and verification state
+        </small>
+
+    </a>
+
+
+    <!-- LEGAL -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='legal') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            ⚖️
+        </div>
+
+        <h3>
+            Legal & Terms
+        </h3>
+
+        <small>
+            Terms, privacy policy and legal documents
+        </small>
+
+    </a>
+
+
+    <!-- ABOUT -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='about') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            ℹ️
+        </div>
+
+        <h3>
+            About Ateliier_fhm
+        </h3>
+
+        <small>
+            Platform information and application details
+        </small>
+
+    </a>
+
+
+    <!-- SUPPORT -->
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='support') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🆘
+        </div>
+
+        <h3>
+            Help & Support
+        </h3>
+
+        <small>
+            Help resources and support information
+        </small>
+
+    </a>
+
+
+</div>
+
+{% endblock %}

@@ -17,6 +17,10 @@ from app.constants.garments import VALID_GARMENT_NAMES
 
 from app.models.measurement import Measurement
 
+from app.services.auth_helpers import (
+    admin_required
+)
+
 from app.services.order_service import (
     create_order,
     generate_order_id,
@@ -39,6 +43,7 @@ order_bp = Blueprint(
 
 
 @order_bp.route("/orders")
+@admin_required
 def orders():
     return render_template(
         "orders.html"
@@ -46,6 +51,7 @@ def orders():
 
 
 @order_bp.route("/orders/new", methods=["GET", "POST"])
+@admin_required
 def new_order():
 
     customer = None
@@ -267,6 +273,7 @@ def new_order():
  
 
 @order_bp.route("/orders/view")
+@admin_required
 def view_orders():
 
     orders = get_all_orders()
@@ -310,6 +317,7 @@ def view_orders():
     "/orders/search",
     methods=["GET", "POST"]
 )
+@admin_required
 def search_order():
 
     order = None
@@ -346,6 +354,7 @@ def search_order():
 
 
 @order_bp.route("/orders/view/<order_id>")
+@admin_required
 def view_order(order_id):
 
     order = get_order_by_id(
@@ -375,6 +384,7 @@ def view_order(order_id):
     "/orders/edit/<order_id>",
     methods=["GET", "POST"]
 )
+@admin_required
 def edit_order(order_id):
 
     order = get_order_by_id(
@@ -574,6 +584,7 @@ def edit_order(order_id):
     "/orders/status/<order_id>",
     methods=["GET", "POST"]
 )
+@admin_required
 def change_order_status(order_id):
 
     order = get_order_by_id(
@@ -638,6 +649,7 @@ def change_order_status(order_id):
 
 
 @order_bp.route("/orders/history/<order_id>")
+@admin_required
 def order_history(order_id):
 
     order = get_order_by_id(
@@ -668,6 +680,7 @@ def order_history(order_id):
     )
 
 @order_bp.route("/orders/activity/<order_id>")
+@admin_required
 def order_activity(order_id):
 
     order = get_order_by_id(

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ section_data.title }}
+{% endblock %}
+
+{% block page_title %}
+{{ section_data.title }}
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>/</span>
+
+<a href="{{ url_for('message.messages') }}">
+    Messages
+</a>
+
+<span>/</span>
+
+<span>
+    {{ section_data.title }}
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            {{ section_data.icon }}
+            {{ section_data.title }}
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div
+            style="
+                text-align: center;
+                padding: 50px 20px;
+            "
+        >
+
+            <div
+                style="
+                    font-size: 48px;
+                    margin-bottom: 20px;
+                "
+            >
+                {{ section_data.icon }}
+            </div>
+
+
+            <h3>
+                Messaging Foundation Ready
+            </h3>
+
+
+            <p>
+                {{ section_data.description }}
+            </p>
+
+
+            <p>
+                The full messaging workflow will be
+                implemented later according to the
+                development roadmap.
+            </p>
+
+
+            <br>
+
+
+            <a
+                href="{{ url_for('message.messages') }}"
+                class="btn"
+            >
+                ← Back to Messages
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

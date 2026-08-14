@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ section_data.title }}
+{% endblock %}
+
+{% block page_title %}
+{{ section_data.title }}
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">
+    Account Settings
+</a>
+<span>/</span>
+<span>{{ section_data.title }}</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        {{ section_data.title }}
+    </h2>
+
+    <p>
+        {{ section_data.description }}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            {{ section_data.title }}
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div style="text-align: center; padding: 40px 20px;">
+
+            <div
+                style="
+                    font-size: 48px;
+                    margin-bottom: 20px;
+                "
+            >
+                ⚙️
+            </div>
+
+            <h3>
+                Feature Foundation Ready
+            </h3>
+
+            <p>
+                This Ateliier_fhm feature has been
+                structurally established and is ready
+                for its full implementation.
+            </p>
+
+            <p>
+                The detailed functionality will be
+                implemented according to the
+                Ateliier_fhm development roadmap.
+            </p>
+
+            <br>
+
+            <a
+                href="{{ url_for('settings.settings') }}"
+                class="btn"
+            >
+                ← Back to Account Settings
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

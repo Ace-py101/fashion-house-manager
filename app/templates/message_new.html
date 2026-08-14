@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Conversation
+{% endblock %}
+
+{% block page_title %}
+New Conversation
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>/</span>
+
+<a href="{{ url_for('message.messages') }}">
+    Messages
+</a>
+
+<span>/</span>
+
+<span>
+    New Conversation
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        New Conversation
+    </h2>
+
+    <p>
+        Start a communication thread with a client or business.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            💬 Communication Portal
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div style="text-align: center; padding: 50px 20px;">
+
+            <div
+                style="
+                    font-size: 48px;
+                    margin-bottom: 20px;
+                "
+            >
+                💬
+            </div>
+
+            <h3>
+                Conversation Foundation Ready
+            </h3>
+
+            <p>
+                Direct client-to-business communication has
+                been structurally established.
+            </p>
+
+            <p>
+                Vendor discovery, Marketplace conversation
+                initiation and order-linked communication will
+                be connected in the next implementation stage.
+            </p>
+
+            <br>
+
+            <a
+                href="{{ url_for('message.messages') }}"
+                class="btn"
+            >
+                ← Back to Messages
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

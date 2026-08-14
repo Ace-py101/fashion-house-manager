@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | Ateliier</title>
+
+    <style>
+
+        :root {
+            --obsidian: #111111;
+            --charcoal: #181818;
+            --gold: #D4AF37;
+            --ivory: #F5F1E8;
+            --champagne: #A89F91;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px 20px;
+
+            background:
+                linear-gradient(
+                    rgba(17, 17, 17, 0.72),
+                    rgba(17, 17, 17, 0.72)
+                ),
+                url(
+                    "{{ url_for(
+                        'static',
+                        filename='images/atelier-logo.png'
+                    ) }}"
+                );
+
+            background-color: var(--obsidian);
+
+            background-repeat: no-repeat;
+
+            background-position: center;
+
+            background-size: min(
+                80vw,
+                80vh
+            );
+
+            color: var(--ivory);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+        .auth-page {
+
+            width: 100%;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+
+            padding: 20px;
+        }
+
+        .auth-container {
+
+            width: 100%;
+
+            max-width: 480px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        /* ==================================================
+           ATELIIER BRAND
+           Matches the registration page
+           ================================================== */
+
+        .brand {
+
+            text-align: center;
+
+            margin-bottom: 22px;
+        }
+
+        .brand-name {
+
+            margin: 0;
+
+            color: var(--gold);
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: clamp(
+                1.7rem,
+                4vw,
+                2.25rem
+            );
+
+            font-weight: 500;
+
+            font-style: italic;
+
+            letter-spacing: 0.16em;
+
+            text-shadow:
+                0 2px 12px
+                rgba(
+                    212,
+                    175,
+                    55,
+                    0.18
+                );
+        }
+
+        .brand-line {
+
+            width: 90px;
+
+            height: 1px;
+
+            margin:
+                10px
+                auto
+                0;
+
+            background:
+                linear-gradient(
+                    to right,
+                    transparent,
+                    var(--gold),
+                    transparent
+                );
+        }
+
+        /* ==================================================
+           AUTH CARD
+           ================================================== */
+
+        .auth-card {
+
+            width: 100%;
+
+            padding: clamp(
+                26px,
+                5vw,
+                42px
+            );
+
+            background:
+                rgba(
+                    24,
+                    24,
+                    24,
+                    0.96
+                );
+
+            border:
+                1px solid
+                rgba(
+                    212,
+                    175,
+                    55,
+                    0.45
+                );
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.55
+                );
+        }
+
+        /* ==================================================
+           HEADER
+           ================================================== */
+
+        .auth-header {
+
+            text-align: center;
+
+            margin-bottom: 28px;
+        }
+
+        .auth-header h1 {
+
+            margin:
+                0
+                0
+                8px;
+
+            font-size: clamp(
+                25px,
+                5vw,
+                34px
+            );
+        }
+
+        .auth-header p {
+
+            margin: 0;
+
+            color: var(--champagne);
+
+            font-size: 16px;
+        }
+
+        /* ==================================================
+           FLASH MESSAGES
+           ================================================== */
+
+        .flash-container {
+
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+
+            padding:
+                12px
+                14px;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid
+                rgba(
+                    212,
+                    175,
+                    55,
+                    0.35
+                );
+
+            background:
+                rgba(
+                    212,
+                    175,
+                    55,
+                    0.08
+                );
+
+            color: var(--ivory);
+
+            font-size: 14px;
+        }
+
+        /* ==================================================
+           FORM
+           ================================================== */
+
+        .form-group {
+
+            margin-bottom: 20px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: var(--ivory);
+
+            font-weight: 600;
+
+            font-size: 15px;
+        }
+
+        input {
+
+            width: 100%;
+
+            min-height: 54px;
+
+            padding:
+                14px
+                16px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(
+                    245,
+                    241,
+                    232,
+                    0.18
+                );
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.22
+                );
+
+            color: var(--ivory);
+
+            font-size: 16px;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
+        }
+
+        input:focus {
+
+            border-color: var(--gold);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    212,
+                    175,
+                    55,
+                    0.10
+                );
+        }
+
+        input::placeholder {
+
+            color:
+                rgba(
+                    245,
+                    241,
+                    232,
+                    0.48
+                );
+        }
+
+        /* ==================================================
+           PASSWORD FIELD
+           ================================================== */
+
+        .password-wrapper {
+
+            position: relative;
+        }
+
+        .password-wrapper input {
+
+            padding-right: 86px;
+        }
+
+        .show-password {
+
+            position: absolute;
+
+            top: 50%;
+
+            right: 12px;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: var(--gold);
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            padding:
+                6px
+                4px;
+        }
+
+        .show-password:hover {
+
+            text-decoration: underline;
+        }
+
+        /* ==================================================
+           FORGOT PASSWORD
+           ================================================== */
+
+        .forgot-password {
+
+            display: block;
+
+            margin-top: -8px;
+
+            margin-bottom: 22px;
+
+            text-align: right;
+
+            color: var(--gold);
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+        .verification-help {
+
+            margin-top: 22px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid
+                rgba(
+                    245,
+                    241,
+                    232,
+                    0.10
+                );
+
+            text-align: center;
+        }
+
+        .verification-help p {
+
+            margin:
+                0
+                0
+                12px;
+
+            color: var(--champagne);
+
+            font-size: 14px;
+        }
+
+        .verification-form {
+
+            display: flex;
+
+            gap: 8px;
+
+            align-items: stretch;
+        }
+
+        .verification-form input {
+
+            min-height: 48px;
+
+            flex: 1;
+        }
+
+        .verification-button {
+
+            min-height: 48px;
+
+            padding:
+                10px
+                14px;
+
+            border:
+                1px solid
+                var(--gold);
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: var(--gold);
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s,
+                color 0.2s;
+        }
+
+        .verification-button:hover {
+
+            background: var(--gold);
+
+            color: #111111;
+        }
+
+        .forgot-password:hover {
+
+            text-decoration: underline;
+        }
+
+        /* ==================================================
+           LOGIN BUTTON
+           ================================================== */
+
+        .login-button {
+
+            width: 100%;
+
+            min-height: 56px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: var(--gold);
+
+            color: #111111;
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+        }
+
+        .login-button:hover {
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 8px 24px
+                rgba(
+                    212,
+                    175,
+                    55,
+                    0.20
+                );
+        }
+
+        /* ==================================================
+           FOOTER
+           ================================================== */
+
+        .auth-footer {
+
+            margin-top: 24px;
+
+            text-align: center;
+
+            color: var(--champagne);
+
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+
+            color: var(--gold);
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+
+            text-decoration: underline;
+        }
+
+        /* ==================================================
+           MOBILE
+           ================================================== */
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding: 16px;
+
+                background-size:
+                    min(
+                        105vw,
+                        105vh
+                    );
+            }
+
+            .auth-page {
+
+                padding: 10px;
+            }
+
+            .auth-card {
+
+                border-radius: 18px;
+
+                padding:
+                    24px
+                    20px;
+            }
+
+            .brand {
+
+                margin-bottom: 16px;
+            }
+
+            .brand-name {
+
+                font-size: 1.65rem;
+
+                letter-spacing:
+                    0.13em;
+            }
+
+            .auth-header h1 {
+
+                font-size: 26px;
+            }
+
+            .auth-header p {
+
+                font-size: 14px;
+            }
+
+            input {
+
+                min-height: 52px;
+            }
+
+            .login-button {
+
+                min-height: 54px;
+            }
+        }
+
+        /* ==================================================
+           LANDSCAPE PHONE
+           ================================================== */
+
+        @media (
+            orientation: landscape
+        ) and (
+            max-height: 600px
+        ) {
+
+            body {
+
+                align-items: flex-start;
+
+                overflow-y: auto;
+            }
+
+            .auth-page {
+
+                min-height: auto;
+
+                padding-top: 25px;
+
+                padding-bottom: 25px;
+            }
+
+            .brand {
+
+                margin-bottom: 12px;
+            }
+
+            .auth-card {
+
+                padding:
+                    22px
+                    28px;
+            }
+
+            .form-group {
+
+                margin-bottom: 14px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <main class="auth-page">
+
+        <div class="auth-container">
+
+            <!-- ==================================================
+                 BRAND
+                 ================================================== -->
+
+            <div class="brand">
+
+                <p class="brand-name">
+                    Ateliier
+                </p>
+
+                <div
+                    class="brand-line"
+                    aria-hidden="true"
+                ></div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 LOGIN CARD
+                 ================================================== -->
+
+            <section class="auth-card">
+
+                <header class="auth-header">
+
+                    <h1>
+                        Welcome Back
+                    </h1>
+
+                    <p>
+                        Sign in to continue.
+                    </p>
+
+                </header>
+
+
+                <!-- ==================================================
+                     FLASH MESSAGES
+                     ================================================== -->
+
+                {% with messages = get_flashed_messages(
+                    with_categories=true
+                ) %}
+
+                    {% if messages %}
+
+                        <div class="flash-container">
+
+                            {% for category, message in messages %}
+
+                                <div
+                                    class="flash-message"
+                                >
+                                    {{ message }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+
+                <!-- ==================================================
+                     LOGIN FORM
+                     ================================================== -->
+
+                <form
+                    method="POST"
+                    novalidate
+                >
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ request.form.get(
+                                'email',
+                                ''
+                            ) }}"
+                            maxlength="255"
+                            placeholder="Enter your email address"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                id="show-password"
+                                class="show-password"
+                                aria-label="Show password"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        href="{{ url_for(
+                            'auth.forgot_password'
+                        ) }}"
+                        class="forgot-password"
+                        title="Password reset will be added in Stage 2"
+                    >
+                        Forgot password?
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+                        🔐 Sign In
+                    </button>
+
+                </form>
+
+
+                <!-- ==================================================
+                     EMAIL VERIFICATION RESEND
+
+                     This form is intentionally OUTSIDE the login
+                     form. Nested HTML forms are invalid and can cause
+                     the browser to detach the Sign In button from
+                     the login form.
+                     ================================================== -->
+
+                <div class="verification-help">
+
+                    <p>
+                        Didn't receive your verification email?
+                    </p>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'auth.resend_verification'
+                        ) }}"
+                        class="verification-form"
+                        novalidate
+                    >
+
+                        <input
+                            type="email"
+                            name="email"
+                            maxlength="255"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="verification-button"
+                        >
+                            Resend
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- ==================================================
+                     FOOTER
+                     ================================================== -->
+
+                <div class="auth-footer">
+
+                    Don't have an account?
+
+                    <a
+                        href="{{ url_for(
+                            'auth.register'
+                        ) }}"
+                    >
+                        Create Account
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- ==================================================
+         SHOW PASSWORD
+         ================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const passwordInput =
+                    document.getElementById(
+                        "password"
+                    );
+
+                const showPasswordButton =
+                    document.getElementById(
+                        "show-password"
+                    );
+
+                if (
+                    !passwordInput ||
+                    !showPasswordButton
+                ) {
+                    return;
+                }
+
+                showPasswordButton.addEventListener(
+                    "click",
+                    function () {
+
+                        const isPassword =
+                            passwordInput.type === "password";
+
+                        passwordInput.type =
+                            isPassword
+                                ? "text"
+                                : "password";
+
+                        showPasswordButton.textContent =
+                            isPassword
+                                ? "Hide"
+                                : "Show";
+
+                        showPasswordButton.setAttribute(
+                            "aria-label",
+                            isPassword
+                                ? "Hide password"
+                                : "Show password"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,428 @@
+/* ============================================================
+   ATELIIER_FHM MARKETPLACE
+   Client-facing visual catalogue
+   ============================================================ */
+
+.marketplace-page {
+    width: 100%;
+}
+
+
+/* ============================================================
+   MARKETPLACE HEADER
+   ============================================================ */
+
+.marketplace-header {
+    margin-bottom: 28px;
+    padding: 10px 0;
+}
+
+.marketplace-eyebrow {
+    display: inline-block;
+    margin-bottom: 8px;
+
+    color: var(--gold);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    letter-spacing: 0.14em;
+}
+
+.marketplace-header h2 {
+    margin: 0 0 8px;
+
+    color: var(--ivory);
+
+    font-size: clamp(
+        1.8rem,
+        4vw,
+        2.5rem
+    );
+}
+
+.marketplace-header p {
+    max-width: 650px;
+    margin: 0;
+
+    color: var(--champagne);
+
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   PRODUCT GRID
+   ============================================================ */
+
+.marketplace-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap: 22px;
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   PRODUCT CARD
+   ============================================================ */
+
+.marketplace-card {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: inherit;
+    text-decoration: none;
+
+    background: var(--card-dark);
+
+    border: 1px solid
+        rgba(
+            212,
+            175,
+            55,
+            0.12
+        );
+
+    border-radius: 16px;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.marketplace-card:hover {
+    transform: translateY(-4px);
+
+    border-color:
+        rgba(
+            212,
+            175,
+            55,
+            0.45
+        );
+
+    box-shadow:
+        0 14px 32px
+        rgba(
+            0,
+            0,
+            0,
+            0.28
+        );
+}
+
+
+/* ============================================================
+   PRODUCT IMAGE
+   ============================================================ */
+
+.marketplace-card-image {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 4 / 5;
+
+    overflow: hidden;
+
+    background:
+        var(--charcoal);
+}
+
+.marketplace-card-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.3s ease;
+}
+
+.marketplace-card:hover
+.marketplace-card-image img {
+    transform: scale(1.03);
+}
+
+.marketplace-image-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 3.5rem;
+
+    color: var(--champagne);
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--charcoal),
+            var(--card-dark)
+        );
+}
+
+
+/* ============================================================
+   FEATURED BADGE
+   ============================================================ */
+
+.marketplace-featured-badge {
+    position: absolute;
+
+    top: 12px;
+    left: 12px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: var(--gold);
+
+    color: var(--obsidian);
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.03em;
+}
+
+
+/* ============================================================
+   PRODUCT BODY
+   ============================================================ */
+
+.marketplace-card-body {
+    display: flex;
+    flex-direction: column;
+
+    flex: 1;
+
+    padding: 17px;
+}
+
+.marketplace-category {
+    margin-bottom: 6px;
+
+    color: var(--gold);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+}
+
+.marketplace-card-body h3 {
+    margin: 0;
+
+    color: var(--ivory);
+
+    font-size: 1.05rem;
+    line-height: 1.35;
+}
+
+.marketplace-description {
+    display: -webkit-box;
+
+    margin: 9px 0 0;
+
+    overflow: hidden;
+
+    color: var(--champagne);
+
+    font-size: 0.88rem;
+    line-height: 1.5;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+
+/* ============================================================
+   CARD FOOTER
+   ============================================================ */
+
+.marketplace-card-footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: auto;
+    padding-top: 18px;
+}
+
+.marketplace-price {
+    color: var(--ivory);
+
+    font-size: 0.98rem;
+}
+
+.marketplace-view {
+    color: var(--gold);
+
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.marketplace-empty-state {
+    width: 100%;
+
+    padding: 70px 24px;
+
+    text-align: center;
+
+    background: var(--card-dark);
+
+    border: 1px solid
+        rgba(
+            212,
+            175,
+            55,
+            0.12
+        );
+
+    border-radius: 18px;
+}
+
+.marketplace-empty-icon {
+    margin-bottom: 18px;
+
+    font-size: 3rem;
+}
+
+.marketplace-empty-state h2 {
+    margin: 0 0 10px;
+
+    color: var(--ivory);
+}
+
+.marketplace-empty-state p {
+    max-width: 560px;
+
+    margin: 0 auto;
+
+    color: var(--champagne);
+
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   RESPONSIVE GRID
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .marketplace-grid {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .marketplace-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 16px;
+    }
+
+    .marketplace-card-body {
+        padding: 14px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .marketplace-header {
+        margin-bottom: 20px;
+    }
+
+    .marketplace-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 10px;
+    }
+
+    .marketplace-card {
+        border-radius: 12px;
+    }
+
+    .marketplace-card-body {
+        padding: 11px;
+    }
+
+    .marketplace-card-body h3 {
+        font-size: 0.9rem;
+    }
+
+    .marketplace-description {
+        font-size: 0.78rem;
+    }
+
+    .marketplace-card-footer {
+        gap: 6px;
+
+        padding-top: 13px;
+    }
+
+    .marketplace-price {
+        font-size: 0.82rem;
+    }
+
+    .marketplace-view {
+        font-size: 0.72rem;
+    }
+
+    .marketplace-featured-badge {
+        top: 7px;
+        left: 7px;
+
+        padding: 4px 7px;
+
+        font-size: 0.64rem;
+    }
+}

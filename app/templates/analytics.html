@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+Analytics
+{% endblock %}
+
+{% block page_title %}
+Analytics
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span> / </span>
+<span>Analytics</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>Analytics</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="module-card">
+
+            <h3>Business Analytics</h3>
+
+            <p>
+                Detailed business intelligence will be
+                developed in the Analytics stage of the roadmap.
+            </p>
+
+            <p>
+                Dashboard analytics will continue to provide
+                operational summaries independently.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

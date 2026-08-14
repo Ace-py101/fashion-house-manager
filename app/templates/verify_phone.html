@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}
+Verify Phone Number | Ateliier
+{% endblock %}
+
+{% block auth_content %}
+
+<style>
+    .verification-page {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+        background: #111111;
+        color: #F5F1E8;
+    }
+
+    .verification-container {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .verification-brand {
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    .verification-brand-name {
+        margin: 0;
+        color: #D4AF37;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 500;
+        font-style: italic;
+        letter-spacing: 0.16em;
+    }
+
+    .verification-brand-line {
+        width: 90px;
+        height: 1px;
+        margin: 10px auto 0;
+        background: linear-gradient(
+            to right,
+            transparent,
+            #D4AF37,
+            transparent
+        );
+    }
+
+    .verification-card {
+        width: 100%;
+        padding: 36px;
+        background: #181818;
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        border-radius: 22px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .verification-header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .verification-icon {
+        font-size: 44px;
+        margin-bottom: 12px;
+    }
+
+    .verification-header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+        color: #F5F1E8;
+    }
+
+    .verification-header p {
+        margin: 0;
+        color: #A89F91;
+        line-height: 1.6;
+    }
+
+    .verification-user {
+        margin-bottom: 24px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: rgba(212, 175, 55, 0.07);
+        border: 1px solid rgba(212, 175, 55, 0.20);
+        color: #A89F91;
+        text-align: center;
+    }
+
+    .verification-user strong {
+        color: #F5F1E8;
+    }
+
+    .verification-form-group {
+        margin-bottom: 20px;
+    }
+
+    .verification-form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #F5F1E8;
+        font-weight: 600;
+    }
+
+    .verification-form-group input {
+        width: 100%;
+        min-height: 56px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(245, 241, 232, 0.18);
+        background: rgba(0, 0, 0, 0.22);
+        color: #F5F1E8;
+        font-size: 20px;
+        letter-spacing: 0.25em;
+        text-align: center;
+        outline: none;
+    }
+
+    .verification-form-group input:focus {
+        border-color: #D4AF37;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.10);
+    }
+
+    .verification-form-group input::placeholder {
+        color: rgba(245, 241, 232, 0.40);
+        letter-spacing: normal;
+    }
+
+    .verification-button {
+        width: 100%;
+        min-height: 54px;
+        border: none;
+        border-radius: 12px;
+        background: #D4AF37;
+        color: #111111;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .verification-button:hover {
+        opacity: 0.92;
+    }
+
+    .resend-form {
+        margin-top: 14px;
+    }
+
+    .resend-button {
+        width: 100%;
+        min-height: 50px;
+        border: 1px solid #D4AF37;
+        border-radius: 12px;
+        background: transparent;
+        color: #D4AF37;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .resend-button:hover {
+        background: #D4AF37;
+        color: #111111;
+    }
+
+    .verification-footer {
+        margin-top: 24px;
+        text-align: center;
+    }
+
+    .verification-footer a {
+        color: #D4AF37;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .verification-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .verification-page {
+            padding: 16px;
+        }
+
+        .verification-card {
+            padding: 26px 20px;
+            border-radius: 18px;
+        }
+
+        .verification-header h1 {
+            font-size: 26px;
+        }
+
+        .verification-brand-name {
+            font-size: 1.65rem;
+        }
+    }
+</style>
+
+<main class="verification-page">
+
+    <div class="verification-container">
+
+        <div class="verification-brand">
+            <p class="verification-brand-name">
+                Ateliier
+            </p>
+
+            <div
+                class="verification-brand-line"
+                aria-hidden="true"
+            ></div>
+        </div>
+
+        <section class="verification-card">
+
+            <header class="verification-header">
+
+                <div class="verification-icon">
+                    📱
+                </div>
+
+                <h1>
+                    Verify Phone Number
+                </h1>
+
+                <p>
+                    Enter the six-digit verification code
+                    sent to your registered phone number.
+                </p>
+
+            </header>
+
+            {% if user and user.phone_number %}
+
+                <div class="verification-user">
+                    Phone:
+                    <strong>
+                        {{ user.phone_number }}
+                    </strong>
+                </div>
+
+            {% endif %}
+
+            <form method="POST">
+
+                <div class="verification-form-group">
+
+                    <label for="verification_code">
+                        Verification Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="verification_code"
+                        name="verification_code"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        minlength="6"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="000000"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="verification-button"
+                >
+                    Verify Phone
+                </button>
+
+            </form>
+
+            <form
+                method="POST"
+                action="{{ url_for('auth.resend_phone_verification') }}"
+                class="resend-form"
+            >
+
+                <button
+                    type="submit"
+                    class="resend-button"
+                >
+                    Resend Verification Code
+                </button>
+
+            </form>
+
+            <div class="verification-footer">
+
+                <a href="{{ url_for('settings.settings') }}">
+                    ← Back to Account Settings
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}

@@ -28,3 +28,8 @@ app/static/uploads/
 .env
 .env.*
 !.env.example
+
+# Development backup / snapshot files
+*.before-*
+*-backup
+*.backup

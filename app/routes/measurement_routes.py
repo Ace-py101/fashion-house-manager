@@ -14,6 +14,10 @@ from app.constants.measurement_templates import (
     garment_has_measurements
 )
 
+from app.services.auth_helpers import (
+    admin_required
+)
+
 from app.services.document_service import (
     DocumentType,
     build_document_context,
@@ -70,6 +74,7 @@ def build_measurement_data(
     return measurement_data
 
 @measurement_bp.route("/measurements")
+@admin_required
 def measurements():
 
     return render_template(
@@ -81,6 +86,7 @@ def measurements():
     "/measurements/new",
     methods=["GET", "POST"]
 )
+@admin_required
 def new_measurement():
 
     customer = None
@@ -386,6 +392,7 @@ def new_measurement():
 @measurement_bp.route(
     "/measurements/order/<order_id>"
 )
+@admin_required
 def view_order_measurements(
     order_id
 ):
@@ -438,6 +445,7 @@ def view_order_measurements(
 @measurement_bp.route(
     "/measurements/<int:measurement_id>"
 )
+@admin_required
 def view_measurement(
     measurement_id
 ):
@@ -480,6 +488,7 @@ def view_measurement(
 @measurement_bp.route(
     "/measurements/<int:measurement_id>/history"
 )
+@admin_required
 def measurement_history(
     measurement_id
 ):
@@ -520,6 +529,7 @@ def measurement_history(
 @measurement_bp.route(
     "/measurements/<int:measurement_id>/activity"
 )
+@admin_required
 def measurement_activity(
     measurement_id
 ):
@@ -559,6 +569,7 @@ def measurement_activity(
 @measurement_bp.route(
     "/measurements/view"
 )
+@admin_required
 def view_measurements():
 
     measurements = (
@@ -580,6 +591,7 @@ def view_measurements():
     "/measurements/search",
     methods=["GET"]
 )
+@admin_required
 def search_measurements_route():
 
     keyword = (
@@ -616,6 +628,7 @@ def search_measurements_route():
 @measurement_bp.route(
     "/measurements/<int:measurement_id>/print"
 )
+@admin_required
 def print_measurement(
     measurement_id
 ):
@@ -672,6 +685,7 @@ def print_measurement(
 @measurement_bp.route(
     "/measurements/<int:measurement_id>/send"
 )
+@admin_required
 def send_measurement(
     measurement_id
 ):
@@ -724,6 +738,7 @@ def send_measurement(
 @measurement_bp.route(
     "/measurements/<int:measurement_id>/download/pdf"
 )
+@admin_required
 def download_measurement_pdf(
     measurement_id
 ):
@@ -781,6 +796,7 @@ def download_measurement_pdf(
     "/measurements/<int:measurement_id>/edit",
     methods=["GET", "POST"]
 )
+@admin_required
 def edit_measurement(
     measurement_id
 ):

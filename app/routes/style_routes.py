@@ -7,6 +7,10 @@ from flask import (
     flash
 )
 
+from app.services.auth_helpers import (
+    admin_required
+)
+
 from app.services.style_service import (
     create_style,
     get_all_styles,
@@ -31,6 +35,7 @@ style_bp = Blueprint(
 @style_bp.route(
     "/styles"
 )
+@admin_required
 def styles():
 
     return render_template(
@@ -42,6 +47,7 @@ def styles():
     "/styles/new",
     methods=["GET", "POST"]
 )
+@admin_required
 def new_style():
 
     order_id = request.args.get(
@@ -230,6 +236,7 @@ def new_style():
 @style_bp.route(
     "/styles/view"
 )
+@admin_required
 def view_styles():
 
     styles = get_all_styles()
@@ -243,6 +250,7 @@ def view_styles():
     "/styles/search",
     methods=["GET"]
 )
+@admin_required
 def search_styles_route():
 
     keyword = request.args.get(
@@ -272,6 +280,7 @@ def search_styles_route():
     "/styles/<int:style_id>/make-order",
     methods=["GET", "POST"]
 )
+@admin_required
 def make_order(style_id):
 
     style = get_style_by_id(
@@ -353,6 +362,7 @@ def make_order(style_id):
 @style_bp.route(
     "/styles/<int:style_id>"
 )
+@admin_required
 def view_style(style_id):
 
     style = get_style_by_id(

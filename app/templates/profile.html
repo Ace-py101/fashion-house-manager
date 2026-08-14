@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Profile
+{% endblock %}
+
+
+{% block page_title %}
+Profile
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ============================================================
+     SHARED PROFILE PAGE
+
+     The same profile foundation is used by admin and client
+     accounts. Role-specific information can be added later.
+     ============================================================ -->
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            My Profile
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <p>
+            Your profile information will be managed here.
+        </p>
+
+        <!--
+            Future profile information will be loaded from the
+            authenticated User record.
+        -->
+
+        <p>
+            Profile management is currently being prepared.
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

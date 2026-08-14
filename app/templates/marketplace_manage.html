@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Marketplace
+{% endblock %}
+
+{% block page_title %}
+Manage Marketplace
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>/</span>
+
+<a href="{{ url_for('marketplace.marketplace') }}">
+    Marketplace
+</a>
+
+<span>/</span>
+
+<span>
+    Manage Listings
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+
+        <h2>
+            Marketplace Listings
+        </h2>
+
+        <p>
+            Manage products published by your business.
+        </p>
+
+    </div>
+
+    <a
+        href="{{ url_for('marketplace.new_listing') }}"
+        class="btn"
+    >
+        + New Listing
+    </a>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Your Listings
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if listings %}
+
+            <div class="table-responsive">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Title
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for listing in listings %}
+
+                            <tr>
+
+                                <td>
+                                    {{ listing.title }}
+                                </td>
+
+                                <td>
+                                    {{ listing.category or "—" }}
+                                </td>
+
+                                <td>
+
+                                    {% if listing.price is not none %}
+
+                                        {{ listing.currency }}
+                                        {{ "%.2f"|format(listing.price) }}
+
+                                    {% else %}
+
+                                        Contact vendor
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {{ listing.status|capitalize }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ listing.created_at.strftime(
+                                        "%d %b %Y"
+                                    ) }}
+
+                                </td>
+
+                                <td>
+
+                                    <div
+                                        style="
+                                            display:flex;
+                                            gap:8px;
+                                            flex-wrap:wrap;
+                                        "
+                                    >
+
+                                        <a
+                                            href="{{ url_for(
+                                                'marketplace.edit_listing',
+                                                listing_id=listing.id
+                                            ) }}"
+                                            class="btn"
+                                        >
+                                            Edit
+                                        </a>
+
+
+                                        {% if listing.status != "published" %}
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for(
+                                                    'marketplace.publish_listing_route',
+                                                    listing_id=listing.id
+                                                ) }}"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn"
+                                                >
+                                                    Publish
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+
+                                        {% if listing.status != "archived" %}
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for(
+                                                    'marketplace.archive_listing_route',
+                                                    listing_id=listing.id
+                                                ) }}"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn"
+                                                >
+                                                    Archive
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div
+                style="
+                    text-align:center;
+                    padding:50px 20px;
+                "
+            >
+
+                <div
+                    style="
+                        font-size:48px;
+                        margin-bottom:16px;
+                    "
+                >
+                    🛍️
+                </div>
+
+                <h3>
+                    No Marketplace Listings
+                </h3>
+
+                <p>
+                    Create your first listing to make your
+                    products available in the marketplace.
+                </p>
+
+                <a
+                    href="{{ url_for('marketplace.new_listing') }}"
+                    class="btn"
+                >
+                    Create Listing
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

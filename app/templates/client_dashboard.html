@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}
+Client Dashboard
+{% endblock %}
+
+{% block page_title %}
+Client Dashboard
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('client.dashboard') }}">
+    Dashboard
+</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Welcome
+    </h2>
+
+    <p>
+        Your fashion house account overview.
+    </p>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+    <a
+        href="{{ url_for('client.orders') }}"
+        class="card dashboard-link"
+    >
+        <div class="card-icon">📋</div>
+
+        <h3>
+            My Orders
+        </h3>
+
+        <div class="card-number">
+            0
+        </div>
+
+        <small>
+            Orders placed with businesses
+        </small>
+    </a>
+
+
+    <a
+        href="{{ url_for('client.measurements') }}"
+        class="card dashboard-link"
+    >
+        <div class="card-icon">📏</div>
+
+        <h3>
+            My Measurements
+        </h3>
+
+        <div class="card-number">
+            0
+        </div>
+
+        <small>
+            Saved measurement records
+        </small>
+    </a>
+
+
+    <a
+        href="{{ url_for('client.payments') }}"
+        class="card dashboard-link"
+    >
+        <div class="card-icon">💳</div>
+
+        <h3>
+            Payments
+        </h3>
+
+        <div class="card-number">
+            0
+        </div>
+
+        <small>
+            Payment records
+        </small>
+    </a>
+
+
+    <a
+        href="{{ url_for('client.deliveries') }}"
+        class="card dashboard-link"
+    >
+        <div class="card-icon">📦</div>
+
+        <h3>
+            Deliveries
+        </h3>
+
+        <div class="card-number">
+            0
+        </div>
+
+        <small>
+            Upcoming deliveries
+        </small>
+    </a>
+
+
+    <a
+        href="{{ url_for('client.saved_styles') }}"
+        class="card dashboard-link"
+    >
+        <div class="card-icon">❤️</div>
+
+        <h3>
+            Saved Styles
+        </h3>
+
+        <div class="card-number">
+            0
+        </div>
+
+        <small>
+            Saved fashion styles
+        </small>
+    </a>
+
+
+    <a
+        href="{{ url_for('message.messages') }}"
+        class="card dashboard-link"
+    >
+        <div class="card-icon">💬</div>
+
+        <h3>
+            Messages
+        </h3>
+
+        <div class="card-number">
+            0
+        </div>
+
+        <small>
+            Client and business communication
+        </small>
+    </a>
+
+</div>
+
+
+<div class="dashboard-panels">
+
+    <div class="panel">
+
+        <h2>
+            📋 Recent Orders
+        </h2>
+
+        <p>
+            No orders yet.
+        </p>
+
+        <a
+            href="{{ url_for('client.orders') }}"
+            class="btn"
+        >
+            View My Orders
+        </a>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2>
+            💬 Messages
+        </h2>
+
+        <p>
+            No conversations yet.
+        </p>
+
+        <a
+            href="{{ url_for('message.messages') }}"
+            class="btn"
+        >
+            Open Messages
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

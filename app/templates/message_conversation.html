@@ -1,0 +1,611 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% if conversation.listing %}
+
+    {% if conversation.listing.style %}
+        {{ conversation.listing.style.style_name }}
+    {% else %}
+        {{ conversation.listing.title }}
+    {% endif %}
+
+{% else %}
+
+    Conversation #{{ conversation.id }}
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block page_title %}
+Messages
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>/</span>
+
+<a href="{{ url_for('message.messages') }}">
+    Messages
+</a>
+
+<span>/</span>
+
+{% if conversation.listing %}
+
+    <span>
+
+        {% if conversation.listing.style %}
+            {{ conversation.listing.style.style_name }}
+        {% else %}
+            {{ conversation.listing.title }}
+        {% endif %}
+
+    </span>
+
+{% else %}
+
+    <span>
+        Conversation #{{ conversation.id }}
+    </span>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ============================================================
+   CONVERSATION PAGE
+   ============================================================ */
+
+.conversation-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   CONVERSATION HEADER
+   ============================================================ */
+
+.conversation-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    border-radius: 16px;
+    background: rgba(34, 34, 34, 0.88);
+}
+
+.conversation-header-main {
+    min-width: 0;
+}
+
+.conversation-eyebrow {
+    margin: 0 0 6px;
+    color: var(--gold, #D4AF37);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+}
+
+.conversation-title {
+    margin: 0 0 6px;
+    color: var(--ivory, #F5F1E8);
+    font-size: clamp(21px, 4vw, 30px);
+}
+
+.conversation-vendor {
+    margin: 0;
+    color: var(--champagne, #A89F91);
+    font-size: 13px;
+}
+
+.conversation-vendor strong {
+    color: var(--ivory, #F5F1E8);
+}
+
+/* ============================================================
+   LISTING REFERENCE
+   ============================================================ */
+
+.conversation-listing-reference {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border-radius: 10px;
+    background: rgba(212, 175, 55, 0.07);
+}
+
+.conversation-listing-icon {
+    font-size: 22px;
+}
+
+.conversation-listing-label {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--champagne, #A89F91);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.conversation-listing-name {
+    display: block;
+    max-width: 230px;
+    overflow: hidden;
+    color: var(--gold, #D4AF37);
+    font-size: 12px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   ORDER REFERENCE
+   ============================================================ */
+
+.conversation-order-reference {
+    margin-top: 12px;
+    color: var(--champagne, #A89F91);
+    font-size: 11px;
+}
+
+.conversation-order-reference strong {
+    color: var(--ivory, #F5F1E8);
+}
+
+/* ============================================================
+   MESSAGE CARD
+   ============================================================ */
+
+.conversation-card {
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.14);
+    border-radius: 16px;
+    background: rgba(34, 34, 34, 0.88);
+}
+
+.conversation-card-header {
+    padding: 15px 18px;
+    border-bottom: 1px solid rgba(245, 241, 232, 0.08);
+}
+
+.conversation-card-header h3 {
+    margin: 0;
+    color: var(--ivory, #F5F1E8);
+    font-size: 15px;
+}
+
+.conversation-messages {
+    padding: 18px;
+}
+
+/* ============================================================
+   MESSAGE
+   ============================================================ */
+
+.conversation-message {
+    margin-bottom: 13px;
+    padding: 13px 15px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.conversation-message:last-child {
+    margin-bottom: 0;
+}
+
+.conversation-message.is-own {
+    border-left: 3px solid var(--gold, #D4AF37);
+}
+
+.conversation-message-author {
+    margin: 0 0 5px;
+    color: var(--gold, #D4AF37);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.conversation-message-body {
+    margin: 0;
+    color: var(--ivory, #F5F1E8);
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-line;
+}
+
+.conversation-message-time {
+    display: block;
+    margin-top: 8px;
+    color: var(--champagne, #A89F91);
+    font-size: 9px;
+}
+
+/* ============================================================
+   EMPTY
+   ============================================================ */
+
+.conversation-empty {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.conversation-empty-icon {
+    margin-bottom: 10px;
+    font-size: 40px;
+}
+
+.conversation-empty h3 {
+    margin: 0 0 7px;
+    color: var(--ivory, #F5F1E8);
+}
+
+.conversation-empty p {
+    margin: 0;
+    color: var(--champagne, #A89F91);
+}
+
+/* ============================================================
+   COMPOSER
+   ============================================================ */
+
+.conversation-composer {
+    padding: 18px;
+    border-top: 1px solid rgba(245, 241, 232, 0.08);
+}
+
+.conversation-composer label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--ivory, #F5F1E8);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.conversation-composer textarea {
+    width: 100%;
+    min-height: 110px;
+    resize: vertical;
+}
+
+.conversation-send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: 10px;
+    padding: 10px 18px;
+    border: 1px solid var(--gold, #D4AF37);
+    border-radius: 10px;
+    background: var(--gold, #D4AF37);
+    color: #111111;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    .conversation-header {
+        grid-template-columns: 1fr;
+    }
+
+    .conversation-listing-reference {
+        width: 100%;
+    }
+
+    .conversation-listing-name {
+        max-width: none;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .conversation-header {
+        padding: 16px;
+    }
+
+    .conversation-messages,
+    .conversation-composer {
+        padding: 14px;
+    }
+
+    .conversation-send {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="conversation-page">
+
+
+    <!-- ========================================================
+         CONVERSATION HEADER
+         ======================================================== -->
+
+    <div class="conversation-header">
+
+        <div class="conversation-header-main">
+
+            <p class="conversation-eyebrow">
+                {% if conversation.listing %}
+                    Marketplace Conversation
+                {% else %}
+                    Direct Communication
+                {% endif %}
+            </p>
+
+
+            <h1 class="conversation-title">
+
+                {% if conversation.listing %}
+
+                    {% if conversation.listing.style %}
+                        {{ conversation.listing.style.style_name }}
+                    {% else %}
+                        {{ conversation.listing.title }}
+                    {% endif %}
+
+                {% else %}
+
+                    Conversation #{{ conversation.id }}
+
+                {% endif %}
+
+            </h1>
+
+
+            <p class="conversation-vendor">
+
+                {% if session.get("account_type") == "client" %}
+
+                    Vendor:
+
+                    <strong>
+
+                        {% if conversation.business %}
+
+                            {% if conversation.business.business_name %}
+                                {{ conversation.business.business_name }}
+                            {% else %}
+                                {{ conversation.business.email }}
+                            {% endif %}
+
+                        {% else %}
+                            Business Vendor
+                        {% endif %}
+
+                    </strong>
+
+                {% else %}
+
+                    Client:
+
+                    <strong>
+
+                        {% if conversation.client %}
+                            {{ conversation.client.email }}
+                        {% else %}
+                            Client
+                        {% endif %}
+
+                    </strong>
+
+                {% endif %}
+
+            </p>
+
+
+            {% if conversation.order_id %}
+
+                <p class="conversation-order-reference">
+                    Order:
+                    <strong>
+                        #{{ conversation.order_id }}
+                    </strong>
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if conversation.listing %}
+
+            <div class="conversation-listing-reference">
+
+                <div class="conversation-listing-icon">
+                    🧵
+                </div>
+
+                <div>
+
+                    <span class="conversation-listing-label">
+                        Product
+                    </span>
+
+                    <span class="conversation-listing-name">
+
+                        {% if conversation.listing.style %}
+                            {{ conversation.listing.style.style_name }}
+                        {% else %}
+                            {{ conversation.listing.title }}
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ========================================================
+         MESSAGE THREAD
+         ======================================================== -->
+
+    <div class="conversation-card">
+
+        <div class="conversation-card-header">
+
+            <h3>
+                💬 Conversation
+            </h3>
+
+        </div>
+
+
+        <div class="conversation-messages">
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div
+                        class="
+                            conversation-message
+                            {% if message.sender_id == session.get('user_id') %}
+                                is-own
+                            {% endif %}
+                        "
+                    >
+
+                        <p class="conversation-message-author">
+
+                            {% if message.sender_id == session.get("user_id") %}
+
+                                You
+
+                            {% elif session.get("account_type") == "client" %}
+
+                                {% if conversation.business %}
+
+                                    {% if conversation.business.business_name %}
+                                        {{ conversation.business.business_name }}
+                                    {% else %}
+                                        {{ conversation.business.email }}
+                                    {% endif %}
+
+                                {% else %}
+
+                                    Vendor
+
+                                {% endif %}
+
+                            {% else %}
+
+                                {% if conversation.client %}
+                                    {{ conversation.client.email }}
+                                {% else %}
+                                    Client
+                                {% endif %}
+
+                            {% endif %}
+
+                        </p>
+
+
+                        <p class="conversation-message-body">
+                            {{ message.body }}
+                        </p>
+
+
+                        <small class="conversation-message-time">
+                            {{ message.created_at.strftime("%d %b %Y %H:%M") }}
+                        </small>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="conversation-empty">
+
+                    <div class="conversation-empty-icon">
+                        💬
+                    </div>
+
+                    <h3>
+                        No messages yet
+                    </h3>
+
+                    <p>
+                        Send the first message in this conversation.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ====================================================
+             MESSAGE COMPOSER
+             ==================================================== -->
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'message.send_conversation_message',
+                conversation_id=conversation.id
+            ) }}"
+            class="conversation-composer"
+        >
+
+            <label for="body">
+                Message
+            </label>
+
+            <textarea
+                id="body"
+                name="body"
+                rows="4"
+                maxlength="5000"
+                placeholder="Write your message..."
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="conversation-send"
+            >
+                Send Message
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

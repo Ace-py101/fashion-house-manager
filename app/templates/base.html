@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>
 {% block title %}
@@ -14,378 +16,614 @@ Fashion House Manager
 {% endblock %}
 </title>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/style.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/base.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/base.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/layout.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/layout.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/components.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/components.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/responsive.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/responsive.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/theme.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/theme.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/toast.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/toast.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/modules/dashboard.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/dashboard.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/modules/customers.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/customers.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/modules/orders.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/orders.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/modules/measurements.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/measurements.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/modules/styles.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/styles.css') }}"
+>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/modules/reports.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/reports.css') }}"
+>
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/modules/marketplace.css') }}"
+>
 
 </head>
 
+
 <body>
+
+{% if not request.endpoint or not request.endpoint.startswith("auth.") %}
 
 <div id="overlay" class="overlay"></div>
 
+
 <button
-id="menu-toggle"
-class="menu-toggle">
-
-☰
-
+    id="menu-toggle"
+    class="menu-toggle"
+    type="button"
+>
+    ☰
 </button>
+
 
 <div class="app-container">
 
-<aside
-id="sidebar"
-class="sidebar">
 
-<div class="brand">
+    <!-- ==================================================
+         SIDEBAR
+         ================================================== -->
 
-<h2>
-✨ Fashion House Manager
-</h2>
+    <aside
+        id="sidebar"
+        class="sidebar"
+    >
+
+        <div class="brand">
+
+            <h2>
+                ✨ Ateliier
+            </h2>
+
+        </div>
+
+
+        <nav>
+
+            <!-- ==========================================
+                 BUSINESS ACCOUNT NAVIGATION
+                 ========================================== -->
+
+            {% if session.get("account_type") == "admin" %}
+
+                <a href="{{ url_for('main.index') }}">
+                    🏠
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ url_for('customer.customers') }}">
+                    👥
+                    <span>Customers</span>
+                </a>
+
+                <a href="{{ url_for('order.orders') }}">
+                    ✂️
+                    <span>Orders</span>
+                </a>
+
+                <a href="{{ url_for('measurement.measurements') }}">
+                    📏
+                    <span>Measurements</span>
+                </a>
+
+                <a href="{{ url_for('style.styles') }}">
+                    🧵
+                    <span>Styles Gallery</span>
+                </a>
+
+                <a href="{{ url_for('payment.payments') }}">
+                    💳
+                    <span>Payments</span>
+                </a>
+
+                <a href="{{ url_for('inventory.inventory') }}">
+                    📦
+                    <span>Inventory</span>
+                </a>
+
+                <a href="{{ url_for('marketplace.marketplace') }}">
+                    🛍️
+                    <span>Marketplace</span>
+                </a>
+
+                <a href="{{ url_for('message.messages') }}">
+                    💬
+                    <span>Messages</span>
+                </a>
+
+                <a href="{{ url_for('firm_activity.firm_activity') }}">
+                    📣
+                    <span>Firm Activity</span>
+                </a>
+
+                <a href="{{ url_for('analytics.analytics') }}">
+                    📈
+                    <span>Analytics</span>
+                </a>
+
+                <a href="{{ url_for('report.reports') }}">
+                    📊
+                    <span>Reports</span>
+                </a>
+
+                <a href="{{ url_for('settings.settings') }}">
+                    ⚙️
+                    <span>Settings</span>
+                </a>
+
+
+            <!-- ==========================================
+                 CLIENT ACCOUNT NAVIGATION
+                 ========================================== -->
+
+            {% elif session.get("account_type") == "client" %}
+
+                <a href="{{ url_for('client.dashboard') }}">
+                    🏠
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ url_for('marketplace.marketplace') }}">
+                    🛍️
+                    <span>Marketplace</span>
+                </a>
+
+                <a href="{{ url_for('client.orders') }}">
+                    📋
+                    <span>My Orders</span>
+                </a>
+
+                <a href="{{ url_for('client.measurements') }}">
+                    📏
+                    <span>My Measurements</span>
+                </a>
+
+                <a href="{{ url_for('client.payments') }}">
+                    💳
+                    <span>Payments</span>
+                </a>
+
+                <a href="{{ url_for('client.deliveries') }}">
+                    📦
+                    <span>Deliveries</span>
+                </a>
+
+                <a href="{{ url_for('client.saved_styles') }}">
+                    ❤️
+                    <span>Saved Styles</span>
+                </a>
+
+                <a href="{{ url_for('message.messages') }}">
+                    💬
+                    <span>Messages</span>
+                </a>
+
+                <a href="{{ url_for('firm_activity.firm_activity') }}">
+                    📣
+                    <span>Firm Activity</span>
+                </a>
+
+
+            <!-- ==========================================
+                 FALLBACK / UNAUTHENTICATED NAVIGATION
+                 ========================================== -->
+
+            {% else %}
+
+                <a href="{{ url_for('main.index') }}">
+                    🏠
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ url_for('marketplace.marketplace') }}">
+                    🛍️
+                    <span>Marketplace</span>
+                </a>
+
+                <a href="{{ url_for('firm_activity.firm_activity') }}">
+                    📣
+                    <span>Firm Activity</span>
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ==================================================
+         MAIN AREA
+         ================================================== -->
+
+    <main class="main-area">
+
+
+        <!-- ==================================================
+             TOP BAR
+             ================================================== -->
+
+        <header class="topbar">
+
+
+            <div class="topbar-left">
+
+                <h1 class="page-title">
+
+                    {% block page_title %}
+                    Dashboard
+                    {% endblock %}
+
+                </h1>
+
+
+                <nav class="breadcrumb-nav">
+
+                    {% block breadcrumb %}
+
+                    <a href="/">
+                        Dashboard
+                    </a>
+
+                    {% endblock %}
+
+                </nav>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <div class="mobile-action-group">
+
+
+                    <!-- Mobile Search -->
+
+                    <div class="search-icon-mobile">
+                        🔍
+                    </div>
+
+
+                    <!-- Search -->
+
+                    <div class="search-box">
+
+                        🔍
+
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                        >
+
+                    </div>
+
+
+                    <!-- Notifications -->
+
+                    <div class="notification">
+
+                        <button
+                            class="notification-button"
+                            id="notification-toggle"
+                            type="button"
+                        >
+
+                            🔔
+
+                            <span class="notification-count">
+                                3
+                            </span>
+
+                        </button>
+
+
+                        <div
+                            class="notification-menu"
+                            id="notification-menu"
+                        >
+
+                            <div class="notification-header">
+                                Notifications
+                            </div>
+
+
+                            <div class="notification-item">
+                                👥 New customer registered
+                            </div>
+
+
+                            <div class="notification-item">
+                                ✂️ Order status updated
+                            </div>
+
+
+                            <div class="notification-item">
+                                💰 Payment reminder
+                            </div>
+
+
+                            <a
+                                href="#"
+                                class="notification-footer"
+                            >
+                                View all notifications
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Profile -->
+
+                    <div class="profile">
+
+                        <button
+                            class="profile-button"
+                            id="profile-toggle"
+                            type="button"
+                        >
+
+                            <div class="avatar">
+                                👤
+                            </div>
+
+
+                            <div class="profile-info">
+
+                                <strong>
+
+                                    {% if session.get("account_type") == "client" %}
+                                        Client
+                                    {% elif session.get("account_type") == "admin" %}
+                                        Business
+                                    {% else %}
+                                        Guest
+                                    {% endif %}
+
+                                </strong>
+
+
+                                <small>
+
+                                    {% if session.get("account_type") == "client" %}
+                                        Client Account
+                                    {% elif session.get("account_type") == "admin" %}
+                                        Business Account
+                                    {% else %}
+                                        Visitor
+                                    {% endif %}
+
+                                </small>
+
+                            </div>
+
+                        </button>
+
+
+                        <div
+                            class="profile-menu"
+                            id="profile-menu"
+                        >
+
+                            <!--
+                                Profile is shared by admin and client
+                                accounts.
+                            -->
+
+                            <a href="{{ url_for('profile.profile') }}">
+                                👤 Profile
+                            </a>
+
+
+                            <!--
+                                Account Settings is available to
+                                authenticated account types.
+                            -->
+
+                            <a href="{{ url_for('settings.settings') }}">
+                                ⚙️ Account Settings
+                            </a>
+
+
+                            <!--
+                                Activity Log remains a placeholder
+                                until the activity system is connected.
+                            -->
+
+                            <a href="#">
+                                📋 Activity Log
+                            </a>
+
+
+                            {% if session.get("authenticated") %}
+
+                                <!--
+                                    Logout is already implemented by
+                                    the authentication system.
+                                -->
+
+                                <a href="{{ url_for('auth.logout') }}">
+                                    🚪 Logout
+                                </a>
+
+                            {% else %}
+
+                                <a href="{{ url_for('auth.login') }}">
+                                    🔐 Login
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==================================================
+             PAGE CONTENT
+             ================================================== -->
+
+        <section class="content">
+
+            {% block content %}
+            {% endblock %}
+
+        </section>
+
+
+    </main>
 
 </div>
 
-<nav>
 
-<a href="/">🏠 <span>Dashboard</span></a>
-
-<a href="{{ url_for('customer.customers') }}">👥 <span>Customers</span></a>
-
-<a href="{{ url_for('order.orders') }}">
-✂️ <span>Orders</span>
-</a>
-
-<a href="{{ url_for('measurement.measurements') }}">
-📏 <span>Measurements</span>
-</a>
-
-<a href="{{ url_for('style.styles') }}">
-🧵 <span>Styles Gallery</span>
-</a>
-
-<a href="{{ url_for('payment.payments') }}">
-💳 <span>Payments</span>
-</a>
-
-<a href="{{ url_for('inventory.inventory') }}">
-📦 <span>Inventory</span>
-</a>
-
-<a href="{{ url_for('report.reports') }}">
-📊 <span>Reports</span>
-</a>
-
-<a href="{{ url_for('settings.settings') }}">
-⚙️ <span>Settings</span>
-</a>
-
-</nav>
-
-</aside>
-
-<main class="main-area">
-
-<header class="topbar">
-
-<div class="topbar-left">
-
-<h1 class="page-title">
-
-{% block page_title %}
-Dashboard
-{% endblock %}
-
-</h1>
-
-<nav class="breadcrumb-nav">
-
-{% block breadcrumb %}
-
-<a href="/">Dashboard</a>
-
-{% endblock %}
-
-</nav>
-
-</div>
-
-<div class="topbar-right">
-
-<div class="mobile-action-group">
-
-<div class="search-icon-mobile">
-🔍
-</div>
-
-<div class="search-box">
-🔍
-<input
-type="text"
-placeholder="Search...">
-</div>
-
-<div class="notification">
-
-<button
-class="notification-button"
-id="notification-toggle"
-type="button"
->
-
-🔔
-
-<span class="notification-count">
-3
-</span>
-
-</button>
-
-
-
-<div
-class="notification-menu"
-id="notification-menu"
->
-
-
-<div class="notification-header">
-
-Notifications
-
-</div>
-
-
-
-<div class="notification-item">
-
-👥 New customer registered
-
-</div>
-
-
-
-<div class="notification-item">
-
-✂️ Order status updated
-
-</div>
-
-
-
-<div class="notification-item">
-
-💰 Payment reminder
-
-</div>
-
-
-
-<a href="#" class="notification-footer">
-
-View all notifications
-
-</a>
-
-
-</div>
-
-
-</div>
-
-<div class="profile">
-
-<button
-class="profile-button"
-id="profile-toggle"
-type="button"
->
-
-<div class="avatar">
-
-👤
-
-</div>
-
-
-<div class="profile-info">
-
-<strong>
-Admin
-</strong>
-
-<small>
-Manager
-</small>
-
-</div>
-
-
-</button>
-
-
-
-<div
-class="profile-menu"
-id="profile-menu"
->
-
-
-<a href="#">
-👤 Profile
-</a>
-
-
-<a href="{{ url_for('settings.settings') }}">
-⚙️ Account Settings
-</a>
-
-
-<a href="#">
-📋 Activity Log
-</a>
-
-
-<a href="#">
-🚪 Logout
-</a>
-
-
-</div>
-
-
-</div>
-
-</header>
-
-<section class="content">
-
-{% block content %}
-{% endblock %}
-
-</section>
-
-</main>
-
-</div>
-
-<!-- Toast Container -->
+<!-- ======================================================
+     TOAST CONTAINER
+     ====================================================== -->
 
 <div id="toast-container">
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-{% if messages %}
+        {% if messages %}
 
-{% for category, message in messages %}
+            {% for category, message in messages %}
 
-<div class="toast toast-{{ category }}">
+                <div class="toast toast-{{ category }}">
 
-<div class="toast-message">
+                    <div class="toast-message">
+                        {{ message }}
+                    </div>
 
-{{ message }}
 
-</div>
+                    <button
+                        class="toast-close"
+                        type="button"
+                    >
+                        &times;
+                    </button>
 
-<button
-class="toast-close"
-type="button">
+                </div>
 
-&times;
+            {% endfor %}
 
-</button>
+        {% endif %}
 
-</div>
-
-{% endfor %}
-
-{% endif %}
-
-{% endwith %}
+    {% endwith %}
 
 </div>
 
-<!-- Confirmation Dialog -->
 
-<div id="confirm-modal" class="modal">
+<!-- ======================================================
+     CONFIRMATION DIALOG
+     ====================================================== -->
 
-<div class="modal-content">
+<div
+    id="confirm-modal"
+    class="modal"
+>
 
-<h2 id="modal-title">
+    <div class="modal-content">
 
-Confirm Action
+        <h2 id="modal-title">
+            Confirm Action
+        </h2>
 
-</h2>
 
-<p id="modal-message">
+        <p id="modal-message">
+            Are you sure you want to continue?
+        </p>
 
-Are you sure you want to continue?
 
-</p>
+        <div class="modal-actions">
 
-<div class="modal-actions">
+            <button
+                type="button"
+                id="modal-cancel"
+                class="button modal-secondary"
+            >
+                Cancel
+            </button>
 
-<button
-type="button"
-id="modal-cancel"
-class="button modal-secondary">
 
-Cancel
+            <button
+                type="button"
+                id="modal-confirm"
+                class="button"
+            >
+                Confirm
+            </button>
 
-</button>
+        </div>
 
-<button
-type="button"
-id="modal-confirm"
-class="button">
-
-Confirm
-
-</button>
+    </div>
 
 </div>
 
-</div>
 
-</div>
+<!-- ======================================================
+     JAVASCRIPT
+     ====================================================== -->
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
@@ -405,14 +643,22 @@ Confirm
 
 <script src="{{ url_for('static', filename='js/modules/tables.js') }}"></script>
 
-
 <script
-src="{{ url_for(
-'static',
-filename='js/modules/style_gallery.js'
-) }}">
-</script>
+    src="{{ url_for(
+        'static',
+        filename='js/modules/style_gallery.js'
+    ) }}"
+></script>
 
+
+{% else %}
+
+    {# Authentication pages intentionally use no application shell. #}
+
+    {% block auth_content %}
+    {% endblock %}
+
+{% endif %}
 
 </body>
 

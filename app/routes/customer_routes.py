@@ -21,6 +21,10 @@ from app.services.customer_service import (
 
 from app.models.order import Order
 
+from app.services.auth_helpers import (
+    admin_required
+)
+
 
 customer_bp = Blueprint(
     "customer",
@@ -29,6 +33,7 @@ customer_bp = Blueprint(
 
 
 @customer_bp.route("/customers")
+@admin_required
 def customers():
 
     return render_template(
@@ -40,13 +45,14 @@ def customers():
     "/customers/new",
     methods=["GET", "POST"]
 )
+@admin_required
 def new_customer():
 
     style_id = request.args.get(
         "style_id",
         type=int
     )
- 
+
     if request.method == "POST":
 
         customer_data = {
@@ -97,7 +103,9 @@ def new_customer():
             return redirect(
                 url_for(
                     "order.new_order",
-                    customer_code=result["customer"].customer_code,
+                    customer_code=result[
+                        "customer"
+                    ].customer_code,
                     style_id=style_id
                 )
             )
@@ -121,6 +129,7 @@ def new_customer():
 
 
 @customer_bp.route("/customers/view")
+@admin_required
 def view_customers():
 
     customers = get_all_customers()
@@ -143,11 +152,12 @@ def view_customers():
         customer_stats=customer_stats
     )
 
-  
+
 @customer_bp.route(
     "/customers/search",
     methods=["GET", "POST"]
 )
+@admin_required
 def search_customer():
 
     customers = []
@@ -188,23 +198,18 @@ def search_customer():
         }
 
     return render_template(
-
         "search_customer.html",
-
         customers=customers,
-
         query=query,
-
         customer_stats=customer_stats,
-
         style_id=style_id
-
     )
 
 
 @customer_bp.route(
     "/customers/<int:customer_id>"
 )
+@admin_required
 def view_customer(customer_id):
 
     style_id = request.args.get(
@@ -225,12 +230,6 @@ def view_customer(customer_id):
 
         return redirect(
             url_for(
-                "customer.customers"
-            )
-        )
- 
-        return redirect(
-            url_for(
                 "customer.view_customers"
             )
         )
@@ -238,8 +237,7 @@ def view_customer(customer_id):
     return render_template(
         "view_customer.html",
         customer=customer,
-        sty_id=style_id,
-        
+        sty_id=style_id
     )
 
 
@@ -247,6 +245,7 @@ def view_customer(customer_id):
     "/customers/<int:customer_id>/edit",
     methods=["GET", "POST"]
 )
+@admin_required
 def edit_customer(customer_id):
 
     customer = get_customer_by_id(
@@ -343,6 +342,7 @@ def edit_customer(customer_id):
 @customer_bp.route(
     "/customers/<int:customer_id>/history"
 )
+@admin_required
 def customer_history(customer_id):
 
     customer = get_customer_by_id(
@@ -376,6 +376,7 @@ def customer_history(customer_id):
 @customer_bp.route(
     "/customers/<int:customer_id>/activity"
 )
+@admin_required
 def customer_activity(customer_id):
 
     customer = get_customer_by_id(
@@ -411,11 +412,13 @@ def customer_activity(customer_id):
         outstanding_balance=0,
         lifetime_spending=0
     )
-    
+
+
 @customer_bp.route(
     "/customers/<int:customer_id>/deactivate",
     methods=["POST"]
 )
+@admin_required
 def deactivate_customer_route(customer_id):
 
     result = deactivate_customer(
@@ -448,6 +451,7 @@ def deactivate_customer_route(customer_id):
 @customer_bp.route(
     "/customers/inactive"
 )
+@admin_required
 def inactive_customers():
 
     customers = get_inactive_customers()
@@ -475,6 +479,7 @@ def inactive_customers():
     "/customers/<int:customer_id>/activate",
     methods=["POST"]
 )
+@admin_required
 def activate_customer_route(customer_id):
 
     result = activate_customer(

@@ -1,0 +1,1098 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if listing.style %}
+    {{ listing.style.style_name }} | Marketplace
+{% else %}
+    {{ listing.title }} | Marketplace
+{% endif %}
+{% endblock %}
+
+
+{% block page_title %}
+Marketplace
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>/</span>
+
+<a href="{{ url_for('marketplace.marketplace') }}">
+    Marketplace
+</a>
+
+<span>/</span>
+
+<span>
+    {% if listing.style %}
+        {{ listing.style.style_name }}
+    {% else %}
+        {{ listing.title }}
+    {% endif %}
+</span>
+
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ============================================================
+   MARKETPLACE PRODUCT DETAIL
+   ============================================================ */
+
+.marketplace-detail-page {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   BACK LINK
+   ============================================================ */
+
+.marketplace-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 22px;
+
+    color: var(--gold, #D4AF37);
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.marketplace-detail-back:hover {
+    text-decoration: underline;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.marketplace-detail-hero {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(360px, 0.85fr);
+
+    gap: 34px;
+
+    margin-bottom: 28px;
+}
+
+
+/* ============================================================
+   IMAGE PANEL
+   ============================================================ */
+
+.marketplace-detail-image-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(
+        212,
+        175,
+        55,
+        0.24
+    );
+
+    border-radius: 22px;
+
+    background: #111;
+
+    box-shadow:
+        0 18px 50px rgba(
+            0,
+            0,
+            0,
+            0.30
+        );
+}
+
+.marketplace-detail-image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 520px;
+
+    object-fit: cover;
+}
+
+.marketplace-detail-image-placeholder {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 520px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #252525,
+            #111111
+        );
+
+    color: var(--gold, #D4AF37);
+
+    font-size: 80px;
+}
+
+
+/* ============================================================
+   FEATURED BADGE
+   ============================================================ */
+
+.marketplace-detail-featured {
+    position: absolute;
+
+    top: 18px;
+    left: 18px;
+
+    z-index: 2;
+
+    padding: 8px 13px;
+
+    border-radius: 999px;
+
+    background: var(--gold, #D4AF37);
+
+    color: #111111;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+
+/* ============================================================
+   PRODUCT INFORMATION PANEL
+   ============================================================ */
+
+.marketplace-detail-info {
+    display: flex;
+    flex-direction: column;
+
+    padding: 8px 0;
+}
+
+.marketplace-detail-eyebrow {
+    margin: 0 0 9px;
+
+    color: var(--gold, #D4AF37);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+}
+
+.marketplace-detail-title {
+    margin: 0 0 9px;
+
+    color: var(--ivory, #F5F1E8);
+
+    font-size: clamp(
+        28px,
+        4vw,
+        44px
+    );
+
+    line-height: 1.12;
+}
+
+.marketplace-detail-subtitle {
+    margin: 0 0 22px;
+
+    color: var(--champagne, #A89F91);
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   PRICE
+   ============================================================ */
+
+.marketplace-detail-price {
+    margin-bottom: 22px;
+
+    padding: 17px 0;
+
+    border-top: 1px solid rgba(
+        245,
+        241,
+        232,
+        0.09
+    );
+
+    border-bottom: 1px solid rgba(
+        245,
+        241,
+        232,
+        0.09
+    );
+}
+
+.marketplace-detail-price-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--champagne, #A89F91);
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.marketplace-detail-price-value {
+    color: var(--gold, #D4AF37);
+
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.marketplace-detail-price-currency {
+    margin-right: 5px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.marketplace-detail-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+}
+
+.marketplace-detail-contact {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 50px;
+
+    padding: 12px 20px;
+
+    border: 1px solid var(--gold, #D4AF37);
+
+    border-radius: 11px;
+
+    background: var(--gold, #D4AF37);
+
+    color: #111111;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.marketplace-detail-contact:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 9px 25px rgba(
+            212,
+            175,
+            55,
+            0.20
+        );
+}
+
+.marketplace-detail-back-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 50px;
+
+    padding: 12px 20px;
+
+    border: 1px solid rgba(
+        245,
+        241,
+        232,
+        0.18
+    );
+
+    border-radius: 11px;
+
+    background: transparent;
+
+    color: var(--ivory, #F5F1E8);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.marketplace-detail-back-button:hover {
+    border-color: var(--gold, #D4AF37);
+
+    color: var(--gold, #D4AF37);
+}
+
+
+/* ============================================================
+   VENDOR
+   ============================================================ */
+
+.marketplace-detail-vendor {
+    padding: 15px;
+
+    border: 1px solid rgba(
+        245,
+        241,
+        232,
+        0.09
+    );
+
+    border-radius: 12px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.025
+    );
+}
+
+.marketplace-detail-vendor-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--champagne, #A89F91);
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.marketplace-detail-vendor-name {
+    color: var(--ivory, #F5F1E8);
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   DETAIL CARDS
+   ============================================================ */
+
+.marketplace-detail-sections {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 22px;
+}
+
+.marketplace-detail-card {
+    overflow: hidden;
+
+    border: 1px solid rgba(
+        212,
+        175,
+        55,
+        0.18
+    );
+
+    border-radius: 18px;
+
+    background: rgba(
+        34,
+        34,
+        34,
+        0.88
+    );
+}
+
+.marketplace-detail-card-header {
+    padding: 17px 20px;
+
+    border-bottom: 1px solid rgba(
+        245,
+        241,
+        232,
+        0.08
+    );
+}
+
+.marketplace-detail-card-header h3 {
+    margin: 0;
+
+    color: var(--ivory, #F5F1E8);
+
+    font-size: 17px;
+}
+
+.marketplace-detail-card-body {
+    padding: 20px;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+   ============================================================ */
+
+.marketplace-detail-description {
+    color: var(--champagne, #A89F91);
+
+    font-size: 14px;
+
+    line-height: 1.75;
+
+    white-space: pre-line;
+}
+
+
+/* ============================================================
+   STYLE INFORMATION
+   ============================================================ */
+
+.marketplace-style-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 11px;
+}
+
+.marketplace-style-detail-item {
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.035
+    );
+}
+
+.marketplace-style-detail-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--champagne, #A89F91);
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.marketplace-style-detail-value {
+    display: block;
+
+    color: var(--ivory, #F5F1E8);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   FABRIC REQUIREMENT
+   ============================================================ */
+
+.marketplace-fabric {
+    margin-top: 14px;
+
+    padding: 13px;
+
+    border-left: 3px solid var(--gold, #D4AF37);
+
+    border-radius: 8px;
+
+    background: rgba(
+        212,
+        175,
+        55,
+        0.055
+    );
+}
+
+.marketplace-fabric-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--gold, #D4AF37);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.marketplace-fabric-value {
+    color: var(--ivory, #F5F1E8);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+    .marketplace-detail-hero {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+    }
+
+    .marketplace-detail-image {
+        min-height: 0;
+
+        aspect-ratio: 1 / 1;
+    }
+
+    .marketplace-detail-image-placeholder {
+        min-height: 0;
+
+        aspect-ratio: 1 / 1;
+    }
+
+    .marketplace-detail-info {
+        padding: 0;
+    }
+
+    .marketplace-detail-sections {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 500px) {
+
+    .marketplace-detail-title {
+        font-size: 27px;
+    }
+
+    .marketplace-detail-price-value {
+        font-size: 25px;
+    }
+
+    .marketplace-detail-actions {
+        flex-direction: column;
+    }
+
+    .marketplace-detail-contact,
+    .marketplace-detail-back-button {
+        width: 100%;
+    }
+
+    .marketplace-style-details {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(
+                    0,
+                    1fr
+                )
+            );
+
+        gap: 7px;
+    }
+
+    .marketplace-style-detail-item {
+        padding: 9px;
+    }
+
+    .marketplace-style-detail-label {
+        font-size: 8px;
+    }
+
+    .marketplace-style-detail-value {
+        font-size: 11px;
+    }
+
+    .marketplace-detail-card-body {
+        padding: 15px;
+    }
+}
+
+</style>
+
+
+<div class="marketplace-detail-page">
+
+
+    <!-- ========================================================
+         BACK
+         ======================================================== -->
+
+    <a
+        href="{{ url_for('marketplace.marketplace') }}"
+        class="marketplace-detail-back"
+    >
+        ← Back to Marketplace
+    </a>
+
+
+    <!-- ========================================================
+         PRODUCT HERO
+         ======================================================== -->
+
+    <div class="marketplace-detail-hero">
+
+
+        <!-- ====================================================
+             IMAGE
+             ==================================================== -->
+
+        <div class="marketplace-detail-image-panel">
+
+            {% if listing.featured %}
+
+                <div class="marketplace-detail-featured">
+                    Featured
+                </div>
+
+            {% endif %}
+
+
+            {% if listing.image_path %}
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/styles/' ~ listing.image_path
+                    ) }}"
+                    alt="{% if listing.style %}{{ listing.style.style_name }}{% else %}{{ listing.title }}{% endif %}"
+                    class="marketplace-detail-image"
+                >
+
+            {% elif listing.style and listing.style.image_filename %}
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/styles/' ~ listing.style.image_filename
+                    ) }}"
+                    alt="{{ listing.style.style_name }}"
+                    class="marketplace-detail-image"
+                >
+
+            {% else %}
+
+                <div class="marketplace-detail-image-placeholder">
+                    🧵
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ====================================================
+             PRODUCT INFORMATION
+             ==================================================== -->
+
+        <div class="marketplace-detail-info">
+
+
+            {% if listing.style %}
+
+                <p class="marketplace-detail-eyebrow">
+                    {{ listing.style.garment_name }}
+                </p>
+
+                <h1 class="marketplace-detail-title">
+                    {{ listing.style.style_name }}
+                </h1>
+
+                <p class="marketplace-detail-subtitle">
+
+                    {{ listing.style.style_type }}
+
+                    {% if listing.style.occasion_fit %}
+                        · {{ listing.style.occasion_fit }}
+                    {% endif %}
+
+                    {% if listing.style.gender %}
+                        · {{ listing.style.gender }}
+                    {% endif %}
+
+                </p>
+
+            {% else %}
+
+                <p class="marketplace-detail-eyebrow">
+                    Marketplace Product
+                </p>
+
+                <h1 class="marketplace-detail-title">
+                    {{ listing.title }}
+                </h1>
+
+            {% endif %}
+
+
+            <!-- ==================================================
+                 PRICE
+                 ================================================== -->
+
+            <div class="marketplace-detail-price">
+
+                <span class="marketplace-detail-price-label">
+                    Price
+                </span>
+
+                <span class="marketplace-detail-price-value">
+
+                    {% if listing.currency %}
+
+                        <span class="marketplace-detail-price-currency">
+                            {{ listing.currency }}
+                        </span>
+
+                    {% endif %}
+
+                    {% if listing.price is not none %}
+
+                        {{ "%.2f"|format(listing.price) }}
+
+                    {% else %}
+
+                        Contact Vendor
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 ACTIONS
+                 ================================================== -->
+
+            <div class="marketplace-detail-actions">
+
+                {% if session.get("authenticated") %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'marketplace.contact_vendor',
+                            listing_id=listing.id
+                        ) }}"
+                        style="margin: 0;"
+                    >
+
+                        <button
+                            type="submit"
+                            class="marketplace-detail-contact"
+                        >
+                            💬 Contact Vendor
+                        </button>
+
+                    </form>
+
+                {% else %}
+
+                    <a
+                        href="{{ url_for('auth.login') }}"
+                        class="marketplace-detail-contact"
+                    >
+                        🔐 Sign in to Contact Vendor
+                    </a>
+
+                {% endif %}
+
+
+                <a
+                    href="{{ url_for('marketplace.marketplace') }}"
+                    class="marketplace-detail-back-button"
+                >
+                    ← Marketplace
+                </a>
+
+            </div>
+
+
+            <!-- ==================================================
+                 VENDOR
+                 ================================================== -->
+
+            <div class="marketplace-detail-vendor">
+
+                <span class="marketplace-detail-vendor-label">
+                    Published by
+                </span>
+
+                <span class="marketplace-detail-vendor-name">
+                    {% if listing.business and listing.business.business_name %}
+                        {{ listing.business.business_name }}
+                    {% elif listing.business %}
+                        {{ listing.business.email }}
+                    {% else %}
+                        Business Vendor
+                    {% endif %}
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         LOWER DETAIL SECTIONS
+         ======================================================== -->
+
+    <div class="marketplace-detail-sections">
+
+
+        <!-- ====================================================
+             DESCRIPTION
+             ==================================================== -->
+
+        <section class="marketplace-detail-card">
+
+            <div class="marketplace-detail-card-header">
+
+                <h3>
+                    Product Description
+                </h3>
+
+            </div>
+
+            <div class="marketplace-detail-card-body">
+
+                <div class="marketplace-detail-description">
+
+                    {% if listing.description %}
+
+                        {{ listing.description }}
+
+                    {% else %}
+
+                        This product is based on a style from
+                        the Ateliier Style Gallery. Contact the
+                        vendor for additional product details,
+                        availability and customization options.
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             STYLE INFORMATION
+             ==================================================== -->
+
+        <section class="marketplace-detail-card">
+
+            <div class="marketplace-detail-card-header">
+
+                <h3>
+                    Style Information
+                </h3>
+
+            </div>
+
+            <div class="marketplace-detail-card-body">
+
+                {% if listing.style %}
+
+                    <div class="marketplace-style-details">
+
+
+                        <div class="marketplace-style-detail-item">
+
+                            <span class="marketplace-style-detail-label">
+                                Style ID
+                            </span>
+
+                            <span class="marketplace-style-detail-value">
+                                {{ listing.style.style_id }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="marketplace-style-detail-item">
+
+                            <span class="marketplace-style-detail-label">
+                                Style Type
+                            </span>
+
+                            <span class="marketplace-style-detail-value">
+                                {{ listing.style.style_type }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="marketplace-style-detail-item">
+
+                            <span class="marketplace-style-detail-label">
+                                Garment
+                            </span>
+
+                            <span class="marketplace-style-detail-value">
+                                {{ listing.style.garment_name }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="marketplace-style-detail-item">
+
+                            <span class="marketplace-style-detail-label">
+                                Gender
+                            </span>
+
+                            <span class="marketplace-style-detail-value">
+                                {{ listing.style.gender }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="marketplace-style-detail-item">
+
+                            <span class="marketplace-style-detail-label">
+                                Occasion
+                            </span>
+
+                            <span class="marketplace-style-detail-value">
+                                {{ listing.style.occasion_fit }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="marketplace-style-detail-item">
+
+                            <span class="marketplace-style-detail-label">
+                                Listing Status
+                            </span>
+
+                            <span class="marketplace-style-detail-value">
+                                Available
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if listing.style.fabric_requirement %}
+
+                        <div class="marketplace-fabric">
+
+                            <span class="marketplace-fabric-label">
+                                Fabric Requirement
+                            </span>
+
+                            <span class="marketplace-fabric-value">
+                                {{ listing.style.fabric_requirement }}
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <p class="marketplace-detail-description">
+                        This listing is not currently linked to a
+                        Style Gallery record.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
