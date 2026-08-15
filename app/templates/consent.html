@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}
+Consent History
+{% endblock %}
+
+{% block page_title %}
+Consent History
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">Settings</a>
+<span>/</span>
+<a href="{{ url_for('legal.legal_index') }}">Legal & Terms</a>
+<span>/</span>
+<span>Consent History</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Consent History
+    </h2>
+
+    <p>
+        A record of the legal-document versions you have
+        accepted.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Your Acceptance Records
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if consents %}
+
+            <div style="overflow-x: auto;">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Document
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Version
+                            </th>
+
+                            <th>
+                                Accepted
+                            </th>
+
+                            <th>
+                                Record
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for consent in consents %}
+
+                            <tr>
+
+                                <td>
+                                    {% if consent.legal_document %}
+                                        {{ consent.legal_document.title }}
+                                    {% else %}
+                                        Legal Document
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ consent.consent_type }}
+                                </td>
+
+                                <td>
+                                    {{ consent.document_version }}
+                                </td>
+
+                                <td>
+                                    {{ consent.accepted_at.strftime(
+                                        "%Y-%m-%d %H:%M"
+                                    ) }}
+                                </td>
+
+                                <td>
+
+                                    {% if consent.legal_document %}
+
+                                        <a
+                                            href="{{ url_for(
+                                                'legal.legal_document',
+                                                document_id=consent.legal_document_id
+                                            ) }}"
+                                            class="btn"
+                                        >
+                                            View Version
+                                        </a>
+
+                                    {% else %}
+
+                                        Historical Record
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div style="text-align: center; padding: 40px 20px;">
+
+                <div
+                    style="
+                        font-size: 48px;
+                        margin-bottom: 20px;
+                    "
+                >
+                    📜
+                </div>
+
+                <h3>
+                    No Consent Records
+                </h3>
+
+                <p>
+                    You have not accepted any legal-document
+                    versions yet.
+                </p>
+
+                <a
+                    href="{{ url_for('legal.legal_index') }}"
+                    class="btn"
+                >
+                    Review Legal Documents
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

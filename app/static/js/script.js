@@ -137,64 +137,6 @@ if(profileToggle && profileMenu){
 
 }
 
-// Notification Dropdown
 
-
-const notificationToggle =
-document.getElementById(
-    "notification-toggle"
-);
-
-
-const notificationMenu =
-document.getElementById(
-    "notification-menu"
-);
-
-
-
-if(notificationToggle && notificationMenu){
-
-
-notificationToggle.addEventListener(
-    "click",
-    () => {
-
-        notificationMenu.classList.toggle(
-            "active"
-        );
-
-    }
-);
-
-
-
-document.addEventListener(
-    "click",
-    (event)=>{
-
-
-        if(
-            !notificationToggle.contains(
-                event.target
-            )
-            &&
-            !notificationMenu.contains(
-                event.target
-            )
-        ){
-
-            notificationMenu.classList.remove(
-                "active"
-            );
-
-        }
-
-
-    }
-);
-
-
-}
 
 });

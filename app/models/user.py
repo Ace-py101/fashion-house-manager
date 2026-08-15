@@ -35,6 +35,25 @@ class User(db.Model):
     )
 
     # ============================================================
+    # BUSINESS ASSOCIATION
+    #
+    # Nullable during the migration period so existing accounts
+    # remain valid while Business records are introduced.
+    # ============================================================
+
+    business_id = db.Column(
+        db.Integer,
+        db.ForeignKey("businesses.id"),
+        nullable=True,
+        index=True
+    )
+
+    business = db.relationship(
+        "Business",
+        back_populates="users"
+    )
+
+    # ============================================================
     # EMAIL VERIFICATION
     # ============================================================
 
@@ -114,7 +133,10 @@ class User(db.Model):
     )
 
     # ============================================================
-    # BUSINESS IDENTITY
+    # LEGACY / COMPATIBILITY BUSINESS IDENTITY
+    #
+    # Retained while Business becomes the authoritative
+    # organizational entity.
     # ============================================================
 
     business_name = db.Column(

@@ -30,96 +30,325 @@ Manage Marketplace
 
 {% block content %}
 
-<div class="dashboard-header">
+<style>
 
-    <div>
+.marketplace-management-page {
+    width: 100%;
+}
 
-        <h2>
-            Marketplace Listings
-        </h2>
+.marketplace-management-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
 
-        <p>
-            Manage products published by your business.
-        </p>
+.marketplace-management-header h2 {
+    margin: 0 0 6px;
+}
+
+.marketplace-management-header p {
+    margin: 0;
+    color: var(--champagne, #A89F91);
+}
+
+.marketplace-listing-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(280px, 1fr)
+        );
+    gap: 20px;
+}
+
+.marketplace-listing-card {
+    overflow: hidden;
+    border: 1px solid
+        rgba(
+            212,
+            175,
+            55,
+            0.20
+        );
+    border-radius: 18px;
+    background: var(--card-dark, #222222);
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.marketplace-listing-card:hover {
+    transform: translateY(-3px);
+    border-color:
+        rgba(
+            212,
+            175,
+            55,
+            0.55
+        );
+}
+
+.marketplace-listing-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background: #111;
+}
+
+.marketplace-listing-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background:
+        linear-gradient(
+            145deg,
+            #252525,
+            #111111
+        );
+    color: var(--gold, #D4AF37);
+    font-size: 50px;
+}
+
+.marketplace-listing-card-body {
+    padding: 18px;
+}
+
+.marketplace-listing-title {
+    margin: 0 0 12px;
+    color: var(--ivory, #F5F1E8);
+    font-size: 19px;
+}
+
+.marketplace-listing-meta {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 18px;
+}
+
+.marketplace-listing-meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--champagne, #A89F91);
+    font-size: 13px;
+}
+
+.marketplace-listing-meta-label {
+    color: var(--champagne, #A89F91);
+}
+
+.marketplace-listing-meta-value {
+    color: var(--ivory, #F5F1E8);
+    font-weight: 600;
+    text-align: right;
+}
+
+.marketplace-listing-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background:
+        rgba(
+            212,
+            175,
+            55,
+            0.10
+        );
+    color: var(--gold, #D4AF37);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.marketplace-listing-actions {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+    gap: 8px;
+    padding-top: 15px;
+    border-top: 1px solid
+        rgba(
+            245,
+            241,
+            232,
+            0.08
+        );
+}
+
+.marketplace-listing-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 8px 10px;
+    border: 1px solid
+        rgba(
+            212,
+            175,
+            55,
+            0.55
+        );
+    border-radius: 9px;
+    background: transparent;
+    color: var(--gold, #D4AF37);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.marketplace-listing-action:hover {
+    background: var(--gold, #D4AF37);
+    color: #111;
+}
+
+.marketplace-listing-empty {
+    padding: 60px 20px;
+    border: 1px dashed
+        rgba(
+            212,
+            175,
+            55,
+            0.30
+        );
+    border-radius: 18px;
+    text-align: center;
+    color: var(--champagne, #A89F91);
+}
+
+.marketplace-listing-empty-icon {
+    margin-bottom: 12px;
+    font-size: 48px;
+}
+
+@media (max-width: 600px) {
+
+    .marketplace-management-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .marketplace-listing-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<div class="marketplace-management-page">
+
+
+    <div class="marketplace-management-header">
+
+        <div>
+
+            <h2>
+                Marketplace Listings
+            </h2>
+
+            <p>
+                Manage your marketplace listing history.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('marketplace.new_listing') }}"
+            class="button button-success"
+        >
+            + New Listing
+        </a>
 
     </div>
 
-    <a
-        href="{{ url_for('marketplace.new_listing') }}"
-        class="btn"
-    >
-        + New Listing
-    </a>
 
-</div>
+    {% if listings %}
 
+        <div class="marketplace-listing-grid">
 
-<div class="card">
+            {% for listing in listings %}
 
-    <div class="card-header">
-
-        <h2>
-            Your Listings
-        </h2>
-
-    </div>
+                <article class="marketplace-listing-card">
 
 
-    <div class="card-body">
+                    {% if listing.image_path %}
 
-        {% if listings %}
+                        <img
+                            src="{{ url_for(
+                                'static',
+                                filename='uploads/styles/' ~ listing.image_path
+                            ) }}"
+                            alt="{{ listing.title }}"
+                            class="marketplace-listing-image"
+                            loading="lazy"
+                        >
 
-            <div class="table-responsive">
+                    {% elif listing.style and listing.style.image_filename %}
 
-                <table>
+                        <img
+                            src="{{ url_for(
+                                'static',
+                                filename='uploads/styles/' ~ listing.style.image_filename
+                            ) }}"
+                            alt="{{ listing.title }}"
+                            class="marketplace-listing-image"
+                            loading="lazy"
+                        >
 
-                    <thead>
+                    {% else %}
 
-                        <tr>
+                        <div class="marketplace-listing-image-placeholder">
+                            🛍️
+                        </div>
 
-                            <th>
-                                Title
-                            </th>
+                    {% endif %}
 
-                            <th>
-                                Category
-                            </th>
 
-                            <th>
-                                Price
-                            </th>
+                    <div class="marketplace-listing-card-body">
 
-                            <th>
-                                Status
-                            </th>
+                        <h3 class="marketplace-listing-title">
+                            {{ listing.title }}
+                        </h3>
 
-                            <th>
-                                Created
-                            </th>
 
-                            <th>
-                                Actions
-                            </th>
+                        <div class="marketplace-listing-meta">
 
-                        </tr>
+                            <div class="marketplace-listing-meta-row">
 
-                    </thead>
+                                <span class="marketplace-listing-meta-label">
+                                    Category
+                                </span>
 
-                    <tbody>
-
-                        {% for listing in listings %}
-
-                            <tr>
-
-                                <td>
-                                    {{ listing.title }}
-                                </td>
-
-                                <td>
+                                <span class="marketplace-listing-meta-value">
                                     {{ listing.category or "—" }}
-                                </td>
+                                </span>
 
-                                <td>
+                            </div>
+
+
+                            <div class="marketplace-listing-meta-row">
+
+                                <span class="marketplace-listing-meta-label">
+                                    Price
+                                </span>
+
+                                <span class="marketplace-listing-meta-value">
 
                                     {% if listing.price is not none %}
 
@@ -128,143 +357,153 @@ Manage Marketplace
 
                                     {% else %}
 
-                                        Contact vendor
+                                        Contact Vendor
 
                                     {% endif %}
 
-                                </td>
+                                </span>
 
-                                <td>
+                            </div>
 
+
+                            <div class="marketplace-listing-meta-row">
+
+                                <span class="marketplace-listing-meta-label">
+                                    Status
+                                </span>
+
+                                <span class="marketplace-listing-status">
                                     {{ listing.status|capitalize }}
+                                </span>
 
-                                </td>
+                            </div>
 
-                                <td>
 
-                                    {{ listing.created_at.strftime(
-                                        "%d %b %Y"
-                                    ) }}
+                            <div class="marketplace-listing-meta-row">
 
-                                </td>
+                                <span class="marketplace-listing-meta-label">
+                                    Created
+                                </span>
 
-                                <td>
+                                <span class="marketplace-listing-meta-value">
+                                    {{ listing.created_at.strftime("%d %b %Y") }}
+                                </span>
 
-                                    <div
-                                        style="
-                                            display:flex;
-                                            gap:8px;
-                                            flex-wrap:wrap;
-                                        "
+                            </div>
+
+                        </div>
+
+
+                        <div class="marketplace-listing-actions">
+
+                            <a
+                                href="{{ url_for(
+                                    'marketplace.edit_listing',
+                                    listing_id=listing.id
+                                ) }}"
+                                class="marketplace-listing-action"
+                            >
+                                Edit
+                            </a>
+
+
+                            {% if listing.status != "published" %}
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'marketplace.publish_listing_route',
+                                        listing_id=listing.id
+                                    ) }}"
+                                    style="margin: 0;"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="marketplace-listing-action"
                                     >
+                                        Publish
+                                    </button>
 
-                                        <a
-                                            href="{{ url_for(
-                                                'marketplace.edit_listing',
-                                                listing_id=listing.id
-                                            ) }}"
-                                            class="btn"
-                                        >
-                                            Edit
-                                        </a>
+                                </form>
+
+                            {% endif %}
 
 
-                                        {% if listing.status != "published" %}
+                            {% if listing.status != "archived" %}
 
-                                            <form
-                                                method="POST"
-                                                action="{{ url_for(
-                                                    'marketplace.publish_listing_route',
-                                                    listing_id=listing.id
-                                                ) }}"
-                                            >
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'marketplace.archive_listing_route',
+                                        listing_id=listing.id
+                                    ) }}"
+                                    style="margin: 0;"
+                                >
 
-                                                <button
-                                                    type="submit"
-                                                    class="btn"
-                                                >
-                                                    Publish
-                                                </button>
+                                    <button
+                                        type="submit"
+                                        class="marketplace-listing-action"
+                                    >
+                                        Archive
+                                    </button>
 
-                                            </form>
+                                </form>
 
-                                        {% endif %}
+                            {% endif %}
 
 
-                                        {% if listing.status != "archived" %}
+                            {% if listing.status == "published" %}
 
-                                            <form
-                                                method="POST"
-                                                action="{{ url_for(
-                                                    'marketplace.archive_listing_route',
-                                                    listing_id=listing.id
-                                                ) }}"
-                                            >
+                                <a
+                                    href="{{ url_for(
+                                        'marketplace.listing',
+                                        listing_id=listing.id
+                                    ) }}"
+                                    class="marketplace-listing-action"
+                                >
+                                    View
+                                </a>
 
-                                                <button
-                                                    type="submit"
-                                                    class="btn"
-                                                >
-                                                    Archive
-                                                </button>
+                            {% endif %}
 
-                                            </form>
+                        </div>
 
-                                        {% endif %}
+                    </div>
 
-                                    </div>
+                </article>
 
-                                </td>
+            {% endfor %}
 
-                            </tr>
+        </div>
 
-                        {% endfor %}
+    {% else %}
 
-                    </tbody>
+        <div class="marketplace-listing-empty">
 
-                </table>
-
+            <div class="marketplace-listing-empty-icon">
+                🛍️
             </div>
 
-        {% else %}
+            <h3>
+                No Marketplace Listings
+            </h3>
 
-            <div
-                style="
-                    text-align:center;
-                    padding:50px 20px;
-                "
+            <p>
+                Post a style from your Style Gallery to create
+                your first Marketplace listing.
+            </p>
+
+            <a
+                href="{{ url_for('style.view_styles') }}"
+                class="button button-success"
             >
+                Browse Style Gallery
+            </a>
 
-                <div
-                    style="
-                        font-size:48px;
-                        margin-bottom:16px;
-                    "
-                >
-                    🛍️
-                </div>
+        </div>
 
-                <h3>
-                    No Marketplace Listings
-                </h3>
-
-                <p>
-                    Create your first listing to make your
-                    products available in the marketplace.
-                </p>
-
-                <a
-                    href="{{ url_for('marketplace.new_listing') }}"
-                    class="btn"
-                >
-                    Create Listing
-                </a>
-
-            </div>
-
-        {% endif %}
-
-    </div>
+    {% endif %}
 
 </div>
 

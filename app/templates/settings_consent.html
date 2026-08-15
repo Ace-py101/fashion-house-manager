@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+Consent & Agreements
+{% endblock %}
+
+{% block page_title %}
+Consent & Agreements
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">Settings</a>
+<span>/</span>
+<span>Consent & Agreements</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Consent & Agreements
+    </h2>
+
+    <p>
+        Review Ateliier_fhm legal documents and manage
+        your consent history.
+    </p>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+
+    <a
+        href="{{ url_for('legal.legal_index') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            ⚖️
+        </div>
+
+        <h3>
+            Legal Documents
+        </h3>
+
+        <small>
+            Review current Terms, Privacy Policy and other
+            published legal documents.
+        </small>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('legal.consent_history') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            📜
+        </div>
+
+        <h3>
+            Consent History
+        </h3>
+
+        <small>
+            View the versions of legal documents you have
+            previously accepted.
+        </small>
+
+    </a>
+
+</div>
+
+
+<div class="card" style="margin-top: 24px;">
+
+    <div class="card-header">
+
+        <h2>
+            About Consent Records
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <p>
+            When you accept a legal document, Ateliier_fhm
+            records the exact document version associated with
+            your acceptance.
+        </p>
+
+        <p>
+            Historical consent records are retained so that
+            previously accepted versions remain identifiable
+            even when newer versions are published.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div
+    style="
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    "
+>
+
+    <a
+        href="{{ url_for('settings.settings') }}"
+        class="btn"
+    >
+        ← Back to Settings
+    </a>
+
+</div>
+
+{% endblock %}

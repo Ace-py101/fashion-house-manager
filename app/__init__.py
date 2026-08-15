@@ -146,10 +146,10 @@ def create_app():
             "greeting": greeting
         }
 
-    # ======================================================
+    # ==================================================
     # Existing Routes
-    # ======================================================
-
+    # ==================================================
+    
     from app.routes.main import main_bp
     from app.routes.customer_routes import customer_bp
     from app.routes.order_routes import order_bp
@@ -159,11 +159,13 @@ def create_app():
     from app.routes.report_routes import report_bp
     from app.routes.style_routes import style_bp
     from app.routes.settings_routes import settings_bp
-
-    # ======================================================
+    from app.routes.notification_routes import notification_bp
+    
+    
+    # ==================================================
     # Platform Routes
-    # ======================================================
-
+    # ==================================================
+    
     from app.routes.auth_routes import auth_bp
     from app.routes.profile_routes import profile_bp
     from app.routes.marketplace_routes import marketplace_bp
@@ -171,11 +173,13 @@ def create_app():
     from app.routes.analytics_routes import analytics_bp
     from app.routes.message_routes import message_bp
     from app.routes.client_routes import client_bp
-
-    # ======================================================
+    from app.routes.legal_routes import legal_bp
+    
+    
+    # ==================================================
     # Register Existing Blueprints
-    # ======================================================
-
+    # ==================================================
+    
     app.register_blueprint(main_bp)
     app.register_blueprint(customer_bp)
     app.register_blueprint(order_bp)
@@ -185,11 +189,13 @@ def create_app():
     app.register_blueprint(report_bp)
     app.register_blueprint(style_bp)
     app.register_blueprint(settings_bp)
-
-    # ======================================================
+    app.register_blueprint(notification_bp)
+    
+    
+    # ==================================================
     # Register Platform Blueprints
-    # ======================================================
-
+    # ==================================================
+    
     app.register_blueprint(auth_bp)
     app.register_blueprint(profile_bp)
     app.register_blueprint(marketplace_bp)
@@ -197,11 +203,13 @@ def create_app():
     app.register_blueprint(analytics_bp)
     app.register_blueprint(message_bp)
     app.register_blueprint(client_bp)
-
-    # ======================================================
+    app.register_blueprint(legal_bp)
+    
+    
+    # ==================================================
     # Import Models
-    # ======================================================
-
+    # ==================================================
+    
     from app import models
 
     return app

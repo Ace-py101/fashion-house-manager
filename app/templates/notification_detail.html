@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+Notification
+{% endblock %}
+
+{% block page_title %}
+Notification
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('notification.notification_history') }}">
+    Notifications
+</a>
+
+<span> / </span>
+
+<span>
+    Notification
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            {{ notification.title }}
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="notification-detail">
+
+            <p>
+                <strong>
+                    Type:
+                </strong>
+
+                {{ notification.notification_type }}
+            </p>
+
+
+            <p>
+                <strong>
+                    Message:
+                </strong>
+            </p>
+
+
+            <div class="notification-detail-message">
+
+                {{ notification.message }}
+
+            </div>
+
+
+            {% if notification.created_at %}
+
+            <p>
+
+                <strong>
+                    Received:
+                </strong>
+
+                {{ notification.created_at.strftime(
+                    "%B %d, %Y at %I:%M %p"
+                ) }}
+
+            </p>
+
+            {% endif %}
+
+
+            <div class="page-actions">
+
+                <a
+                    href="{{ url_for(
+                        'notification.notification_history'
+                    ) }}"
+                    class="button button-primary"
+                >
+                    ← Back to Notifications
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

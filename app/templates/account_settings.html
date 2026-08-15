@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}
-Account Settings
+Settings
 {% endblock %}
 
 {% block page_title %}
-Account Settings
+Settings
 {% endblock %}
 
 {% block breadcrumb %}
 <a href="{{ url_for('main.index') }}">Dashboard</a>
 <span>/</span>
-<span>Account Settings</span>
+<span>Settings</span>
 {% endblock %}
 
 
@@ -20,24 +20,45 @@ Account Settings
 <div class="dashboard-header">
 
     <h2>
-        Account Settings
+        Settings
     </h2>
 
-    <p>
-        Manage your Ateliier_fhm account, security,
-        preferences and platform settings.
-    </p>
+    {% if user.account_type == "admin" %}
+
+        <p>
+            Manage your business account, organization,
+            security, preferences and platform settings.
+        </p>
+
+    {% else %}
+
+        <p>
+            Manage your client account, privacy,
+            notifications, security and platform preferences.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ============================================================
+     ACCOUNT
+     ============================================================ -->
+
+<div class="dashboard-header">
+
+    <h3>
+        Account
+    </h3>
 
 </div>
 
 
 <div class="dashboard-grid">
 
-
-    <!-- ACCOUNT -->
-
     <a
-        href="{{ url_for('settings.settings_placeholder', section='account') }}"
+        href="{{ url_for('settings.profile_settings') }}"
         class="card dashboard-link"
     >
 
@@ -46,39 +67,35 @@ Account Settings
         </div>
 
         <h3>
-            Account
-        </h3>
-
-        <small>
-            Account information and preferences
-        </small>
-
-    </a>
-
-
-    <!-- PROFILE -->
-
-    <a
-        href="{{ url_for('profile.profile') }}"
-        class="card dashboard-link"
-    >
-
-        <div class="card-icon">
-            🪪
-        </div>
-
-        <h3>
             Profile
         </h3>
 
         <small>
-            Manage your profile information
+            View your account profile and verification status
         </small>
 
     </a>
 
 
-    <!-- SECURITY -->
+    <a
+        href="{{ url_for('settings.account_settings') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            ⚙️
+        </div>
+
+        <h3>
+            Account
+        </h3>
+
+        <small>
+            Manage phone and account information
+        </small>
+
+    </a>
+
 
     <a
         href="{{ url_for('settings.settings_placeholder', section='security') }}"
@@ -100,8 +117,6 @@ Account Settings
     </a>
 
 
-    <!-- VERIFICATION -->
-
     <a
         href="{{ url_for('auth.verify_phone') }}"
         class="card dashboard-link"
@@ -121,55 +136,87 @@ Account Settings
 
     </a>
 
+</div>
 
-    <!-- PRIVACY -->
+
+<!-- ============================================================
+     BUSINESS
+     ============================================================ -->
+
+{% if user.account_type == "admin" %}
+
+<div class="dashboard-header">
+
+    <h3>
+        Business
+    </h3>
+
+</div>
+
+
+<div class="dashboard-grid">
 
     <a
-        href="{{ url_for('settings.settings_placeholder', section='privacy') }}"
+        href="{{ url_for('settings.business_settings') }}"
         class="card dashboard-link"
     >
 
         <div class="card-icon">
-            🔒
+            🏢
         </div>
 
         <h3>
-            Privacy
+            Business Profile
         </h3>
 
         <small>
-            Privacy and personal-data preferences
+            Manage your business identity
         </small>
 
     </a>
 
 
-    <!-- CONSENT -->
-
     <a
-        href="{{ url_for('settings.settings_placeholder', section='consent') }}"
+        href="{{ url_for('settings.settings_placeholder', section='users') }}"
         class="card dashboard-link"
     >
 
         <div class="card-icon">
-            📜
+            👥
         </div>
 
         <h3>
-            Consent & Agreements
+            Users & Roles
         </h3>
 
         <small>
-            Terms, privacy agreements and consent records
+            Team members and organizational access
         </small>
 
     </a>
 
+</div>
 
-    <!-- NOTIFICATIONS -->
+{% endif %}
+
+
+<!-- ============================================================
+     PERSONAL EXPERIENCE
+     ============================================================ -->
+
+<div class="dashboard-header">
+
+    <h3>
+        Preferences & Communication
+    </h3>
+
+</div>
+
+
+<div class="dashboard-grid">
 
     <a
-        href="{{ url_for('settings.settings_placeholder', section='notifications') }}"
+        href="{{ url_for('settings.notification_settings') }}"
         class="card dashboard-link"
     >
 
@@ -188,29 +235,82 @@ Account Settings
     </a>
 
 
-    <!-- SUBSCRIPTION -->
-
     <a
-        href="{{ url_for('settings.settings_placeholder', section='subscription') }}"
+        href="{{ url_for('settings.settings_placeholder', section='preferences') }}"
         class="card dashboard-link"
     >
 
         <div class="card-icon">
-            💳
+            ⚙️
         </div>
 
         <h3>
-            Subscription
+            Preferences
         </h3>
 
         <small>
-            Plan, billing and subscription status
+            Application and account experience preferences
+        </small>
+
+    </a>
+
+</div>
+
+
+<!-- ============================================================
+     PRIVACY & GOVERNANCE
+     ============================================================ -->
+
+<div class="dashboard-header">
+
+    <h3>
+        Privacy & Governance
+    </h3>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+    <a
+        href="{{ url_for('settings.privacy_settings') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🔒
+        </div>
+
+        <h3>
+            Privacy
+        </h3>
+
+        <small>
+            Privacy and personal-data preferences
         </small>
 
     </a>
 
 
-    <!-- ACCOUNT STATUS -->
+    <a
+        href="{{ url_for('settings.consent_settings') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            📜
+        </div>
+
+        <h3>
+            Consent & Agreements
+        </h3>
+
+        <small>
+            Terms, privacy agreements and consent records
+        </small>
+
+    </a>
+
 
     <a
         href="{{ url_for('settings.settings_placeholder', section='status') }}"
@@ -226,13 +326,109 @@ Account Settings
         </h3>
 
         <small>
-            Current account and verification state
+            Account and verification state
         </small>
 
     </a>
 
 
-    <!-- LEGAL -->
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='activity') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            📋
+        </div>
+
+        <h3>
+            Activity
+        </h3>
+
+        <small>
+            Account and organizational activity
+        </small>
+
+    </a>
+
+</div>
+
+
+<!-- ============================================================
+     SUBSCRIPTION
+     ============================================================ -->
+
+<div class="dashboard-header">
+
+    <h3>
+        Subscription & Billing
+    </h3>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='subscription') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            💳
+        </div>
+
+        <h3>
+            Subscription
+        </h3>
+
+        <small>
+            Plan, feature access, limits and subscription status
+        </small>
+
+    </a>
+
+
+    {% if user.account_type == "admin" %}
+
+    <a
+        href="{{ url_for('settings.settings_placeholder', section='billing') }}"
+        class="card dashboard-link"
+    >
+
+        <div class="card-icon">
+            🧾
+        </div>
+
+        <h3>
+            Billing
+        </h3>
+
+        <small>
+            Business billing records and payment configuration
+        </small>
+
+    </a>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ============================================================
+     PLATFORM
+     ============================================================ -->
+
+<div class="dashboard-header">
+
+    <h3>
+        Platform
+    </h3>
+
+</div>
+
+
+<div class="dashboard-grid">
 
     <a
         href="{{ url_for('settings.settings_placeholder', section='legal') }}"
@@ -254,8 +450,6 @@ Account Settings
     </a>
 
 
-    <!-- ABOUT -->
-
     <a
         href="{{ url_for('settings.settings_placeholder', section='about') }}"
         class="card dashboard-link"
@@ -276,8 +470,6 @@ Account Settings
     </a>
 
 
-    <!-- SUPPORT -->
-
     <a
         href="{{ url_for('settings.settings_placeholder', section='support') }}"
         class="card dashboard-link"
@@ -296,7 +488,6 @@ Account Settings
         </small>
 
     </a>
-
 
 </div>
 

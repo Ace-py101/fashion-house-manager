@@ -1,10 +1,16 @@
 from flask import (
     Blueprint,
-    render_template
+    render_template,
+    redirect,
+    url_for,
+    flash
 )
 
+from app.models.user import User
+
 from app.services.auth_helpers import (
-    login_required
+    login_required,
+    current_user_id
 )
 
 
@@ -19,13 +25,29 @@ profile_bp = Blueprint(
 )
 @login_required
 def profile():
-    """
-    Display the authenticated user's shared profile page.
 
-    Both admin and client accounts use this route.
-    Role-specific profile features can be added later.
-    """
+    user = (
+        User.query
+        .filter_by(
+            id=current_user_id()
+        )
+        .first()
+    )
+
+    if not user:
+
+        flash(
+            "Unable to locate your account.",
+            "error"
+        )
+
+        return redirect(
+            url_for(
+                "auth.login"
+            )
+        )
 
     return render_template(
-        "profile.html"
+        "profile.html",
+        user=user
     )

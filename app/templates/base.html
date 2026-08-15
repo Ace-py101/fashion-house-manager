@@ -91,6 +91,15 @@ Fashion House Manager
     href="{{ url_for('static', filename='css/modules/marketplace.css') }}"
 >
 
+<link
+    rel="stylesheet"
+    href="{{ url_for(
+        'static',
+        filename='css/modules/notifications.css'
+    ) }}"
+>
+
+
 </head>
 
 
@@ -352,21 +361,34 @@ Fashion House Manager
                     </div>
 
 
-                    <!-- Notifications -->
+                    <!-- ==================================================
+                         GLOBAL NOTIFICATION SHELL
+                         ================================================== -->
 
-                    <div class="notification">
+                    <div
+                        id="global-notification-shell"
+                        class="notification"
+                        data-authenticated="{{
+                            'true'
+                            if session.get('authenticated')
+                            else 'false'
+                        }}"
+                    >
 
                         <button
                             class="notification-button"
                             id="notification-toggle"
                             type="button"
+                            aria-label="Open notifications"
+                            aria-expanded="false"
                         >
 
                             🔔
 
-                            <span class="notification-count">
-                                3
-                            </span>
+                            <span
+                                class="notification-count"
+                                aria-label="Unread notifications"
+                            ></span>
 
                         </button>
 
@@ -377,27 +399,47 @@ Fashion House Manager
                         >
 
                             <div class="notification-header">
-                                Notifications
+
+                                <div>
+
+                                    <strong>
+                                        Notifications
+                                    </strong>
+
+                                    <span
+                                        class="notification-header-subtitle"
+                                    >
+                                        Ateliier FHM
+                                    </span>
+
+                                </div>
+
+
+                                <button
+                                    id="notification-mark-all"
+                                    type="button"
+                                    class="notification-mark-all"
+                                >
+                                    Mark all read
+                                </button>
+
                             </div>
 
 
-                            <div class="notification-item">
-                                👥 New customer registered
-                            </div>
+                            <div
+                                id="notification-items"
+                                class="notification-items"
+                            >
 
+                                <div class="notification-loading">
+                                    Loading notifications...
+                                </div>
 
-                            <div class="notification-item">
-                                ✂️ Order status updated
-                            </div>
-
-
-                            <div class="notification-item">
-                                💰 Payment reminder
                             </div>
 
 
                             <a
-                                href="#"
+                                href="{{ url_for('notification.notification_history') }}"
                                 class="notification-footer"
                             >
                                 View all notifications
@@ -538,6 +580,17 @@ Fashion House Manager
 
 
 <!-- ======================================================
+     GLOBAL NOTIFICATION BANNERS
+     ====================================================== -->
+
+<div
+    id="notification-banner-container"
+    aria-live="polite"
+    aria-atomic="false"
+></div>
+
+
+<!-- ======================================================
      TOAST CONTAINER
      ====================================================== -->
 
@@ -628,6 +681,14 @@ Fashion House Manager
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/modules/notifications.js'
+    ) }}"
+></script>
+
 
 <script src="{{ url_for('static', filename='js/modules/dashboard.js') }}"></script>
 

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}
+Business Settings
+{% endblock %}
+
+{% block page_title %}
+Business Settings
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">
+    Settings
+</a>
+<span>/</span>
+<span>Business</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Business Profile
+    </h2>
+
+    <p>
+        Manage the business identity associated
+        with this Ateliier_fhm business account.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Business Identity
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if business %}
+
+            <p>
+                This account is currently associated with:
+            </p>
+
+            <p>
+                <strong>
+                    {{ business.name }}
+                </strong>
+            </p>
+
+        {% elif user.business_name %}
+
+            <p>
+                The existing account contains a business
+                name that has not yet been associated with
+                the new Business organization record.
+            </p>
+
+            <p>
+                <strong>
+                    {{ user.business_name }}
+                </strong>
+            </p>
+
+        {% else %}
+
+            <p>
+                No business organization has been configured
+                for this account yet.
+            </p>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('settings.business_settings') }}"
+            novalidate
+        >
+
+            <div class="form-group">
+
+                <label for="business_name">
+                    Business Name
+                </label>
+
+                <input
+                    type="text"
+                    id="business_name"
+                    name="business_name"
+                    value="{% if business %}{{ business.name }}{% else %}{{ user.business_name or '' }}{% endif %}"
+                    maxlength="150"
+                    minlength="2"
+                    autocomplete="organization"
+                    required
+                >
+
+            </div>
+
+
+            <div
+                style="
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    margin-top: 20px;
+                "
+            >
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Save Business Settings
+                </button>
+
+                <a
+                    href="{{ url_for('settings.settings') }}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,24 +1,440 @@
 {% extends "base.html" %}
 
 {% block title %}
-Styles
+{{ style.style_name or "Style" }}
 {% endblock %}
 
 {% block page_title %}
-Styles
+Style Details
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span> / </span>
+
+<a href="{{ url_for('style.view_styles') }}">
+    Style Gallery
+</a>
+
+<span> / </span>
+
+<span>
+    {{ style.style_name or "Style" }}
+</span>
+
 {% endblock %}
 
 {% block content %}
 
-<div class="card">
+<style>
 
-    <div class="card-body">
+.style-detail-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        <h2>
+.style-detail-layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(320px, 0.85fr);
+    gap: 28px;
+}
 
-            Under Construction
+.style-detail-image-card {
+    overflow: hidden;
+    border: 1px solid
+        rgba(
+            212,
+            175,
+            55,
+            0.25
+        );
+    border-radius: 20px;
+    background: #111;
+    box-shadow:
+        0 18px 45px rgba(
+            0,
+            0,
+            0,
+            0.25
+        );
+}
 
-        </h2>
+.style-detail-image {
+    display: block;
+    width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+    background: #111;
+}
+
+.style-detail-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    color: var(--gold, #D4AF37);
+    font-size: 80px;
+}
+
+.style-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.style-detail-header {
+    padding-bottom: 18px;
+    border-bottom: 1px solid
+        rgba(
+            245,
+            241,
+            232,
+            0.08
+        );
+}
+
+.style-detail-eyebrow {
+    margin: 0 0 8px;
+    color: var(--gold, #D4AF37);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+}
+
+.style-detail-title {
+    margin: 0;
+    color: var(--ivory, #F5F1E8);
+    font-size: clamp(
+        28px,
+        4vw,
+        42px
+    );
+    line-height: 1.15;
+}
+
+.style-detail-meta {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+    gap: 10px;
+}
+
+.style-detail-meta-item {
+    padding: 13px;
+    border-radius: 11px;
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+}
+
+.style-detail-meta-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--champagne, #A89F91);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.style-detail-meta-value {
+    color: var(--ivory, #F5F1E8);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.style-detail-fabric {
+    padding: 15px;
+    border-left: 3px solid
+        var(--gold, #D4AF37);
+    border-radius: 9px;
+    background:
+        rgba(
+            212,
+            175,
+            55,
+            0.055
+        );
+}
+
+.style-detail-fabric-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--gold, #D4AF37);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.style-detail-fabric-value {
+    color: var(--ivory, #F5F1E8);
+    font-size: 14px;
+}
+
+.style-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.style-detail-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 12px 18px;
+    border: 1px solid
+        var(--gold, #D4AF37);
+    border-radius: 11px;
+    background: transparent;
+    color: var(--gold, #D4AF37);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.style-detail-action:hover {
+    background: var(--gold, #D4AF37);
+    color: #111;
+}
+
+.style-detail-action.primary {
+    background: var(--gold, #D4AF37);
+    color: #111;
+}
+
+@media (max-width: 800px) {
+
+    .style-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .style-detail-image {
+        max-height: none;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .style-detail-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .style-detail-actions {
+        flex-direction: column;
+    }
+
+    .style-detail-action {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="style-detail-page">
+
+    <div class="style-detail-layout">
+
+
+        <div class="style-detail-image-card">
+
+            {% if style.image_filename %}
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/styles/' ~ style.image_filename
+                    ) }}"
+                    data-full="{{ url_for(
+                        'static',
+                        filename='uploads/styles/' ~ style.image_filename
+                    ) }}"
+                    alt="{{ style.style_name or 'Style Image' }}"
+                    class="style-detail-image gallery-image"
+                >
+
+            {% else %}
+
+                <div class="style-detail-placeholder">
+                    🧵
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="style-detail-info">
+
+
+            <div class="style-detail-header">
+
+                <p class="style-detail-eyebrow">
+                    Style Gallery
+                </p>
+
+                <h1 class="style-detail-title">
+                    {{ style.style_name or "Unnamed Style" }}
+                </h1>
+
+            </div>
+
+
+            <div class="style-detail-meta">
+
+                <div class="style-detail-meta-item">
+
+                    <span class="style-detail-meta-label">
+                        Style ID
+                    </span>
+
+                    <span class="style-detail-meta-value">
+                        {{ style.style_id }}
+                    </span>
+
+                </div>
+
+
+                <div class="style-detail-meta-item">
+
+                    <span class="style-detail-meta-label">
+                        Style Type
+                    </span>
+
+                    <span class="style-detail-meta-value">
+                        {{ style.style_type }}
+                    </span>
+
+                </div>
+
+
+                <div class="style-detail-meta-item">
+
+                    <span class="style-detail-meta-label">
+                        Occasion / Fit
+                    </span>
+
+                    <span class="style-detail-meta-value">
+                        {{ style.occasion_fit }}
+                    </span>
+
+                </div>
+
+
+                <div class="style-detail-meta-item">
+
+                    <span class="style-detail-meta-label">
+                        Garment
+                    </span>
+
+                    <span class="style-detail-meta-value">
+                        {{ style.garment_name }}
+                    </span>
+
+                </div>
+
+
+                <div class="style-detail-meta-item">
+
+                    <span class="style-detail-meta-label">
+                        Gender
+                    </span>
+
+                    <span class="style-detail-meta-value">
+                        {{ style.gender }}
+                    </span>
+
+                </div>
+
+
+                <div class="style-detail-meta-item">
+
+                    <span class="style-detail-meta-label">
+                        Status
+                    </span>
+
+                    <span class="style-detail-meta-value">
+                        {{ style.status }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            {% if style.fabric_requirement %}
+
+                <div class="style-detail-fabric">
+
+                    <span class="style-detail-fabric-label">
+                        Fabric Requirement
+                    </span>
+
+                    <span class="style-detail-fabric-value">
+                        {{ style.fabric_requirement }}
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="style-detail-actions">
+
+                <a
+                    href="{{ url_for(
+                        'style.make_order',
+                        style_id=style.id
+                    ) }}"
+                    class="style-detail-action primary"
+                >
+                    📝 Make Order
+                </a>
+
+
+                <a
+                    href="{{ url_for(
+                        'marketplace.new_listing',
+                        style_id=style.id
+                    ) }}"
+                    class="style-detail-action"
+                >
+                    🛍️ Post to Marketplace
+                </a>
+
+
+                <a
+                    href="{{ url_for('style.view_styles') }}"
+                    class="style-detail-action"
+                >
+                    ← Back to Styles
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 

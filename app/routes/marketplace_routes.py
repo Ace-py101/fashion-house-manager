@@ -149,6 +149,60 @@ def new_listing():
 
     styles = get_all_styles()
 
+    selected_style_id = request.args.get(
+        "style_id",
+        "",
+    ).strip()
+
+    if selected_style_id:
+
+        if not selected_style_id.isdigit():
+
+            flash(
+                "The selected Style Gallery item is invalid.",
+                "error",
+            )
+
+            return redirect(
+                url_for(
+                    "style.view_styles"
+                )
+            )
+
+        selected_style = get_style_by_id(
+            int(selected_style_id)
+        )
+
+        if not selected_style:
+
+            flash(
+                "The selected style could not be found.",
+                "error",
+            )
+
+            return redirect(
+                url_for(
+                    "style.view_styles"
+                )
+            )
+
+        if selected_style.status.lower() != "active":
+
+            flash(
+                "Only active styles can be published to the Marketplace.",
+                "error",
+            )
+
+            return redirect(
+                url_for(
+                    "style.view_styles"
+                )
+            )
+
+    else:
+
+        selected_style_id = None
+
     if request.method == "POST":
 
         try:
@@ -228,6 +282,7 @@ def new_listing():
         "marketplace_listing_form.html",
         listing=None,
         styles=styles,
+        selected_style_id=selected_style_id,
         form_mode="create",
     )
 
@@ -296,10 +351,20 @@ def edit_listing(listing_id):
                     "Only active styles can be used for Marketplace listings."
                 )
 
+            description = request.form.get(
+                "description",
+                "",
+            ).strip()
+
+            if len(description) > 5000:
+                raise ValueError(
+                    "Product description cannot exceed 5000 characters."
+                )
+
             update_listing(
                 listing=listing,
                 title=style.style_name,
-                description=None,
+                description=description or None,
                 category=style.garment_name,
                 price=request.form.get(
                     "price",

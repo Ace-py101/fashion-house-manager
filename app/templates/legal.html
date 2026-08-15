@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}
+Legal & Terms
+{% endblock %}
+
+{% block page_title %}
+Legal & Terms
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">Settings</a>
+<span>/</span>
+<span>Legal & Terms</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Legal & Terms
+    </h2>
+
+    <p>
+        Review the current Ateliier_fhm legal documents
+        and manage your acceptance records.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Current Documents
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if documents %}
+
+            <div class="dashboard-grid">
+
+                {% for document in documents %}
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>
+                                {{ document.title }}
+                            </h3>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <p>
+                                <strong>Type:</strong>
+                                {{ document.document_type }}
+                            </p>
+
+                            <p>
+                                <strong>Version:</strong>
+                                {{ document.version }}
+                            </p>
+
+                            {% if document.effective_at %}
+
+                                <p>
+                                    <strong>Effective:</strong>
+                                    {{ document.effective_at.strftime("%Y-%m-%d") }}
+                                </p>
+
+                            {% endif %}
+
+
+                            {% if document.id in accepted_document_ids %}
+
+                                <p>
+                                    ✓ You have accepted this version.
+                                </p>
+
+                                <a
+                                    href="{{ url_for(
+                                        'legal.legal_document',
+                                        document_id=document.id
+                                    ) }}"
+                                    class="btn"
+                                >
+                                    View Document
+                                </a>
+
+                            {% else %}
+
+                                <p>
+                                    This document requires your review.
+                                </p>
+
+                                <a
+                                    href="{{ url_for(
+                                        'legal.legal_document',
+                                        document_id=document.id
+                                    ) }}"
+                                    class="btn"
+                                >
+                                    Review Document
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div style="text-align: center; padding: 40px 20px;">
+
+                <div
+                    style="
+                        font-size: 48px;
+                        margin-bottom: 20px;
+                    "
+                >
+                    ⚖️
+                </div>
+
+                <h3>
+                    No Active Legal Documents
+                </h3>
+
+                <p>
+                    There are currently no published legal
+                    documents requiring review.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<div
+    style="
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    "
+>
+
+    <a
+        href="{{ url_for('legal.consent_history') }}"
+        class="btn"
+    >
+        View Consent History
+    </a>
+
+    <a
+        href="{{ url_for('settings.settings') }}"
+        class="btn"
+    >
+        ← Back to Settings
+    </a>
+
+</div>
+
+{% endblock %}

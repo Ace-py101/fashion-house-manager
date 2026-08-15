@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+Notifications
+{% endblock %}
+
+{% block page_title %}
+Notifications
+{% endblock %}
+
+{% block breadcrumb %}
+
+<a href="{{ url_for('main.index') }}">
+    Dashboard
+</a>
+
+<span>
+    /
+</span>
+
+<span>
+    Notifications
+</span>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ============================================================
+     ATELIIER FHM NOTIFICATION HISTORY
+     ============================================================ -->
+
+<div class="card notification-history-page">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                Notifications
+            </h2>
+
+            <p>
+                Your Ateliier FHM notification history.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            id="notification-history-mark-all"
+            class="button button-primary"
+        >
+            Mark all read
+        </button>
+
+    </div>
+
+
+    <div
+        id="notification-history-items"
+        class="notification-history-items"
+    >
+
+        <div class="notification-loading">
+            Loading notifications...
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

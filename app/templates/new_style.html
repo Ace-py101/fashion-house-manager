@@ -10,7 +10,7 @@ New Style
 
 {% block breadcrumb %}
 
-<a href="/">
+<a href="{{ url_for('main.index') }}">
     Dashboard
 </a>
 
@@ -35,9 +35,7 @@ New Style
     <div class="card-header">
 
         <h2>
-
-            Style Gallery
-
+            Upload New Style
         </h2>
 
     </div>
@@ -49,410 +47,246 @@ New Style
             enctype="multipart/form-data"
             class="app-form"
         >
-        
+
             <div class="form-group">
-                <label>
+
+                <label for="style_image">
                     Upload Style Image
                 </label>
-        
+
                 <input
                     type="file"
+                    id="style_image"
                     name="style_image"
                     accept=".jpg,.jpeg,.png,.webp"
                     required
                 >
+
             </div>
-        
+
+
             <div class="form-row">
-        
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="style_name">
                         Style Name
                     </label>
-        
+
                     <input
                         type="text"
+                        id="style_name"
                         name="style_name"
+                        maxlength="150"
                         required
                     >
-        
+
                 </div>
-        
+
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="style_type">
                         Style Type
                     </label>
-        
+
                     <select
+                        id="style_type"
                         name="style_type"
                         required
                     >
+
                         <option value="">
                             Select Style Type
                         </option>
-        
+
                         {% for option in style_types %}
-        
+
                         <option value="{{ option }}">
                             {{ option }}
                         </option>
-        
+
                         {% endfor %}
-        
+
                     </select>
-        
+
                 </div>
-        
+
             </div>
-        
-        
+
+
             <div class="form-row">
-        
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="occasion_fit">
                         Occasion / Fit
                     </label>
-        
+
                     <select
+                        id="occasion_fit"
                         name="occasion_fit"
                         required
                     >
-        
+
                         <option value="">
                             Select Occasion / Fit
                         </option>
-        
+
                         {% for option in occasion_fits %}
-        
+
                         <option value="{{ option }}">
                             {{ option }}
                         </option>
-        
+
                         {% endfor %}
-        
+
                     </select>
-        
+
                 </div>
-        
-        
+
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="garment_name">
                         Garment Name
                     </label>
-        
+
                     <select
+                        id="garment_name"
                         name="garment_name"
                         required
                     >
-        
+
                         <option value="">
                             Select Garment
                         </option>
-        
+
                         {% for option in garment_names %}
-        
+
                         <option value="{{ option }}">
                             {{ option }}
                         </option>
-        
+
                         {% endfor %}
-        
+
                     </select>
-        
+
                 </div>
-        
+
             </div>
-        
-        
+
+
             <div class="form-row">
-        
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="gender">
                         Gender
                     </label>
-        
+
                     <select
+                        id="gender"
                         name="gender"
                         required
                     >
-        
+
                         <option value="">
                             Select Gender
                         </option>
-        
+
                         {% for option in genders %}
-        
+
                         <option value="{{ option }}">
                             {{ option }}
                         </option>
-        
+
                         {% endfor %}
-        
+
                     </select>
-        
+
                 </div>
-        
-        
+
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="fabric_requirement">
                         Fabric Requirement
                     </label>
-        
+
                     <input
                         type="text"
+                        id="fabric_requirement"
                         name="fabric_requirement"
+                        maxlength="150"
                         placeholder="e.g. 4 yards"
                         required
                     >
-        
+
                 </div>
-        
+
             </div>
-        
-        
+
+
             <div class="form-row">
-        
+
                 <div class="form-group">
-        
-                    <label>
+
+                    <label for="status">
                         Status
                     </label>
-        
+
                     <select
+                        id="status"
                         name="status"
                         required
                     >
-        
+
                         <option value="">
                             Select Status
                         </option>
-        
+
                         {% for option in statuses %}
-        
-                        <option value="{{ option }}">
+
+                        <option
+                            value="{{ option }}"
+                            {% if option == "Active" %}
+                                selected
+                            {% endif %}
+                        >
                             {{ option }}
                         </option>
-        
+
                         {% endfor %}
-        
+
                     </select>
-        
+
                 </div>
-        
+
             </div>
-        
-        
+
+
             <div class="page-actions">
-        
+
+                <a
+                    href="{{ url_for('style.view_styles') }}"
+                    class="button button-secondary"
+                >
+                    ← View Styles
+                </a>
+
                 <button
                     type="submit"
                     class="button button-success"
                 >
-                    📤 Upload Photo
+                    📤 Upload Style
                 </button>
-        
+
             </div>
-        
+
         </form>
 
-        <hr>
-
-        <h3>
-
-            Saved Styles
-
-        </h3>
- 
-        {% if styles %}
-        
-        <div class="customer-menu-grid">
-        
-            {% for style in styles %}
-        
-            <div class="module-card">
-        
-                {% if style.image_filename %}
-        
-                <img
-                    class="gallery-image"
-                    src="{{ url_for(
-                        'static',
-                        filename='uploads/styles/' ~ style.image_filename
-                    ) }}"
-                    data-full="{{ url_for(
-                        'static',
-                        filename='uploads/styles/' ~ style.image_filename
-                    ) }}"
-                    alt="{{ style.style_name or 'Style Image' }}"
-                >
-        
-                {% endif %}
-        
-        
-                <h3>
-                    {{ style.style_name or "Unnamed Style" }}
-                </h3>
-        
-        
-                {% if style.style_type %}
-        
-                <p>
-                    <strong>
-                        Type:
-                    </strong>
-        
-                    {{ style.style_type }}
-                </p>
-        
-                {% endif %}
-        
-        
-                {% if style.occasion_fit %}
-        
-                <p>
-                    <strong>
-                        Occasion / Fit:
-                    </strong>
-        
-                    {{ style.occasion_fit }}
-                </p>
-        
-                {% endif %}
-        
-        
-                {% if style.garment_name %}
-        
-                <p>
-                    <strong>
-                        Garment:
-                    </strong>
-        
-                    {{ style.garment_name }}
-                </p>
-        
-                {% endif %}
-        
-        
-                {% if style.gender %}
-        
-                <p>
-                    <strong>
-                        Gender:
-                    </strong>
-        
-                    {{ style.gender }}
-                </p>
-        
-                {% endif %}
-        
-        
-                {% if style.fabric_requirement %}
-        
-                <p>
-                    <strong>
-                        Fabric:
-                    </strong>
-        
-                    {{ style.fabric_requirement }}
-                </p>
-        
-                {% endif %}
-        
-        
-                {% if style.status %}
-        
-                <p>
-                    <strong>
-                        Status:
-                    </strong>
-        
-                    {{ style.status }}
-                </p>
-        
-                {% endif %}
-        
-        
-                {% if order_id %}
-        
-                <a
-                    href="{{ url_for(
-                        'order.edit_order',
-                        order_id=order_id,
-                        style_id=style.id
-                    ) }}"
-                    class="button button-primary"
-                >
-                    🎨 Select This Style
-                </a>
-        
-                {% else %}
-        
-                <a
-                    href="{{ url_for(
-                        'style.make_order',
-                        style_id=style.id
-                    ) }}"
-                    class="button button-primary"
-                >
-                
-                    📝 Make Order
-
-                </a>
-        
-                {% endif %}
-        
-        
-            </div>
-        
-            {% endfor %}
-        
-        </div>
-        
-        {% else %}
-        
-        <div class="empty-state">
-        
-            <h3>
-                No styles uploaded yet.
-            </h3>
-        
-            <p>
-                Upload your first style to begin building your gallery.
-            </p>
-        
-        </div>
-        
-        {% endif %}
-
     </div>
-
-</div>
-
-<div
-id="style-image-viewer"
-class="image-viewer"
->
-
-<button
-id="viewer-close"
-type="button"
->
-
-✕
-
-</button>
-
-<img
-id="viewer-image"
-src=""
-alt="Style Image"
->
 
 </div>
 

@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block title %}
+Notification Settings
+{% endblock %}
+
+{% block page_title %}
+Notification Settings
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">
+    Settings
+</a>
+<span>/</span>
+<span>Notifications</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Notification Settings
+    </h2>
+
+    {% if user.account_type == "admin" %}
+
+        <p>
+            Control how notifications are delivered to
+            your business account.
+        </p>
+
+    {% else %}
+
+        <p>
+            Control how Ateliier_fhm communicates with you
+            about your client account.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Notification Channels
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <form
+            method="POST"
+            action="{{ url_for('settings.notification_settings') }}"
+            novalidate
+        >
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="email_enabled"
+                        value="1"
+                        {% if not preferences or preferences.email_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Email Notifications
+                </label>
+
+                <small>
+                    Receive supported notifications by email.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="sms_enabled"
+                        value="1"
+                        {% if not preferences or preferences.sms_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    SMS Notifications
+                </label>
+
+                <small>
+                    Receive supported notifications by SMS when
+                    a verified phone number is available.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="in_app_enabled"
+                        value="1"
+                        {% if not preferences or preferences.in_app_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    In-App Notifications
+                </label>
+
+                <small>
+                    Receive notifications through the
+                    Ateliier_fhm application.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="order_notifications"
+                        value="1"
+                        {% if not preferences or preferences.order_notifications %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Order Notifications
+                </label>
+
+                <small>
+                    Receive notifications related to orders.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="delivery_notifications"
+                        value="1"
+                        {% if not preferences or preferences.delivery_notifications %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Delivery Notifications
+                </label>
+
+                <small>
+                    Receive notifications about delivery events
+                    and status changes.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="security_notifications"
+                        value="1"
+                        {% if not preferences or preferences.security_notifications %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Security Notifications
+                </label>
+
+                <small>
+                    Receive important account-security
+                    notifications.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="marketing_notifications"
+                        value="1"
+                        {% if preferences and preferences.marketing_notifications %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Marketing Notifications
+                </label>
+
+                <small>
+                    Receive optional promotional and marketing
+                    notifications.
+                </small>
+
+            </div>
+
+
+            <div
+                style="
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    margin-top: 20px;
+                "
+            >
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Save Notification Settings
+                </button>
+
+
+                <a
+                    href="{{ url_for('settings.settings') }}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

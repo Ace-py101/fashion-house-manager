@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ document.title }}
+{% endblock %}
+
+{% block page_title %}
+{{ document.title }}
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">Settings</a>
+<span>/</span>
+<a href="{{ url_for('legal.legal_index') }}">Legal & Terms</a>
+<span>/</span>
+<span>{{ document.title }}</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        {{ document.title }}
+    </h2>
+
+    <p>
+        {{ document.document_type }}
+        · Version {{ document.version }}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h2>
+                {{ document.title }}
+            </h2>
+
+            <small>
+                Version {{ document.version }}
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if document.effective_at %}
+
+            <p>
+                <strong>Effective date:</strong>
+                {{ document.effective_at.strftime("%Y-%m-%d") }}
+            </p>
+
+        {% endif %}
+
+
+        <div
+            style="
+                margin-top: 24px;
+                line-height: 1.8;
+                white-space: pre-wrap;
+            "
+        >
+            {{ document.content }}
+        </div>
+
+
+        {% if document.is_active %}
+
+            <hr style="margin: 30px 0;">
+
+
+            {% if accepted %}
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <h3>
+                            ✓ Accepted
+                        </h3>
+
+                        <p>
+                            You have already accepted this exact
+                            version of this document.
+                        </p>
+
+                        <p>
+                            Your historical acceptance record is
+                            preserved by Ateliier_fhm.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>
+                            Acceptance
+                        </h3>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <p>
+                            Please review the complete document
+                            before accepting it.
+                        </p>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'legal.accept_consent',
+                                document_id=document.id
+                            ) }}"
+                            novalidate
+                        >
+
+                            <label
+                                style="
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: flex-start;
+                                    margin: 20px 0;
+                                "
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    name="accept_consent"
+                                    value="1"
+                                    required
+                                >
+
+                                <span>
+                                    I confirm that I have read and
+                                    understood this document and
+                                    accept the current version.
+                                </span>
+
+                            </label>
+
+
+                            <button
+                                type="submit"
+                                class="btn"
+                            >
+                                Accept Document
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h3>
+                        Historical Version
+                    </h3>
+
+                    <p>
+                        This document version is no longer active.
+                        It is displayed because it forms part of
+                        your historical consent record.
+                    </p>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<div
+    style="
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    "
+>
+
+    <a
+        href="{{ url_for('legal.legal_index') }}"
+        class="btn"
+    >
+        ← Legal & Terms
+    </a>
+
+    <a
+        href="{{ url_for('legal.consent_history') }}"
+        class="btn"
+    >
+        Consent History
+    </a>
+
+</div>
+
+{% endblock %}

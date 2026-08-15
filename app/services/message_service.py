@@ -3,6 +3,7 @@ from datetime import datetime
 from app.database import db
 from app.models.conversation import Conversation
 from app.models.message import Message
+from app.services.notification_service import create_notification
 
 
 # ============================================================
@@ -151,6 +152,13 @@ def send_message(
 ):
     """
     Send a message inside an authorized conversation.
+
+    After the message is persisted, create an in-app
+    notification for the other participant.
+
+    The notification is intentionally produced here in the
+    service layer so every future message producer receives
+    the same notification behavior.
     """
 
     conversation = _get_user_conversation(
@@ -191,6 +199,65 @@ def send_message(
     conversation.updated_at = datetime.utcnow()
 
     db.session.commit()
+
+
+    # ========================================================
+    # STEP 4C — DETERMINE MESSAGE RECIPIENT
+    # ========================================================
+    #
+    # Every conversation has exactly two participants:
+    #
+    #     client_id
+    #     business_id
+    #
+    # The recipient is therefore the participant who did not
+    # send the current message.
+    # ========================================================
+
+    if conversation.client_id == sender_id:
+
+        recipient_id = conversation.business_id
+
+    else:
+
+        recipient_id = conversation.client_id
+
+
+    # ========================================================
+    # STEP 4C — CREATE GLOBAL NOTIFICATION
+    # ========================================================
+    #
+    # The notification service remains responsible for:
+    #
+    #     - notification validation
+    #     - preference checking
+    #     - database persistence
+    #
+    # The message service only supplies the event details.
+    # ========================================================
+
+    if recipient_id:
+
+        try:
+
+            create_notification(
+                user_id=recipient_id,
+                notification_type="message",
+                title="New Message",
+                message="You have a new message.",
+                link=f"/messages/{conversation.id}",
+            )
+
+        except Exception:
+            # ------------------------------------------------
+            # A notification failure must not invalidate an
+            # already-persisted message.
+            #
+            # The message has already been committed above.
+            # ------------------------------------------------
+
+            db.session.rollback()
+
 
     return message
 

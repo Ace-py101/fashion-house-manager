@@ -637,6 +637,39 @@
                         >
 
                     </div>
+                    {% if form_mode == "edit" %}
+
+                    <div class="full-width">
+
+                        <label for="description">
+                            Product Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            maxlength="5000"
+                            rows="7"
+                            placeholder="Describe this product for Marketplace customers..."
+                            style="
+                                width: 100%;
+                                min-height: 170px;
+                                padding: 13px 15px;
+                                border: 1px solid rgba(212, 175, 55, 0.35);
+                                border-radius: 12px;
+                                background: rgba(0, 0, 0, 0.20);
+                                color: var(--ivory, #F5F1E8);
+                                font-size: 16px;
+                                line-height: 1.6;
+                                resize: vertical;
+                                box-sizing: border-box;
+                            "
+                        >{{ listing.description if listing and listing.description else '' }}</textarea>
+
+                    </div>
+
+                    {% endif %}
+
 
 
                     <div class="full-width">

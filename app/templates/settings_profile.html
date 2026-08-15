@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Profile
+Profile Settings
 {% endblock %}
 
 {% block page_title %}
@@ -10,6 +10,10 @@ Profile
 
 {% block breadcrumb %}
 <a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">
+    Settings
+</a>
 <span>/</span>
 <span>Profile</span>
 {% endblock %}
@@ -20,19 +24,21 @@ Profile
 <div class="dashboard-header">
 
     <h2>
-        My Profile
+        Profile
     </h2>
 
     {% if user.account_type == "admin" %}
 
         <p>
-            Business account identity and verification status.
+            Your business account profile and verification
+            information.
         </p>
 
     {% else %}
 
         <p>
-            Client account identity and verification status.
+            Your client account profile and verification
+            information.
         </p>
 
     {% endif %}
@@ -45,7 +51,7 @@ Profile
     <div class="card-header">
 
         <h2>
-            Account Profile
+            Account Identity
         </h2>
 
     </div>
@@ -62,13 +68,11 @@ Profile
                 </h3>
 
                 <p>
-
                     {% if user.account_type == "admin" %}
                         Business Account
                     {% else %}
                         Client Account
                     {% endif %}
-
                 </p>
 
             </div>
@@ -87,9 +91,9 @@ Profile
                 <small>
 
                     {% if user.email_verified %}
-                        ✓ Verified
+                        ✓ Email verified
                     {% else %}
-                        Not verified
+                        Email not verified
                     {% endif %}
 
                 </small>
@@ -110,11 +114,11 @@ Profile
                 <small>
 
                     {% if user.phone_verified %}
-                        ✓ Verified
+                        ✓ Phone verified
                     {% elif user.phone_number %}
-                        Not verified
+                        Phone not verified
                     {% else %}
-                        Not provided
+                        No phone number
                     {% endif %}
 
                 </small>
@@ -142,7 +146,7 @@ Profile
 
                     {% else %}
 
-                        Not configured
+                        Business not configured
 
                     {% endif %}
 
@@ -165,10 +169,10 @@ Profile
         >
 
             <a
-                href="{{ url_for('settings.profile_settings') }}"
+                href="{{ url_for('settings.account_settings') }}"
                 class="btn"
             >
-                Profile Settings
+                Edit Account Information
             </a>
 
 
@@ -176,7 +180,7 @@ Profile
                 href="{{ url_for('settings.settings') }}"
                 class="btn"
             >
-                Account Settings
+                ← Back to Settings
             </a>
 
         </div>

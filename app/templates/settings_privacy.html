@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}
+Privacy Settings
+{% endblock %}
+
+{% block page_title %}
+Privacy Settings
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">
+    Settings
+</a>
+<span>/</span>
+<span>Privacy</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Privacy Settings
+    </h2>
+
+    {% if user.account_type == "admin" %}
+
+        <p>
+            Control the privacy preferences associated with
+            your business account.
+        </p>
+
+    {% else %}
+
+        <p>
+            Control how Ateliier_fhm handles preferences
+            associated with your client account.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Personal Data Preferences
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <form
+            method="POST"
+            action="{{ url_for('settings.privacy_settings') }}"
+            novalidate
+        >
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="analytics_enabled"
+                        value="1"
+                        {% if preferences and preferences.analytics_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Analytics
+                </label>
+
+                <small>
+                    Allow application analytics to be used
+                    to improve Ateliier_fhm.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="personalization_enabled"
+                        value="1"
+                        {% if preferences and preferences.personalization_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Personalization
+                </label>
+
+                <small>
+                    Allow the application to personalize
+                    relevant experiences and recommendations.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="marketing_enabled"
+                        value="1"
+                        {% if preferences and preferences.marketing_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Marketing
+                </label>
+
+                <small>
+                    Allow optional marketing communications
+                    and promotional messages.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="data_sharing_enabled"
+                        value="1"
+                        {% if preferences and preferences.data_sharing_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    Optional Data Sharing
+                </label>
+
+                <small>
+                    Allow optional data sharing for permitted
+                    application purposes. Required legal or
+                    operational processing is not controlled
+                    by this setting.
+                </small>
+
+            </div>
+
+
+            <div
+                style="
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    margin-top: 20px;
+                "
+            >
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Save Privacy Settings
+                </button>
+
+
+                <a
+                    href="{{ url_for('settings.settings') }}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

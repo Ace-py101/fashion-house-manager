@@ -10,11 +10,13 @@ from app.models.measurement_history import MeasurementHistory
 from app.models.style import Style
 
 from app.models.user import User
+from app.models.business import Business
 from app.models.subscription import Subscription
 
 from app.models.legal_document import LegalDocument
 from app.models.user_consent import UserConsent
 from app.models.user_privacy_preference import UserPrivacyPreference
+
 from app.models.user_notification_preference import (
     UserNotificationPreference
 )
@@ -22,3 +24,5 @@ from app.models.user_notification_preference import (
 from app.models.conversation import Conversation
 from app.models.message import Message
 from app.models.marketplace_listing import MarketplaceListing
+
+from app.models.notification import Notification

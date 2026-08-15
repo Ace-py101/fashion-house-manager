@@ -217,8 +217,7 @@ def new_style():
 
         return redirect(
             url_for(
-                "style.new_style",
-                order_id=order_id
+                "style.view_styles"
             )
         )
 

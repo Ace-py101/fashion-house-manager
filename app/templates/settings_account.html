@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}
+Account Settings
+{% endblock %}
+
+{% block page_title %}
+Account Settings
+{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('main.index') }}">Dashboard</a>
+<span>/</span>
+<a href="{{ url_for('settings.settings') }}">
+    Settings
+</a>
+<span>/</span>
+<span>Account</span>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Account Information
+    </h2>
+
+    <p>
+        Manage the contact information associated
+        with your Ateliier_fhm account.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h2>
+            Account Details
+        </h2>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <form
+            method="POST"
+            action="{{ url_for('settings.account_settings') }}"
+            novalidate
+        >
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    value="{{ user.email }}"
+                    autocomplete="email"
+                    readonly
+                >
+
+                <small>
+                    Email address changes are handled through
+                    the account-security process.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone_number">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone_number"
+                    name="phone_number"
+                    value="{{ user.phone_number or '' }}"
+                    maxlength="30"
+                    minlength="7"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    pattern="[0-9+() -]{7,30}"
+                    title="Enter a valid phone number using digits, spaces, +, -, or parentheses."
+                >
+
+                <small>
+
+                    {% if user.phone_verified %}
+
+                        ✓ Phone number verified.
+
+                    {% elif user.phone_number %}
+
+                        Phone number saved but not verified.
+
+                    {% else %}
+
+                        No phone number has been added.
+
+                    {% endif %}
+
+                </small>
+
+            </div>
+
+
+            <div
+                style="
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    margin-top: 20px;
+                "
+            >
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Save Account Settings
+                </button>
+
+
+                {% if user.phone_number and not user.phone_verified %}
+
+                <a
+                    href="{{ url_for('auth.verify_phone') }}"
+                    class="btn"
+                >
+                    Verify Phone
+                </a>
+
+                {% endif %}
+
+
+                <a
+                    href="{{ url_for('settings.settings') }}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
